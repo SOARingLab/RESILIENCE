@@ -1,0 +1,14 @@
+<div class="container">
+  <h1>Process Variable List</h1>
+  <p>
+    <button (click)="add()">Add</button>
+  </p>
+  <p>
+    <span class="column-head">Name</span>
+    <span class="column-head">Operation</span>
+  </p>
+  <p *ngFor="let processVariable of processVariableList">
+    <span class="column"><a [routerLink]="'/process-variable/' + processVariable.id">{{processVariable.name}}</a></span>
+    <span class="column"><button (click)="delete(processVariable.id)">Delete</button></span>
+  </p>
+</div>

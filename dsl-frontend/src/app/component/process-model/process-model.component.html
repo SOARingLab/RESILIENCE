@@ -1,0 +1,16 @@
+<div class="container">
+  <h1>Process Model</h1>
+  <p>
+    <button (click)="save()">Save</button>
+  </p>
+  <p>
+    <span class="label">Filename</span>
+    <input class="value" [(ngModel)]="processModel.filename">
+  </p>
+  <p>
+    <span class="label">Data</span>
+  </p>
+  <p>
+    <textarea class="value-data" [(ngModel)]="processModel.data"></textarea>
+  </p>
+</div>

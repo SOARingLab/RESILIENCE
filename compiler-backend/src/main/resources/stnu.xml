@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml>
+    <key id="nContingent" for="graph">
+        <desc>Number of contingents in the graph</desc>
+        <default>0</default>
+    </key>
+    <key id="nObservedProposition" for="graph">
+        <desc>Number of observed propositions in the graph</desc>
+        <default>0</default>
+    </key>
+    <key id="NetworkType" for="graph">
+        <desc>Network Type</desc>
+        <default>CSTNU</default>
+    </key>
+    <key id="nEdges" for="graph">
+        <desc>Number of edges in the graph</desc>
+        <default>0</default>
+    </key>
+    <key id="nVertices" for="graph">
+        <desc>Number of vertices in the graph</desc>
+        <default>0</default>
+    </key>
+    <key id="Name" for="graph">
+        <desc>Graph Name</desc>
+        <default></default>
+    </key>
+    <key id="Obs" for="node">
+        <desc>Proposition Observed. Value specification: [a-zA-F]</desc>
+        <default></default>
+    </key>
+    <key id="x" for="node">
+        <desc>The x coordinate for the visualization. A positive value.</desc>
+        <default>0</default>
+    </key>
+    <key id="Label" for="node">
+        <desc>Label. Format: [¬[a-zA-F]|[a-zA-F]]+|⊡</desc>
+        <default>⊡</default>
+    </key>
+    <key id="y" for="node">
+        <desc>The y coordinate for the visualization. A positive value.</desc>
+        <default>0</default>
+    </key>
+    <key id="Potential" for="node">
+        <desc>Labeled Potential Values. Format: {[('node name (no case modification)', 'integer', 'label') ]+}|{}</desc>
+        <default></default>
+    </key>
+    <key id="Type" for="edge">
+        <desc>Type: Possible values: contingent|requirement|derived|internal.</desc>
+        <default>requirement</default>
+    </key>
+    <key id="Value" for="edge">
+        <desc>Value for STN edge. Format: 'integer'</desc>
+        <default></default>
+    </key>
+    <key id="LabeledValue" for="edge">
+        <desc>Case Value. Format: 'LC(NodeName):integer' or 'UC(NodeName):integer'</desc>
+        <default></default>
+    </key>
+    <graph edgedefault="directed">
+        <data key="nContingent">0</data>
+        <data key="NetworkType">STNU</data>
+        <data key="nEdges">0</data>
+        <data key="nVertices">0</data>
+        <data key="Name">stnu.xml</data>
+    </graph>
+</graphml>

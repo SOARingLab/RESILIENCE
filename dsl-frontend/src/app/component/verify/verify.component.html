@@ -1,0 +1,30 @@
+<div class="container">
+  <h1>Verification Result</h1>
+  <h2>Functional</h2>
+  <div *ngIf="resultFunctional === 'waiting'">
+    <h3>Waiting For Result</h3>
+  </div>
+  <div *ngIf="resultFunctional === 'true'">
+    <h3>OK</h3>
+  </div>
+  <div *ngIf="resultFunctional === 'false'">
+    <h3>Not OK</h3>
+    <p *ngFor="let pathConstraints of resultFunctionalDetail | keyvalue">
+      Path: {{pathConstraints.key}}<br>
+      Constraints:
+      <span *ngFor="let constraint of pathConstraints.value; index as i">
+        <span *ngIf="i > 0">, </span>{{constraint}}
+      </span>
+    </p>
+  </div>
+  <h2>Non-functional (Temporal)</h2>
+  <div *ngIf="resultNonFunctional === 'waiting'">
+    <h3>Waiting For Result</h3>
+  </div>
+  <div *ngIf="resultNonFunctional === 'true'">
+    <h3>OK</h3>
+  </div>
+  <div *ngIf="resultNonFunctional === 'false'">
+    <h3>Not OK</h3>
+  </div>
+</div>

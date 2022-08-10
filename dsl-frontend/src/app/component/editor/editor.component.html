@@ -1,0 +1,86 @@
+<div class="container">
+  <h1>
+    Syntax-Directed Editor
+    <button (click)="generateText()">Complete</button>
+  </h1>
+</div>
+<div *ngIf="editorReady">
+  <div class="input" *ngFor="let input of inputs; let inputId=index">
+    <div class="container">
+      <div *ngFor="let inputCondition of input[0]; let inputConditionId=index">
+        <span class="keyword" *ngIf="inputConditionId === 0">
+          WHEN
+        </span>
+        <select class="keyword" *ngIf="inputConditionId >= 1" [(ngModel)]="inputCondition[0]">
+          <option>AND</option>
+          <option>OR</option>
+        </select>
+        &nbsp;
+        <select class="operand" [(ngModel)]="inputCondition[1]" (ngModelChange)="inputConditionChange(inputCondition)">
+          <option *ngFor="let grammarCondition0 of grammarConditionList">
+            {{grammarCondition0}}
+          </option>
+        </select>
+        <select class="operator" [(ngModel)]="inputCondition[2]">
+          <option *ngFor="let grammarCondition1 of grammarConditions[grammarConditionMap.get(inputCondition[1])][1]">
+            {{grammarCondition1}}
+          </option>
+        </select>
+        <select class="operand" *ngIf="grammarConditions[grammarConditionMap.get(inputCondition[1])][2].length > 0" [(ngModel)]="inputCondition[3]">
+          <option *ngFor="let grammarCondition2 of grammarConditions[grammarConditionMap.get(inputCondition[1])][2]">
+            {{grammarCondition2}}
+          </option>
+        </select>
+        <input class="operand" *ngIf="grammarConditions[grammarConditionMap.get(inputCondition[1])][2].length === 0" [(ngModel)]="inputCondition[3]">
+        &nbsp;
+        <button class="plus" (click)="inputConditionDelete(inputId, inputConditionId)"
+                [disabled]="input[0].length <= 1">
+          -
+        </button>
+        <button class="plus" (click)="inputConditionAdd(inputId, inputConditionId + 1)">
+          +
+        </button>
+      </div>
+    </div>
+    <div class="container">
+      <div *ngFor="let inputAction of input[1]; let inputActionId=index">
+        <span class="keyword">
+          SET
+        </span>
+        &nbsp;
+        <select class="operand" [(ngModel)]="inputAction[0]" (ngModelChange)="inputActionChange(inputAction)">
+          <option *ngFor="let grammarAction0 of grammarActionList">
+            {{grammarAction0}}
+          </option>
+        </select>
+        <span class="operator">
+          {{grammarActions[grammarActionMap.get(inputAction[0])][1][0]}}
+        </span>
+        <select class="operand" *ngIf="grammarActions[grammarActionMap.get(inputAction[0])][2].length > 0" [(ngModel)]="inputAction[2]">
+          <option *ngFor="let grammarAction2 of grammarActions[grammarActionMap.get(inputAction[0])][2]">
+            {{grammarAction2}}
+          </option>
+        </select>
+        <input class="operand" *ngIf="grammarActions[grammarActionMap.get(inputAction[0])][2].length === 0" [(ngModel)]="inputAction[2]">
+        &nbsp;
+        <button class="plus" (click)="inputActionDelete(inputId, inputActionId)" [disabled]="input[1].length <= 1">
+          -
+        </button>
+        <button class="plus" (click)="inputActionAdd(inputId, inputActionId + 1)">
+          +
+        </button>
+      </div>
+    </div>
+    <div class="container">
+      <button class="plus" (click)="inputDelete(inputId)" [disabled]="inputs.length <= 1">
+        -
+      </button>
+      <button class="plus" (click)="inputAdd(inputId + 1)">
+        +
+      </button>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <pre>{{text}}</pre>
+</div>

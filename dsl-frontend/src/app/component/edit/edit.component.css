@@ -1,0 +1,9 @@
+.label {
+  display: inline-block;
+  width: 100px;
+}
+
+.value {
+  display: inline-block;
+  width: 200px;
+}

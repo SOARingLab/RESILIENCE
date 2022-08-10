@@ -1,0 +1,42 @@
+{
+  "name": "Constraint",
+  "uri": "http://some-company/schema/bpmn/constraint",
+  "prefix": "constraint",
+  "xml": {
+    "tagAlias": "lowerCase"
+  },
+  "types": [
+    {
+      "name": "NodeWithConstraint",
+      "extends": [
+        "bpmn:FlowNode",
+        "bpmn:SequenceFlow",
+        "bpmn:MessageFlow"
+      ],
+      "properties": [
+        {
+          "name": "declarative",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "temporal",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "declarativeColor",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "temporalColor",
+          "isAttr": true,
+          "type": "String"
+        }
+      ]
+    }
+  ],
+  "emumerations": [],
+  "associations": []
+}

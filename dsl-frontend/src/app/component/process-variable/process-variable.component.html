@@ -1,0 +1,41 @@
+<div class="container">
+  <h1>Process Variable</h1>
+  <p>
+    <button (click)="save()">Save</button>
+  </p>
+  <p>
+    <span class="label">Name</span>
+    <input class="value" [(ngModel)]="processVariable.name">
+  </p>
+  <p>
+    <span class="label">Method</span>
+    <select class="value" [(ngModel)]="processVariable.type">
+      <option *ngFor="let type of types">{{type}}</option>
+    </select>
+<!--    <input class="value" [(ngModel)]="processVariable.type">-->
+  </p>
+  <p>
+    <span class="label">Default value</span>
+    <input class="value" [(ngModel)]="processVariable.defaultValue">
+  </p>
+  <ng-container *ngIf="processVariable.type === 'Number'">
+    <p>
+      <span class="label">Minimum value</span>
+      <input class="value" [(ngModel)]="processVariable.minimumValue">
+    </p>
+    <p>
+      <span class="label">Maximum value</span>
+      <input class="value" [(ngModel)]="processVariable.maximumValue">
+    </p>
+  </ng-container>
+  <ng-container *ngIf="processVariable.type === 'String'">
+    <p>
+      <span class="label">Value range</span>
+      <button class="plus" (click)="addValue()">+</button>
+    </p>
+    <p *ngFor="let index of range(processVariable.valueRange.length)">
+      <input class="value-range" [(ngModel)]="processVariable.valueRange[index]">
+      <button class="plus" (click)="deleteValue(index)">-</button>
+    </p>
+  </ng-container>
+</div>

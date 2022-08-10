@@ -1,0 +1,73 @@
+<div class="container">
+  <h1>Edit</h1>
+  <h2>File</h2>
+  <p>
+    <button (click)="loadSyntax()">Load syntax</button>
+    <button (click)="saveSyntax()">Save syntax</button>
+    <button (click)="loadCode()">Load code</button>
+    <button (click)="saveCode()">Save code</button>
+    <button (click)="newCode()">New code</button>
+    <button (click)="convert()">Convert</button>
+    <button (click)="visit()">Visit</button>
+    <button (click)="test()">Test</button>
+  </p>
+  <div>
+    <div>
+      <span class="label">Syntax file</span>
+      <span class="value"><textarea [(ngModel)]="syntaxFile"></textarea></span>
+    </div>
+    <div>
+      <span class="label">Code file</span>
+      <span class="value"><textarea [(ngModel)]="codeFile"></textarea></span>
+    </div>
+    <div>
+      <span class="label">Code name</span>
+      <span class="value"><input [(ngModel)]="edit.code.name"></span>
+    </div>
+  </div>
+  <h2>Code</h2>
+  <div *ngIf="edit.syntax.rootSyntaxNodeId && edit.code.rootCodeNodeId">
+    <app-edit-node [editNode]="edit.getRootEditNode()"></app-edit-node>
+  </div>
+  <h2>
+    Properties
+  </h2>
+  <div>
+    <div *ngIf="edit.selectedEditNode.syntaxNode.id">
+      <span class="label">Name</span>
+      <span class="value"><input [(ngModel)]="edit.selectedEditNode.codeNode.name"></span>
+    </div>
+    <div *ngIf="edit.selectedEditNode.syntaxNode.id">
+      <span class="label">Type</span>
+      <span class="value"><input [value]="edit.selectedEditNode.syntaxNode.name"></span>
+    </div>
+    <div *ngIf="edit.selectedEditNode.syntaxNode.type === 'lexical'">
+      <span class="label">Content</span>
+      <span class="value"><input [(ngModel)]="edit.selectedEditNode.codeNode.content"></span>
+    </div>
+    <div *ngIf="edit.selectedEditNode.syntaxNode.type === 'alternation'">
+      <span class="label">Contents</span>
+      <span class="value">
+        <button
+          *ngFor="let syntaxNode of getSyntaxNodeChildren(); let index = index"
+          (click)="setCodeNode(syntaxNode)"
+        >
+          {{syntaxNode.name}}
+        </button>
+      </span>
+    </div>
+    <div *ngIf="edit.selectedEditNode.syntaxNode.id">
+      <span class="label">Comment</span>
+      <span class="value"><textarea [(ngModel)]="edit.selectedEditNode.codeNode.comment"></textarea></span>
+    </div>
+    <div *ngIf="edit.selectedEditNode.syntaxNode.id">
+      <span class="label">Operation</span>
+      <span class="value">
+        <button (click)="addCodeNode()" *ngIf="canAddCodeNode()">Add</button>
+        <button (click)="deleteCodeNode()" *ngIf="canDeleteCodeNode()">Delete</button>
+        <button (click)="moveCodeNode(-1)" *ngIf="canMoveCodeNode()">Move up</button>
+        <button (click)="moveCodeNode(1)" *ngIf="canSetCodeNode()">Move down</button>
+      </span>
+    </div>
+  </div>
+</div>

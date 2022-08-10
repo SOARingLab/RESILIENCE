@@ -1,0 +1,17 @@
+<div class="container">
+  <h1>Process Model List</h1>
+  <p>
+    <button (click)="add()">Add</button>
+  </p>
+  <p>
+    <span class="column-head">Name</span>
+    <span class="column-head">Operation</span>
+  </p>
+  <p *ngFor="let processModel of processModelList">
+    <span class="column"><a [routerLink]="'/process-model/' + processModel.id">{{processModel.filename}}</a></span>
+    <span class="column">
+      <button (click)="delete(processModel.id)">Delete</button>
+      <button (click)="open(processModel.id)">Open</button>
+    </span>
+  </p>
+</div>

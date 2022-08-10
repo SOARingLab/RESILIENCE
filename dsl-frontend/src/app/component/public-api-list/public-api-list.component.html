@@ -1,0 +1,26 @@
+<div class="container">
+  <h1>Third-party API List</h1>
+  <p>
+    <button (click)="add()">Add</button>
+  </p>
+  <p>
+    <span class="column-head">Name</span>
+    <span class="column-head">Operation</span>
+  </p>
+  <p *ngFor="let publicApi of publicApiList">
+    <span class="column"><a [routerLink]="'/public-api/' + publicApi.id">{{publicApi.name}}</a></span>
+    <span class="column"><button (click)="delete(publicApi.id)">Delete</button></span>
+  </p>
+  <!--  <p>-->
+  <!--    <button class="pagination" (click)="firstPage()">&lt;&lt;</button>-->
+  <!--    <button class="pagination" (click)="previousPage()">&lt;</button>-->
+  <!--    <span class="pagination">{{page + 1}}</span>-->
+  <!--    <button class="pagination" (click)="nextPage()">&gt;</button>-->
+  <!--    <button class="pagination" (click)="lastPage()">&gt;&gt;</button>-->
+  <!--    <span class="pagination">Page</span>-->
+  <!--    <input class="pagination" [(ngModel)]="page">-->
+  <!--    <span class="pagination">Size</span>-->
+  <!--    <input class="pagination" [(ngModel)]="size">-->
+  <!--    <button class="pagination" (click)="findAll()">Go</button>-->
+  <!--  </p>-->
+</div>

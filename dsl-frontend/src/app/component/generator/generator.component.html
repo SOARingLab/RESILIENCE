@@ -1,0 +1,94 @@
+<div class="container">
+  <h1>
+    Value Range
+    <button (click)="saveGrammar()">Complete</button>
+  </h1>
+</div>
+<div class="container">
+  <h2>
+    WHEN variable operator value
+  </h2>
+</div>
+<div class="grammar" *ngFor="let i of range(grammarConditions.length)">
+  <table class="grammar-table">
+    <tr>
+      <th>variable</th>
+      <th>operator</th>
+      <th>value</th>
+    </tr>
+    <tr>
+      <td>
+        <div *ngFor="let j of range(grammarConditions[i][0].length)">
+          <input [(ngModel)]="grammarConditions[i][0][j]">
+          <button class="plus" (click)="deleteElement(grammarConditions[i][0], j)">-</button>
+          <button class="plus" (click)="addElement(grammarConditions[i][0], j)">+</button>
+        </div>
+      </td>
+      <td>
+        <div *ngFor="let j of range(grammarConditions[i][1].length)">
+          <input [(ngModel)]="grammarConditions[i][1][j]">
+          <button class="plus" (click)="deleteElement(grammarConditions[i][1], j)">-</button>
+          <button class="plus" (click)="addElement(grammarConditions[i][1], j)">+</button>
+        </div>
+      </td>
+      <td>
+        <div *ngFor="let j of range(grammarConditions[i][2].length)">
+          <input [(ngModel)]="grammarConditions[i][2][j]">
+          <button class="plus" (click)="deleteElement(grammarConditions[i][2], j)">-</button>
+          <button class="plus" (click)="addElement(grammarConditions[i][2], j)">+</button>
+        </div>
+      </td>
+    </tr>
+  </table>
+  <button class="plus" (click)="deleteGrammarCondition(i)"
+          [disabled]="grammarConditions.length <= 1">
+    -
+  </button>
+  <button class="plus" (click)="addGrammarCondition(i)">
+    +
+  </button>
+</div>
+<div class="container">
+  <h2>
+    SET variable operator value
+  </h2>
+</div>
+<div class="grammar" *ngFor="let i of range(grammarActions.length)">
+  <table class="grammar-table">
+    <tr>
+      <th>variable</th>
+      <th>operator</th>
+      <th>value</th>
+    </tr>
+    <tr>
+      <td>
+        <div *ngFor="let j of range(grammarActions[i][0].length)">
+          <input [(ngModel)]="grammarActions[i][0][j]">
+          <button class="plus" (click)="deleteElement(grammarActions[i][0], j)">-</button>
+          <button class="plus" (click)="addElement(grammarActions[i][0], j)">+</button>
+        </div>
+      </td>
+      <td>
+        <div *ngFor="let j of range(grammarActions[i][1].length)">
+          <input [(ngModel)]="grammarActions[i][1][j]">
+          <button class="plus" (click)="deleteElement(grammarActions[i][1], j)">-</button>
+          <button class="plus" (click)="addElement(grammarActions[i][1], j)">+</button>
+        </div>
+      </td>
+      <td>
+        <div *ngFor="let j of range(grammarActions[i][2].length)">
+          <input [(ngModel)]="grammarActions[i][2][j]">
+          <button class="plus" (click)="deleteElement(grammarActions[i][2], j)">-</button>
+          <button class="plus" (click)="addElement(grammarActions[i][2], j)">+</button>
+        </div>
+      </td>
+    </tr>
+  </table>
+  <button class="plus" (click)="deleteGrammarAction(i)"
+          [disabled]="grammarActions.length <= 1">
+    -
+  </button>
+  <button class="plus" (click)="addGrammarAction(i)">
+    +
+  </button>
+</div>

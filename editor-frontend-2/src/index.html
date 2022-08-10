@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Long-tailed Change</title>
+
+  <link rel="stylesheet" href="vendor/bpmn-js/assets/diagram-js.css" />
+  <link rel="stylesheet" href="vendor/bpmn-js/assets/bpmn-js.css" />
+  <link rel="stylesheet" href="vendor/bpmn-js/assets/bpmn-font/css/bpmn-embedded.css" />
+  <link rel="stylesheet" href="vendor/bpmn-js-properties-panel/assets/properties-panel.css" />
+
+  <link rel="stylesheet" href="app.css" />
+</head>
+<body>
+  <div class="content with-diagram" id="js-drop-zone">
+
+    <div class="message intro">
+      <div class="note">
+        Drop BPMN diagram from your desktop or <a id="js-create-diagram" href>create a new diagram</a> to get started.
+      </div>
+    </div>
+
+    <div class="message error">
+      <div class="note">
+        <p>Ooops, we could not display the BPMN 2.0 diagram.</p>
+
+        <div class="details">
+          <span>Import Error Details</span>
+          <pre></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="canvas" id="js-canvas"></div>
+    <div class="properties-panel-parent" id="js-properties-panel"></div>
+  </div>
+
+  <ul class="buttons">
+    <li>
+      Open
+    </li>
+    <li>
+      <input id="open-diagram" type="file">
+    </li>
+    <li>
+      <button id="js-open-diagram">
+        Open
+      </button>
+    </li>
+    <li>
+      Deploy
+    </li>
+    <li>
+      <button id="js-deploy-diagram">
+        Deploy
+      </button>
+    </li>
+    <li>
+      <button id="js-deploy-with-annotations">
+        Deploy with annotations
+      </button>
+    </li>
+    <li>
+      Verify
+    </li>
+    <li>
+      <input id="start-node-name" value="Start">
+    </li>
+    <li>
+      <button id="js-verify">
+        Verify
+      </button>
+    </li>
+    <li>
+      Download
+    </li>
+    <li>
+      <a id="js-download-diagram" href title="download BPMN diagram">
+        BPMN diagram
+      </a>
+    </li>
+    <li>
+      <a id="js-download-svg" href title="download as SVG image">
+        SVG image
+      </a>
+    </li>
+  </ul>
+
+  <script src="app.js"></script>
+</body>
+</html>

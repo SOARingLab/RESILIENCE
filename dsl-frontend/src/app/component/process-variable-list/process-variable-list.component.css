@@ -1,0 +1,16 @@
+.column {
+  display: inline-block;
+  width: 200px;
+}
+
+.column-head {
+  display: inline-block;
+  width: 200px;
+  font-weight: bold;
+}
+
+.pagination {
+  display: inline-block;
+  width: 30px;
+  text-align: center;
+}

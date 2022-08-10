@@ -1,0 +1,89 @@
+.lexical, .terminal, .question, .plus, .asterisk, .concatenation, .alternation {
+  display: inline-block;
+  margin: 5px;
+  border: 1px solid;
+  padding: 5px;
+}
+
+.lexical {
+}
+
+.terminal {
+}
+
+.question {
+}
+
+.plus {
+}
+
+.asterisk {
+}
+
+.concatenation {
+}
+
+.alternation {
+}
+
+/*meta language*/
+
+.expression, .identifier {
+  display: inline-block;
+  margin: 5px;
+  border: 1px solid;
+  padding: 5px;
+}
+
+.syntax {
+  margin: 5px;
+  border: 1px solid;
+  padding: 5px;
+}
+
+.expression {
+}
+
+.identifier {
+}
+
+.lhs {
+  margin: 5px;
+  padding: 5px;
+}
+
+.rhs {
+  margin: 5px;
+  padding: 5px;
+}
+
+/*Simple*/
+
+.inputs {
+}
+
+.input {
+  margin: 5px;
+  border: 1px solid;
+  padding: 5px;
+  width: 600px;
+}
+
+.logical {
+  display: inline-block;
+  width: 80px;
+}
+
+.operand {
+  display: inline-block;
+  width: 160px;
+}
+
+.operator {
+  display: inline-block;
+  width: 80px;
+}
+
+.add {
+  width: 23px;
+}

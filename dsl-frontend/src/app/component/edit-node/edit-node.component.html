@@ -1,0 +1,218 @@
+<ng-container *ngIf="editNode.syntaxNode.type === 'lexical'">
+  <ng-container *ngIf="edit.syntax.name === ''">
+    <span class="lexical" (click)="select()">
+      &lt;{{editNode.syntaxNode.name}}&gt;
+      <input [(ngModel)]="editNode.codeNode.content">
+    </span>
+  </ng-container>
+  <ng-container *ngIf="edit.syntax.name === 'meta language'">
+    <span class="lexical" (click)="select()" *ngIf="editNode.syntaxNode.name === 'lexical'">
+      ?<input [(ngModel)]="editNode.codeNode.content">?
+    </span>
+    <span class="terminal" (click)="select()" *ngIf="editNode.syntaxNode.name === 'terminal'">
+      "<input [(ngModel)]="editNode.codeNode.content">"
+    </span>
+    <span class="identifier" (click)="select()" *ngIf="editNode.syntaxNode.name === 'identifier'">
+      <input [(ngModel)]="editNode.codeNode.content">
+    </span>
+  </ng-container>
+  <ng-container *ngIf="edit.syntax.name === 'Simple'">
+    <span (click)="select()" *ngIf="editNode.syntaxNode.name === 'IDENTIFIER'">
+      <input class="operand" [(ngModel)]="editNode.codeNode.content">
+    </span>
+    <span (click)="select()" *ngIf="editNode.syntaxNode.name === 'EXPRESSION'">
+      <input class="operand" [(ngModel)]="editNode.codeNode.content">
+    </span>
+    <span (click)="select()" *ngIf="editNode.syntaxNode.name === 'OPERATOR'">
+      <select class="operator" [(ngModel)]="editNode.codeNode.content">
+        <option>==</option>
+        <option>!=</option>
+        <option>&lt;</option>
+        <option>&lt;=</option>
+        <option>&gt;</option>
+        <option>&gt;=</option>
+      </select>
+    </span>
+    <span (click)="select()" *ngIf="editNode.syntaxNode.name === 'LOGICAL'">
+      <span class="logical" *ngIf="getConditionPosition(editNode.codeNode) === 0">
+        WHEN
+      </span>
+      <span *ngIf="getConditionPosition(editNode.codeNode) !== 0">
+        <select class="logical" [(ngModel)]="editNode.codeNode.content">
+          <option>AND</option>
+          <option>OR</option>
+        </select>
+      </span>
+    </span>
+  </ng-container>
+</ng-container>
+<ng-container *ngIf="editNode.syntaxNode.type === 'terminal'">
+  <ng-container *ngIf="edit.syntax.name === ''">
+    <span class="terminal" (click)="select()">
+      &lt;{{editNode.syntaxNode.name}}&gt;
+      {{editNode.codeNode.content}}
+    </span>
+  </ng-container>
+  <ng-container *ngIf="edit.syntax.name === 'Simple'">
+     <span class="logical" (click)="select()">
+       {{editNode.codeNode.content}}
+     </span>
+  </ng-container>
+</ng-container>
+<ng-container *ngIf="editNode.syntaxNode.type === 'question'">
+  <ng-container *ngIf="edit.syntax.name === ''">
+    <span class="question">
+      <span (click)="select()">&lt;{{editNode.syntaxNode.name}}&gt;</span>
+      <span *ngFor="let content of editNode.codeNode.contents; let index = index">
+        <app-edit-node [editNode]="edit.getEditNode(content)"></app-edit-node>
+      </span>
+    </span>
+  </ng-container>
+</ng-container>
+<ng-container *ngIf="editNode.syntaxNode.type === 'plus'">
+  <ng-container *ngIf="edit.syntax.name === ''">
+    <span class="plus">
+      <span (click)="select()">&lt;{{editNode.syntaxNode.name}}&gt;</span>
+      <span *ngFor="let content of editNode.codeNode.contents; let index = index">
+        <app-edit-node [editNode]="edit.getEditNode(content)"></app-edit-node>
+      </span>
+    </span>
+  </ng-container>
+</ng-container>
+<ng-container *ngIf="editNode.syntaxNode.type === 'asterisk'">
+  <ng-container *ngIf="edit.syntax.name === ''">
+    <span class="asterisk">
+      <span (click)="select()">&lt;{{editNode.syntaxNode.name}}&gt;</span>
+      <span *ngFor="let content of editNode.codeNode.contents; let index = index">
+        <app-edit-node [editNode]="edit.getEditNode(content)"></app-edit-node>
+      </span>
+    </span>
+  </ng-container>
+  <ng-container *ngIf="edit.syntax.name === 'meta language'">
+    <div class="syntax" *ngIf="editNode.syntaxNode.name === 'syntax'">
+      <p (click)="select()">
+        Syntax name: <input [(ngModel)]="editNode.codeNode.name">
+      </p>
+      <div *ngFor="let content of editNode.codeNode.contents; let index = index">
+        <span class="lhs">
+          <input [(ngModel)]="edit.getEditNode(content).codeNode.name">
+        </span>
+        <span>=</span>
+        <span class="rhs">
+          <app-edit-node [editNode]="edit.getEditNode(content)"></app-edit-node>
+        </span>
+      </div>
+      <p>
+        <button (click)="addCodeNode(editNode.codeNode)">Add rule</button>
+      </p>
+    </div>
+    <span class="concatenation" *ngIf="editNode.syntaxNode.name === 'concatenation'">
+      <span (click)="select()">&lt;con&gt;</span>
+      <span *ngFor="let content of editNode.codeNode.contents; let index = index">
+        <app-edit-node [editNode]="edit.getEditNode(content)"></app-edit-node>
+      </span>
+    </span>
+    <span class="alternation" *ngIf="editNode.syntaxNode.name === 'alternation'">
+      <span (click)="select()">&lt;alt&gt;</span>
+      <span *ngFor="let content of editNode.codeNode.contents; let index = index">
+        <app-edit-node [editNode]="edit.getEditNode(content)"></app-edit-node>
+      </span>
+    </span>
+  </ng-container>
+  <ng-container *ngIf="edit.syntax.name === 'Simple'">
+    <div class="inputs" *ngIf="editNode.syntaxNode.name === 'inputs'">
+      <div>
+        <button (click)="addCodeNode(editNode.codeNode)">add input</button>
+      </div>
+      <div *ngFor="let content of editNode.codeNode.contents; let index = index">
+        <app-edit-node [editNode]="edit.getEditNode(content)"></app-edit-node>
+      </div>
+    </div>
+    <div *ngIf="editNode.syntaxNode.name === 'conditions'">
+      <button (click)="addCodeNode(editNode.codeNode)">add condition</button>
+      <div *ngFor="let content of editNode.codeNode.contents; let index = index">
+        <app-edit-node [editNode]="edit.getEditNode(content)"></app-edit-node>
+      </div>
+    </div>
+    <div *ngIf="editNode.syntaxNode.name === 'actions'">
+      <button (click)="addCodeNode(editNode.codeNode)">add action</button>
+      <div *ngFor="let content of editNode.codeNode.contents; let index = index">
+        <app-edit-node [editNode]="edit.getEditNode(content)"></app-edit-node>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>
+<ng-container *ngIf="editNode.syntaxNode.type === 'concatenation'">
+  <ng-container *ngIf="edit.syntax.name === ''">
+    <span class="concatenation">
+      <span (click)="select()">&lt;{{editNode.syntaxNode.name}}&gt;</span>
+      <span *ngFor="let content of editNode.codeNode.contents; let index = index">
+        <app-edit-node [editNode]="edit.getEditNode(content)"></app-edit-node>
+      </span>
+    </span>
+  </ng-container>
+  <ng-container *ngIf="edit.syntax.name === 'meta language'">
+    <span class="question" *ngIf="editNode.syntaxNode.name === 'question'">
+      <span *ngFor="let content of editNode.codeNode.contents; let index = index">
+        <app-edit-node [editNode]="edit.getEditNode(content)"></app-edit-node>
+      </span>
+      <span (click)="select()">?</span>
+    </span>
+    <span class="plus" *ngIf="editNode.syntaxNode.name === 'plus'">
+      <span *ngFor="let content of editNode.codeNode.contents; let index = index">
+        <app-edit-node [editNode]="edit.getEditNode(content)"></app-edit-node>
+      </span>
+      <span (click)="select()">+</span>
+    </span>
+    <span class="asterisk" *ngIf="editNode.syntaxNode.name === 'asterisk'">
+      <span *ngFor="let content of editNode.codeNode.contents; let index = index">
+        <app-edit-node [editNode]="edit.getEditNode(content)"></app-edit-node>
+      </span>
+      <span (click)="select()">*</span>
+    </span>
+  </ng-container>
+  <ng-container *ngIf="edit.syntax.name === 'Simple'">
+    <div class="input" *ngIf="editNode.syntaxNode.name === 'input'">
+      <div *ngFor="let content of editNode.codeNode.contents; let index = index">
+        <app-edit-node [editNode]="edit.getEditNode(content)"></app-edit-node>
+      </div>
+      <div>
+        <button class="add" (click)="deleteCodeNode(editNode.codeNode)">-</button>
+      </div>
+    </div>
+    <span *ngIf="editNode.syntaxNode.name === 'condition'">
+      <span *ngFor="let content of editNode.codeNode.contents; let index = index">
+        <app-edit-node [editNode]="edit.getEditNode(content)"></app-edit-node>
+      </span>
+      <span>
+        <button class="add" (click)="deleteCodeNode(editNode.codeNode)">-</button>
+      </span>
+    </span>
+    <span *ngIf="editNode.syntaxNode.name === 'action'">
+      <span *ngFor="let content of editNode.codeNode.contents; let index = index">
+        <app-edit-node [editNode]="edit.getEditNode(content)"></app-edit-node>
+      </span>
+      <span>
+        <button class="add" (click)="deleteCodeNode(editNode.codeNode)">-</button>
+      </span>
+    </span>
+  </ng-container>
+</ng-container>
+<ng-container *ngIf="editNode.syntaxNode.type === 'alternation'">
+  <ng-container *ngIf="edit.syntax.name === ''">
+    <span class="alternation">
+      <span (click)="select()">&lt;{{editNode.syntaxNode.name}}&gt;</span>
+      <span *ngFor="let content of editNode.codeNode.contents; let index = index">
+        <app-edit-node [editNode]="edit.getEditNode(content)"></app-edit-node>
+      </span>
+    </span>
+  </ng-container>
+  <ng-container *ngIf="edit.syntax.name === 'meta language'">
+    <span class="expression" *ngIf="editNode.syntaxNode.name === 'expression'">
+      <span (click)="select()">&lt;exp&gt;</span>
+      <span *ngFor="let content of editNode.codeNode.contents; let index = index">
+        <app-edit-node [editNode]="edit.getEditNode(content)"></app-edit-node>
+      </span>
+    </span>
+  </ng-container>
+</ng-container>
