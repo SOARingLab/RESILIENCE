@@ -48,6 +48,7 @@ public class StnuVerifier {
 
     private void readBpmnXml(String bpmnXml) throws Exception {
         Document document = DocumentHelper.parseText(bpmnXml);
+        document.getRootElement().addNamespace("constraint", "http://some-company/schema/bpmn/constraint");
         List<Node> list = document.selectNodes("//*[@constraint:temporal]");
         for (Node node : list) {
             String localName = node.valueOf("local-name()");

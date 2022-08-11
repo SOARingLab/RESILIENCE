@@ -8,7 +8,7 @@
     <bpmn:messageFlow id="Flow_0n0fh5x" name="Payment" sourceRef="Activity_1sxv7q6" targetRef="Event_1tne0jm" />
   </bpmn:collaboration>
   <bpmn:process id="Process_1nyigqr" name="Online grocery customer" isExecutable="true">
-    <bpmn:startEvent id="Event_1uks022" name="Start">
+    <bpmn:startEvent id="Event_1uks022" name="Start 1">
       <bpmn:outgoing>Flow_1pa4vlj</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_1pa4vlj" sourceRef="Event_1uks022" targetRef="Activity_0yryb7d" />
@@ -69,7 +69,7 @@ S.sendMessage(execution, "Payment received");</bpmn:script>
     <bpmn:sequenceFlow id="Flow_1iqyzuo" sourceRef="Activity_105x9s9" targetRef="Event_1tne0jm" />
     <bpmn:sequenceFlow id="Flow_1fx9gvd" sourceRef="Event_1tne0jm" targetRef="Activity_06f2qgl" />
     <bpmn:sequenceFlow id="Flow_1xff9nj" sourceRef="Activity_06f2qgl" targetRef="Event_1jram7c" />
-    <bpmn:startEvent id="Event_19drawv" name="Order received">
+    <bpmn:startEvent id="Event_19drawv" name="Start">
       <bpmn:outgoing>Flow_08qvpkv</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0vhqg04" messageRef="Message_0fig6wj" />
     </bpmn:startEvent>
@@ -136,7 +136,7 @@ S.sendMessage(execution, "Goods received");</bpmn:script>
       <bpmndi:BPMNShape id="Event_1uks022_di" bpmnElement="Event_1uks022">
         <dc:Bounds x="232" y="172" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="238" y="215" width="25" height="14" />
+          <dc:Bounds x="234" y="215" width="33" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_01v61hf_di" bpmnElement="Activity_0yryb7d">
@@ -194,7 +194,7 @@ S.sendMessage(execution, "Goods received");</bpmn:script>
       <bpmndi:BPMNShape id="Event_0rjfhq4_di" bpmnElement="Event_19drawv">
         <dc:Bounds x="232" y="482" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="213" y="525" width="74" height="14" />
+          <dc:Bounds x="238" y="525" width="25" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1ic89og_di" bpmnElement="Activity_17p63lp">

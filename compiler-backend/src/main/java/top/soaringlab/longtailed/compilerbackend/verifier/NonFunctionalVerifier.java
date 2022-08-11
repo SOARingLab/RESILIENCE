@@ -64,6 +64,7 @@ public class NonFunctionalVerifier {
 
     private void readBpmnXml() throws Exception {
         Document document = DocumentHelper.parseText(bpmnXml);
+        document.getRootElement().addNamespace("constraint", "http://some-company/schema/bpmn/constraint");
         List<Node> list = document.selectNodes("//*[@constraint:temporal]");
         for (Node node : list) {
             String localName = node.valueOf("local-name()");
