@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0q4pldu" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.11.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:constraint="http://some-company/schema/bpmn/constraint" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0q4pldu" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.11.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
   <bpmn:collaboration id="Collaboration_0skvm35">
     <bpmn:participant id="Participant_18ri5a1" name="Customer" processRef="Process_1nyigqr" />
     <bpmn:participant id="Participant_1ee8jmu" name="Online grocery" processRef="Process_1izd960" />
@@ -38,6 +38,9 @@ S.sendMessageToStart(execution, "Order received");</bpmn:script>
       <bpmn:outgoing>Flow_0ianl30</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_10sip0p" messageRef="Message_1wdhdkr" />
     </bpmn:intermediateCatchEvent>
+    <bpmn:endEvent id="Event_04iot6i" name="End">
+      <bpmn:incoming>Flow_1wv421j</bpmn:incoming>
+    </bpmn:endEvent>
     <bpmn:scriptTask id="Activity_1sxv7q6" name="Pay for goods" scriptFormat="groovy">
       <bpmn:incoming>Flow_0ianl30</bpmn:incoming>
       <bpmn:outgoing>Flow_1wv421j</bpmn:outgoing>
@@ -45,9 +48,6 @@ S.sendMessageToStart(execution, "Order received");</bpmn:script>
 S.info(execution, "Pay for goods");
 S.sendMessage(execution, "Payment received");</bpmn:script>
     </bpmn:scriptTask>
-    <bpmn:endEvent id="Event_04iot6i" name="End">
-      <bpmn:incoming>Flow_1wv421j</bpmn:incoming>
-    </bpmn:endEvent>
   </bpmn:process>
   <bpmn:process id="Process_1izd960" isExecutable="true" camunda:isStartableInTasklist="false">
     <bpmn:laneSet id="LaneSet_0zy5dkd">
@@ -59,14 +59,15 @@ S.sendMessage(execution, "Payment received");</bpmn:script>
         <bpmn:flowNodeRef>Event_1jram7c</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Lane_0cahbgp" name="Logistics">
+        <bpmn:flowNodeRef>Gateway_0cvilib</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0d00975</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_105x9s9</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_0z6b60p</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_0nll1wx</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:sequenceFlow id="Flow_08qvpkv" sourceRef="Event_19drawv" targetRef="Activity_17p63lp" />
-    <bpmn:sequenceFlow id="Flow_169a07k" sourceRef="Activity_17p63lp" targetRef="Activity_0d00975" />
     <bpmn:sequenceFlow id="Flow_187e7sp" sourceRef="Activity_0d00975" targetRef="Activity_105x9s9" />
-    <bpmn:sequenceFlow id="Flow_1iqyzuo" sourceRef="Activity_105x9s9" targetRef="Event_1tne0jm" />
     <bpmn:sequenceFlow id="Flow_1fx9gvd" sourceRef="Event_1tne0jm" targetRef="Activity_06f2qgl" />
     <bpmn:sequenceFlow id="Flow_1xff9nj" sourceRef="Activity_06f2qgl" targetRef="Event_1jram7c" />
     <bpmn:startEvent id="Event_19drawv" name="Order received">
@@ -75,7 +76,7 @@ S.sendMessage(execution, "Payment received");</bpmn:script>
     </bpmn:startEvent>
     <bpmn:scriptTask id="Activity_17p63lp" name="Issue goods" scriptFormat="groovy">
       <bpmn:incoming>Flow_08qvpkv</bpmn:incoming>
-      <bpmn:outgoing>Flow_169a07k</bpmn:outgoing>
+      <bpmn:outgoing>Flow_11bhxk8</bpmn:outgoing>
       <bpmn:script>S.info(execution, "Order received");
 if (order_status == "canceled") {
     S.info(execution, "Order canceled");
@@ -84,30 +85,61 @@ if (order_status == "canceled") {
     S.info(execution, "Issue goods");
 }</bpmn:script>
     </bpmn:scriptTask>
+    <bpmn:exclusiveGateway id="Gateway_0cvilib">
+      <bpmn:incoming>Flow_11bhxk8</bpmn:incoming>
+      <bpmn:outgoing>Flow_04dzht4</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1yt8avj</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
     <bpmn:scriptTask id="Activity_0d00975" name="Deliver goods" scriptFormat="groovy">
-      <bpmn:incoming>Flow_169a07k</bpmn:incoming>
+      <bpmn:incoming>Flow_04dzht4</bpmn:incoming>
       <bpmn:outgoing>Flow_187e7sp</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1g0vepn</bpmn:outgoing>
       <bpmn:script>S.info(execution, "Deliver goods (delivery_method = " + delivery_method + ")");
 S.sendMessage(execution, "Goods received");</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:scriptTask id="Activity_105x9s9" name="Confirm delivery" scriptFormat="groovy">
       <bpmn:incoming>Flow_187e7sp</bpmn:incoming>
-      <bpmn:outgoing>Flow_1iqyzuo</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0dq8qa1</bpmn:outgoing>
       <bpmn:script>S.info(execution, "Confirm delivery");</bpmn:script>
     </bpmn:scriptTask>
+    <bpmn:exclusiveGateway id="Gateway_0z6b60p">
+      <bpmn:incoming>Flow_0dq8qa1</bpmn:incoming>
+      <bpmn:outgoing>Flow_0e2jtau</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1dtqxn2</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
     <bpmn:intermediateCatchEvent id="Event_1tne0jm" name="Payment received">
-      <bpmn:incoming>Flow_1iqyzuo</bpmn:incoming>
+      <bpmn:incoming>Flow_0e2jtau</bpmn:incoming>
       <bpmn:outgoing>Flow_1fx9gvd</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0zp8ujk" messageRef="Message_0m4ocql" />
     </bpmn:intermediateCatchEvent>
     <bpmn:scriptTask id="Activity_06f2qgl" name="Process payment" scriptFormat="groovy">
       <bpmn:incoming>Flow_1fx9gvd</bpmn:incoming>
+      <bpmn:incoming>Flow_1g0vepn</bpmn:incoming>
       <bpmn:outgoing>Flow_1xff9nj</bpmn:outgoing>
       <bpmn:script>S.info(execution, "Process payment (amount = " + amount + ")");</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:endEvent id="Event_1jram7c" name="End">
       <bpmn:incoming>Flow_1xff9nj</bpmn:incoming>
     </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_11bhxk8" sourceRef="Activity_17p63lp" targetRef="Gateway_0cvilib" />
+    <bpmn:sequenceFlow id="Flow_04dzht4" name="order_status&#10;== &#34;pending&#34;" sourceRef="Gateway_0cvilib" targetRef="Activity_0d00975">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">order_status == "pending"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0dq8qa1" sourceRef="Activity_105x9s9" targetRef="Gateway_0z6b60p" />
+    <bpmn:sequenceFlow id="Flow_0e2jtau" name="order_status&#10;== &#34;pending&#34;" sourceRef="Gateway_0z6b60p" targetRef="Event_1tne0jm">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">order_status == "pending"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="Event_0nll1wx" name="Canceled">
+      <bpmn:incoming>Flow_1yt8avj</bpmn:incoming>
+      <bpmn:incoming>Flow_1dtqxn2</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1yt8avj" name="order_status&#10;==&#34;canceled&#34;" sourceRef="Gateway_0cvilib" targetRef="Event_0nll1wx">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">order_status == "canceled"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1dtqxn2" name="order_status&#10;==&#34;canceled&#34;" sourceRef="Gateway_0z6b60p" targetRef="Event_0nll1wx">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">order_status == "canceled"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1g0vepn" sourceRef="Activity_0d00975" targetRef="Activity_06f2qgl" constraint:declarative="response" />
     <bpmn:textAnnotation id="TextAnnotation_1jfwp8e">
       <bpmn:text>WHEN risk_level == "high"
 SET order_status = "canceled"
@@ -122,15 +154,15 @@ SET delivery_method = "contactless_locker"</bpmn:text>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0skvm35">
       <bpmndi:BPMNShape id="Participant_18ri5a1_di" bpmnElement="Participant_18ri5a1" isHorizontal="true">
-        <dc:Bounds x="160" y="110" width="760" height="160" />
+        <dc:Bounds x="160" y="110" width="870" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1wv421j_di" bpmnElement="Flow_1wv421j">
-        <di:waypoint x="690" y="190" />
-        <di:waypoint x="762" y="190" />
+        <di:waypoint x="790" y="190" />
+        <di:waypoint x="872" y="190" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0ianl30_di" bpmnElement="Flow_0ianl30">
         <di:waypoint x="518" y="190" />
-        <di:waypoint x="590" y="190" />
+        <di:waypoint x="690" y="190" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_17hy1ta_di" bpmnElement="Flow_17hy1ta">
         <di:waypoint x="410" y="190" />
@@ -155,44 +187,77 @@ SET delivery_method = "contactless_locker"</bpmn:text>
           <dc:Bounds x="461" y="148" width="78" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0pnl4th_di" bpmnElement="Activity_1sxv7q6">
-        <dc:Bounds x="590" y="150" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_04iot6i_di" bpmnElement="Event_04iot6i">
-        <dc:Bounds x="762" y="172" width="36" height="36" />
+        <dc:Bounds x="872" y="172" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="770" y="215" width="20" height="14" />
+          <dc:Bounds x="880" y="215" width="20" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0pnl4th_di" bpmnElement="Activity_1sxv7q6">
+        <dc:Bounds x="690" y="150" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Participant_1ee8jmu_di" bpmnElement="Participant_1ee8jmu" isHorizontal="true">
-        <dc:Bounds x="160" y="350" width="760" height="390" />
+        <dc:Bounds x="160" y="350" width="860" height="470" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_0cahbgp_di" bpmnElement="Lane_0cahbgp" isHorizontal="true">
-        <dc:Bounds x="190" y="580" width="730" height="160" />
+        <dc:Bounds x="190" y="580" width="830" height="240" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_1ev2hop_di" bpmnElement="Lane_1ev2hop" isHorizontal="true">
-        <dc:Bounds x="190" y="350" width="730" height="230" />
+        <dc:Bounds x="190" y="350" width="830" height="230" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1g0vepn_di" bpmnElement="Flow_1g0vepn">
+        <di:waypoint x="530" y="620" />
+        <di:waypoint x="800" y="540" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1dtqxn2_di" bpmnElement="Flow_1dtqxn2">
+        <di:waypoint x="740" y="685" />
+        <di:waypoint x="740" y="760" />
+        <di:waypoint x="568" y="760" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="747" y="726" width="65" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1yt8avj_di" bpmnElement="Flow_1yt8avj">
+        <di:waypoint x="360" y="685" />
+        <di:waypoint x="360" y="760" />
+        <di:waypoint x="532" y="760" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="368" y="726" width="65" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0e2jtau_di" bpmnElement="Flow_0e2jtau">
+        <di:waypoint x="740" y="635" />
+        <di:waypoint x="740" y="518" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="748" y="626" width="63" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0dq8qa1_di" bpmnElement="Flow_0dq8qa1">
+        <di:waypoint x="670" y="660" />
+        <di:waypoint x="715" y="660" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_04dzht4_di" bpmnElement="Flow_04dzht4">
+        <di:waypoint x="385" y="660" />
+        <di:waypoint x="430" y="660" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="369" y="626" width="63" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11bhxk8_di" bpmnElement="Flow_11bhxk8">
+        <di:waypoint x="360" y="540" />
+        <di:waypoint x="360" y="635" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1xff9nj_di" bpmnElement="Flow_1xff9nj">
-        <di:waypoint x="800" y="500" />
-        <di:waypoint x="842" y="500" />
+        <di:waypoint x="900" y="500" />
+        <di:waypoint x="942" y="500" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1fx9gvd_di" bpmnElement="Flow_1fx9gvd">
-        <di:waypoint x="658" y="500" />
-        <di:waypoint x="700" y="500" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1iqyzuo_di" bpmnElement="Flow_1iqyzuo">
-        <di:waypoint x="640" y="620" />
-        <di:waypoint x="640" y="518" />
+        <di:waypoint x="758" y="500" />
+        <di:waypoint x="800" y="500" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_187e7sp_di" bpmnElement="Flow_187e7sp">
-        <di:waypoint x="550" y="660" />
-        <di:waypoint x="590" y="660" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_169a07k_di" bpmnElement="Flow_169a07k">
-        <di:waypoint x="360" y="540" />
-        <di:waypoint x="360" y="660" />
-        <di:waypoint x="450" y="660" />
+        <di:waypoint x="530" y="660" />
+        <di:waypoint x="570" y="660" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08qvpkv_di" bpmnElement="Flow_08qvpkv">
         <di:waypoint x="268" y="500" />
@@ -207,25 +272,37 @@ SET delivery_method = "contactless_locker"</bpmn:text>
       <bpmndi:BPMNShape id="Activity_1ic89og_di" bpmnElement="Activity_17p63lp">
         <dc:Bounds x="310" y="460" width="100" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0cvilib_di" bpmnElement="Gateway_0cvilib" isMarkerVisible="true">
+        <dc:Bounds x="335" y="635" width="50" height="50" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0kdwycs_di" bpmnElement="Activity_0d00975">
-        <dc:Bounds x="450" y="620" width="100" height="80" />
+        <dc:Bounds x="430" y="620" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1e9gyrv_di" bpmnElement="Activity_105x9s9">
-        <dc:Bounds x="590" y="620" width="100" height="80" />
+        <dc:Bounds x="570" y="620" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0z6b60p_di" bpmnElement="Gateway_0z6b60p" isMarkerVisible="true">
+        <dc:Bounds x="715" y="635" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0nd6r2z_di" bpmnElement="Event_1tne0jm">
-        <dc:Bounds x="622" y="482" width="36" height="36" />
+        <dc:Bounds x="722" y="482" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="525" y="493" width="89" height="14" />
+          <dc:Bounds x="622.5" y="493" width="89" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_07vkzv7_di" bpmnElement="Activity_06f2qgl">
-        <dc:Bounds x="700" y="460" width="100" height="80" />
+        <dc:Bounds x="800" y="460" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1jram7c_di" bpmnElement="Event_1jram7c">
-        <dc:Bounds x="842" y="482" width="36" height="36" />
+        <dc:Bounds x="942" y="482" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="850" y="525" width="20" height="14" />
+          <dc:Bounds x="950" y="525" width="20" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0nll1wx_di" bpmnElement="Event_0nll1wx">
+        <dc:Bounds x="532" y="742" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="527" y="785" width="47" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_1jfwp8e_di" bpmnElement="TextAnnotation_1jfwp8e" bioc:stroke="green">
@@ -252,10 +329,10 @@ SET delivery_method = "contactless_locker"</bpmn:text>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0n0fh5x_di" bpmnElement="Flow_0n0fh5x">
-        <di:waypoint x="640" y="230" />
-        <di:waypoint x="640" y="482" />
+        <di:waypoint x="740" y="230" />
+        <di:waypoint x="740" y="482" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="647" y="292" width="45" height="14" />
+          <dc:Bounds x="746.9999999999999" y="292" width="45" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

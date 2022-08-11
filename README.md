@@ -68,9 +68,9 @@ Usage:
 
 - Open a process model. Click `Choose File` to choose a .bpmn file and click `Open` to open the process model.
 
-- Specify a functional constraint. Draw a link between two activities and set the relation in the property panel. An example is `process-example/online-grocery-functional.bpmn`.
+- Specify a functional constraint. Draw a link between two activities and set the relation in `Declarative` in the property panel. An example is `process-example/online-grocery-constraint.bpmn`.
 
-- Specify a non-functional constraint. Choose an activity and set the duration in the property panel. Draw a link between two activities and set the constraint in the property panel. An example is `process-example/online-grocery-non-functional.bpmn`.
+- Specify a non-functional constraint. Choose an activity and set the duration in `Temporal` in the property panel. Draw a link between two activities and set the constraint in `Temporal` in the property panel. An example is `process-example/online-grocery-constraint.bpmn`.
 
 - Verify the constraints. Set the start node name and click `Verify`.
 

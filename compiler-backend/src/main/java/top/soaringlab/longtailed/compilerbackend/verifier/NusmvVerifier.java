@@ -610,7 +610,7 @@ public class NusmvVerifier {
         bufferedWriter.write(inputFile);
         bufferedWriter.close();
 
-        String[] runCommand = new String[]{"cmd", "/c", "NuSMV.exe", inputFileName};
+        String[] runCommand = new String[]{"NuSMV", inputFileName};
         Process process = Runtime.getRuntime().exec(runCommand, null, directoryFile);
         if (!process.waitFor(10, TimeUnit.SECONDS)) {
             process.destroy();

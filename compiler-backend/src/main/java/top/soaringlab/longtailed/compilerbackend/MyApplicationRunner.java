@@ -48,8 +48,20 @@ public class MyApplicationRunner implements ApplicationRunner {
 
         processModel = new ProcessModel();
         processModel.setProcessId("online_grocery");
-        processModel.setFilename("online-grocery-functional.bpmn");
-        processModel.setData(readResourceFile("process-model/online-grocery-functional.bpmn"));
+        processModel.setFilename("online-grocery-annotation.bpmn");
+        processModel.setData(readResourceFile("process-model/online-grocery-annotation.bpmn"));
+        processModelService.save(processModel);
+
+        processModel = new ProcessModel();
+        processModel.setProcessId("online_grocery");
+        processModel.setFilename("online-grocery-constraint.bpmn");
+        processModel.setData(readResourceFile("process-model/online-grocery-constraint.bpmn"));
+        processModelService.save(processModel);
+
+        processModel = new ProcessModel();
+        processModel.setProcessId("online_grocery");
+        processModel.setFilename("online-grocery-functional-detail.bpmn");
+        processModel.setData(readResourceFile("process-model/online-grocery-functional-detail.bpmn"));
         processModelService.save(processModel);
     }
 
