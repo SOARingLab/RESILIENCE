@@ -3596,15 +3596,35 @@ class CustomRenderer extends diagram_js_lib_draw_BaseRenderer__WEBPACK_IMPORTED_
       };
       let path = drawPath(parentNode, pathData, attrs);
 
+      if (declarative === 'responded existence') {
+        (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(path, {
+          markerStart: marker('declarative-circle-start', fill, stroke)
+        });
+      }
+
+      if (declarative === 'co-existence') {
+        (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(path, {
+          markerStart: marker('declarative-circle-start', fill, stroke),
+          markerEnd: marker('declarative-circle-end', fill, stroke)
+        });
+      }
+
       if (declarative === 'response') {
         (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(path, {
-          markerStart: marker('declarative-circle', fill, stroke),
+          markerStart: marker('declarative-circle-start', fill, stroke),
           markerEnd: marker('declarative-arrow-end', fill, stroke)
         });
       }
 
       if (declarative === 'precedence') {
         (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(path, {
+          markerEnd: marker('declarative-circle-arrow-end', fill, stroke)
+        });
+      }
+
+      if (declarative === 'succession') {
+        (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(path, {
+          markerStart: marker('declarative-circle-start', fill, stroke),
           markerEnd: marker('declarative-circle-arrow-end', fill, stroke)
         });
       }
@@ -3777,7 +3797,7 @@ function marker(type, fill, stroke) {
 }
 
 function createMarker(id, type, fill, stroke) {
-  if (type === 'declarative-circle') {
+  if (type === 'declarative-circle-start') {
     let declarativeCircle = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.create)('circle');
     (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(declarativeCircle, {
       cx: 6,
@@ -3788,6 +3808,27 @@ function createMarker(id, type, fill, stroke) {
       element: declarativeCircle,
       ref: {
         x: 1,
+        y: 6
+      },
+      scale: 0.5,
+      attrs: {
+        fill: fill,
+        stroke: stroke
+      }
+    });
+  }
+
+  if (type === 'declarative-circle-end') {
+    let declarativeCircle = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.create)('circle');
+    (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(declarativeCircle, {
+      cx: 6,
+      cy: 6,
+      r: 5
+    });
+    addMarker(id, {
+      element: declarativeCircle,
+      ref: {
+        x: 11,
         y: 6
       },
       scale: 0.5,
@@ -4011,7 +4052,8 @@ __webpack_require__.r(__webpack_exports__);
     id: 'declarative',
     element,
     component: Declarative,
-    isEdited: _bpmn_io_properties_panel__WEBPACK_IMPORTED_MODULE_0__.isTextFieldEntryEdited
+    // isEdited: isTextFieldEntryEdited
+    isEdited: _bpmn_io_properties_panel__WEBPACK_IMPORTED_MODULE_0__.isSelectEntryEdited
   }, {
     id: 'temporal',
     element,
@@ -4036,27 +4078,68 @@ function Declarative(props) {
     id
   } = props;
   const modeling = (0,bpmn_js_properties_panel__WEBPACK_IMPORTED_MODULE_1__.useService)('modeling');
-  const translate = (0,bpmn_js_properties_panel__WEBPACK_IMPORTED_MODULE_1__.useService)('translate');
-  const debounce = (0,bpmn_js_properties_panel__WEBPACK_IMPORTED_MODULE_1__.useService)('debounceInput');
+  const translate = (0,bpmn_js_properties_panel__WEBPACK_IMPORTED_MODULE_1__.useService)('translate'); // const debounce = useService('debounceInput');
 
   const getValue = () => {
     return element.businessObject.declarative || '';
   };
 
   const setValue = value => {
+    if (value === '') {
+      value = null;
+    }
+
     return modeling.updateProperties(element, {
       declarative: value
     });
   };
 
-  return (0,_bpmn_io_properties_panel_preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_bpmn_io_properties_panel__WEBPACK_IMPORTED_MODULE_0__.TextFieldEntry, {
+  const getOptions = () => {
+    return [{
+      label: '',
+      value: '',
+      disabled: false
+    }, {
+      label: '●---',
+      value: 'responded existence',
+      disabled: false
+    }, {
+      label: '●--●',
+      value: 'co-existence',
+      disabled: false
+    }, {
+      label: '●--⯈',
+      value: 'response',
+      disabled: false
+    }, {
+      label: '--⯈●',
+      value: 'precedence',
+      disabled: false
+    }, {
+      label: '●-⯈●',
+      value: 'succession',
+      disabled: false
+    }];
+  }; // return <TextFieldEntry
+  //     id={id}
+  //     element={element}
+  //     description={translate('Add declarative constraint')}
+  //     label={translate('Declarative')}
+  //     getValue={getValue}
+  //     setValue={setValue}
+  //     debounce={debounce}
+  // />
+
+
+  return (0,_bpmn_io_properties_panel_preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_bpmn_io_properties_panel__WEBPACK_IMPORTED_MODULE_0__.SelectEntry, {
     id: id,
     element: element,
     description: translate('Add declarative constraint'),
     label: translate('Declarative'),
     getValue: getValue,
     setValue: setValue,
-    debounce: debounce
+    getOptions: getOptions,
+    disabled: false
   });
 }
 

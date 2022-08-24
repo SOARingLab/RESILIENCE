@@ -432,12 +432,48 @@ public class NusmvVerifier {
         // ltl spec
         for (BpmnFlow bpmnConstraint : bpmnConstraintList) {
             stringBuilder.append("  LTLSPEC ");
-            if (bpmnConstraint.declarative.equals("response")) {
+            if (bpmnConstraint.declarative.equals("responded existence")) {
+                stringBuilder.append("F (");
+                stringBuilder.append(bpmnNodeToLtsStateList(bpmnConstraint.source));
+                stringBuilder.append(") -> F (");
+                stringBuilder.append(bpmnNodeToLtsStateList(bpmnConstraint.target));
+                stringBuilder.append(")\n");
+            } else if (bpmnConstraint.declarative.equals("co-existence")) {
+                stringBuilder.append("(F (");
+                stringBuilder.append(bpmnNodeToLtsStateList(bpmnConstraint.source));
+                stringBuilder.append(") -> F (");
+                stringBuilder.append(bpmnNodeToLtsStateList(bpmnConstraint.target));
+                stringBuilder.append(")) & (F (");
+                stringBuilder.append(bpmnNodeToLtsStateList(bpmnConstraint.target));
+                stringBuilder.append(") -> F (");
+                stringBuilder.append(bpmnNodeToLtsStateList(bpmnConstraint.source));
+                stringBuilder.append("))\n");
+            } else if (bpmnConstraint.declarative.equals("response")) {
                 stringBuilder.append("G ((");
                 stringBuilder.append(bpmnNodeToLtsStateList(bpmnConstraint.source));
                 stringBuilder.append(") -> F (");
                 stringBuilder.append(bpmnNodeToLtsStateList(bpmnConstraint.target));
                 stringBuilder.append("))\n");
+            } else if (bpmnConstraint.declarative.equals("precedence")) {
+                stringBuilder.append("F (");
+                stringBuilder.append(bpmnNodeToLtsStateList(bpmnConstraint.target));
+                stringBuilder.append(") -> (!(");
+                stringBuilder.append(bpmnNodeToLtsStateList(bpmnConstraint.target));
+                stringBuilder.append(") U (");
+                stringBuilder.append(bpmnNodeToLtsStateList(bpmnConstraint.source));
+                stringBuilder.append("))\n");
+            } else if (bpmnConstraint.declarative.equals("succession")) {
+                stringBuilder.append("(G ((");
+                stringBuilder.append(bpmnNodeToLtsStateList(bpmnConstraint.source));
+                stringBuilder.append(") -> F (");
+                stringBuilder.append(bpmnNodeToLtsStateList(bpmnConstraint.target));
+                stringBuilder.append("))) & (F (");
+                stringBuilder.append(bpmnNodeToLtsStateList(bpmnConstraint.target));
+                stringBuilder.append(") -> (!(");
+                stringBuilder.append(bpmnNodeToLtsStateList(bpmnConstraint.target));
+                stringBuilder.append(") U (");
+                stringBuilder.append(bpmnNodeToLtsStateList(bpmnConstraint.source));
+                stringBuilder.append(")))\n");
             }
         }
 

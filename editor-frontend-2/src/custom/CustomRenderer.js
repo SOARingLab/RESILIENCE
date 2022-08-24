@@ -163,15 +163,35 @@ export default class CustomRenderer extends BaseRenderer {
 
             let path = drawPath(parentNode, pathData, attrs);
 
+            if (declarative === 'responded existence') {
+                svgAttr(path, {
+                    markerStart: marker('declarative-circle-start', fill, stroke),
+                });
+            }
+
+            if (declarative === 'co-existence') {
+                svgAttr(path, {
+                    markerStart: marker('declarative-circle-start', fill, stroke),
+                    markerEnd: marker('declarative-circle-end', fill, stroke),
+                });
+            }
+
             if (declarative === 'response') {
                 svgAttr(path, {
-                    markerStart: marker('declarative-circle', fill, stroke),
+                    markerStart: marker('declarative-circle-start', fill, stroke),
                     markerEnd: marker('declarative-arrow-end', fill, stroke),
                 });
             }
 
             if (declarative === 'precedence') {
                 svgAttr(path, {
+                    markerEnd: marker('declarative-circle-arrow-end', fill, stroke),
+                });
+            }
+
+            if (declarative === 'succession') {
+                svgAttr(path, {
+                    markerStart: marker('declarative-circle-start', fill, stroke),
                     markerEnd: marker('declarative-circle-arrow-end', fill, stroke),
                 });
             }
@@ -362,13 +382,28 @@ function marker(type, fill, stroke) {
 
 function createMarker(id, type, fill, stroke) {
 
-    if (type === 'declarative-circle') {
+    if (type === 'declarative-circle-start') {
         let declarativeCircle = svgCreate('circle');
         svgAttr(declarativeCircle, {cx: 6, cy: 6, r: 5});
 
         addMarker(id, {
             element: declarativeCircle,
             ref: {x: 1, y: 6},
+            scale: 0.5,
+            attrs: {
+                fill: fill,
+                stroke: stroke
+            }
+        });
+    }
+
+    if (type === 'declarative-circle-end') {
+        let declarativeCircle = svgCreate('circle');
+        svgAttr(declarativeCircle, {cx: 6, cy: 6, r: 5});
+
+        addMarker(id, {
+            element: declarativeCircle,
+            ref: {x: 11, y: 6},
             scale: 0.5,
             attrs: {
                 fill: fill,

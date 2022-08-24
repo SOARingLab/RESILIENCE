@@ -1,4 +1,4 @@
-import {TextFieldEntry, isTextFieldEntryEdited} from '@bpmn-io/properties-panel';
+import {TextFieldEntry, isTextFieldEntryEdited, SelectEntry, isSelectEntryEdited} from '@bpmn-io/properties-panel';
 import {useService} from 'bpmn-js-properties-panel';
 
 export default function (element) {
@@ -8,7 +8,8 @@ export default function (element) {
             id: 'declarative',
             element,
             component: Declarative,
-            isEdited: isTextFieldEntryEdited
+            // isEdited: isTextFieldEntryEdited
+            isEdited: isSelectEntryEdited
         },
         {
             id: 'temporal',
@@ -36,26 +37,51 @@ function Declarative(props) {
 
     const modeling = useService('modeling');
     const translate = useService('translate');
-    const debounce = useService('debounceInput');
+    // const debounce = useService('debounceInput');
 
     const getValue = () => {
         return element.businessObject.declarative || '';
     }
 
     const setValue = value => {
+        if (value === '') {
+            value = null;
+        }
         return modeling.updateProperties(element, {
             declarative: value
         });
     }
 
-    return <TextFieldEntry
+    const getOptions = () => {
+        return [
+            {label: '', value: '', disabled: false},
+            {label: '●---', value: 'responded existence', disabled: false},
+            {label: '●--●', value: 'co-existence', disabled: false},
+            {label: '●--⯈', value: 'response', disabled: false},
+            {label: '--⯈●', value: 'precedence', disabled: false},
+            {label: '●-⯈●', value: 'succession', disabled: false}
+        ];
+    }
+
+    // return <TextFieldEntry
+    //     id={id}
+    //     element={element}
+    //     description={translate('Add declarative constraint')}
+    //     label={translate('Declarative')}
+    //     getValue={getValue}
+    //     setValue={setValue}
+    //     debounce={debounce}
+    // />
+
+    return <SelectEntry
         id={id}
         element={element}
         description={translate('Add declarative constraint')}
         label={translate('Declarative')}
         getValue={getValue}
         setValue={setValue}
-        debounce={debounce}
+        getOptions={getOptions}
+        disabled={false}
     />
 }
 
