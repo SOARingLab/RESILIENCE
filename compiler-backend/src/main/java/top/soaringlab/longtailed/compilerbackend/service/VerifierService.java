@@ -2,8 +2,8 @@ package top.soaringlab.longtailed.compilerbackend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import top.soaringlab.longtailed.compilerbackend.verifier.NonFunctionalVerifier;
 import top.soaringlab.longtailed.compilerbackend.verifier.NusmvVerifier;
+import top.soaringlab.longtailed.compilerbackend.verifier.StnuVerifier;
 
 @Service
 public class VerifierService {
@@ -27,8 +27,13 @@ public class VerifierService {
         return nusmvVerifier.functionalVerify(file, start);
     }
 
+//    public boolean verifyNonFunctional(String file) throws Exception {
+//        NonFunctionalVerifier nonFunctionalVerifier = new NonFunctionalVerifier();
+//        return nonFunctionalVerifier.nonFunctionalVerify(file);
+//    }
+
     public boolean verifyNonFunctional(String file) throws Exception {
-        NonFunctionalVerifier nonFunctionalVerifier = new NonFunctionalVerifier();
-        return nonFunctionalVerifier.nonFunctionalVerify(file);
+        StnuVerifier stnuVerifier = new StnuVerifier();
+        return stnuVerifier.nonFunctionalVerify(file);
     }
 }
