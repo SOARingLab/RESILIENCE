@@ -6,6 +6,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import top.soaringlab.longtailed.compilerbackend.domain.ProcessVariable;
+import top.soaringlab.longtailed.compilerbackend.dsl.expressionlanguage.ExpressionLanguageTranslator;
 import top.soaringlab.longtailed.compilerbackend.dsl.nusmvresult.NusmvResultReader;
 import top.soaringlab.longtailed.compilerbackend.dsl.simple.SimpleVerifier;
 import top.soaringlab.longtailed.compilerbackend.dto.FunctionalVerificationResult;
@@ -721,9 +722,7 @@ public class NusmvVerifier {
     }
 
     private String translateCondition(String condition) {
-        String inputs = "WHEN " + condition + " SET a = a";
-        List<String> result = SimpleVerifier.verify(inputs);
-        return result.get(2);
+        return ExpressionLanguageTranslator.translate(condition);
     }
 
     private List<String> translateAnnotation(String annotation) {

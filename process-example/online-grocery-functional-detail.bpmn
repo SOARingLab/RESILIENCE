@@ -18,7 +18,7 @@
     <bpmn:scriptTask id="Activity_0yryb7d" name="Place order" scriptFormat="groovy">
       <bpmn:incoming>Flow_1pa4vlj</bpmn:incoming>
       <bpmn:outgoing>Flow_17hy1ta</bpmn:outgoing>
-      <bpmn:script>execution.setVariable("order_status", "running");
+      <bpmn:script>execution.setVariable("order_status", "pending");
 if (execution.getVariable("region") == null) {
     execution.setVariable("region", "region_1");
 }
@@ -123,21 +123,21 @@ S.sendMessage(execution, "Goods received");</bpmn:script>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_11bhxk8" sourceRef="Activity_17p63lp" targetRef="Gateway_0cvilib" />
     <bpmn:sequenceFlow id="Flow_04dzht4" name="order_status&#10;== &#34;pending&#34;" sourceRef="Gateway_0cvilib" targetRef="Activity_0d00975">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">order_status == "pending"</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${order_status == "pending"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0dq8qa1" sourceRef="Activity_105x9s9" targetRef="Gateway_0z6b60p" />
     <bpmn:sequenceFlow id="Flow_0e2jtau" name="order_status&#10;== &#34;pending&#34;" sourceRef="Gateway_0z6b60p" targetRef="Event_1tne0jm">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">order_status == "pending"</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${order_status == "pending"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:endEvent id="Event_0nll1wx" name="Canceled">
       <bpmn:incoming>Flow_1yt8avj</bpmn:incoming>
       <bpmn:incoming>Flow_1dtqxn2</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_1yt8avj" name="order_status&#10;==&#34;canceled&#34;" sourceRef="Gateway_0cvilib" targetRef="Event_0nll1wx">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">order_status == "canceled"</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${order_status == "canceled"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1dtqxn2" name="order_status&#10;==&#34;canceled&#34;" sourceRef="Gateway_0z6b60p" targetRef="Event_0nll1wx">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">order_status == "canceled"</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${order_status == "canceled"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1g0vepn" sourceRef="Activity_0d00975" targetRef="Activity_06f2qgl" constraint:declarative="response" />
     <bpmn:textAnnotation id="TextAnnotation_1jfwp8e">

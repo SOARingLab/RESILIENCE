@@ -20,7 +20,7 @@
     <bpmn:scriptTask id="Activity_0yryb7d" name="Place order" scriptFormat="groovy">
       <bpmn:incoming>Flow_1pa4vlj</bpmn:incoming>
       <bpmn:outgoing>Flow_17hy1ta</bpmn:outgoing>
-      <bpmn:script>execution.setVariable("order_status", "running");
+      <bpmn:script>execution.setVariable("order_status", "pending");
 if (execution.getVariable("region") == null) {
     execution.setVariable("region", "region_1");
 }
