@@ -21,8 +21,8 @@ export class ProcessLogService {
     return this.httpClient.get<Page<ProcessLog>>(url);
   }
 
-  findByBusinessKey(businessKey: string, page: number, size: number) {
-    const url = this.rootUrl + '/findByBusinessKey?businessKey=' + businessKey + '&page=' + page + '&size=' + size;
-    return this.httpClient.get<Page<ProcessLog>>(url);
+  findByBusinessKey(businessKey: string) {
+    const url = this.rootUrl + '/findByBusinessKey?businessKey=' + businessKey;
+    return this.httpClient.get<ProcessLog[]>(url);
   }
 }

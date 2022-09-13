@@ -38,4 +38,7 @@
     <input class="io" [(ngModel)]="publicApi.outputTos[index]">
     <button class="plus" (click)="deleteOutput(index)">-</button>
   </p>
+  <p *ngIf="message" class="message">
+    {{message}}
+  </p>
 </div>

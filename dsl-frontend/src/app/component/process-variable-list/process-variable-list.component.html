@@ -11,4 +11,7 @@
     <span class="column"><a [routerLink]="'/process-variable/' + processVariable.id">{{processVariable.name}}</a></span>
     <span class="column"><button (click)="delete(processVariable.id)">Delete</button></span>
   </p>
+  <p *ngIf="message" class="message">
+    {{message}}
+  </p>
 </div>

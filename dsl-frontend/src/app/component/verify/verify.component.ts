@@ -9,7 +9,7 @@ import {VerifyService} from "../../service/verify.service";
 export class VerifyComponent implements OnInit {
 
   resultFunctional = 'waiting';
-  resultFunctionalDetail = {};
+  resultFunctionalDetail: object[] = [];
   resultNonFunctional = 'waiting';
 
   constructor(
@@ -43,9 +43,24 @@ export class VerifyComponent implements OnInit {
     let start = localStorage.getItem('start');
     if (processId && file && start) {
       this.verifyService.verifyFunctional(processId, file, start).subscribe(resultFunctional => {
-        this.resultFunctional = resultFunctional + '';
+        this.resultFunctional = resultFunctional.result + '';
+        this.resultFunctionalDetail = resultFunctional.detail;
       });
     }
+  }
+
+  explainResultFunctional() {
+    // for (let state of this.resultFunctionalDetail) {
+    //   for (let entry of Object.entries(state)) {
+    //     let variable = entry[0];
+    //     let value = String(entry[1]);
+    //     if (variable === 'state') {
+    //       let bpmnNodeIds = value.split('__');
+    //     }
+    //   }
+    // }
+    localStorage.setItem('resultFunctionalDetail', JSON.stringify(this.resultFunctionalDetail));
+    window.location.href = '/assets/public-2/index.html';
   }
 
   verifyNonFunctional() {

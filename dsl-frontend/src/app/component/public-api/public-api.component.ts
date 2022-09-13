@@ -13,6 +13,7 @@ export class PublicApiComponent implements OnInit {
   methods = ['GET', 'POST', 'PUT', 'DELETE'];
   id = 0;
   publicApi = new PublicApi();
+  message: string | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -42,6 +43,7 @@ export class PublicApiComponent implements OnInit {
   save() {
     this.publicApiService.save(this.publicApi).subscribe(publicApi => {
       this.publicApi = publicApi;
+      this.message = 'Saved';
     });
   }
 

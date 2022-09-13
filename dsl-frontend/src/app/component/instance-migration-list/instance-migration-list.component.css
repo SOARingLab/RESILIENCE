@@ -1,0 +1,14 @@
+.column {
+  display: inline-block;
+  width: 400px;
+}
+
+.column-head {
+  display: inline-block;
+  width: 400px;
+  font-weight: bold;
+}
+
+.message {
+  color: green;
+}

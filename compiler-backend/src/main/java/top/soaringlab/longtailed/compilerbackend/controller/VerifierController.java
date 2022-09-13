@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import top.soaringlab.longtailed.compilerbackend.dto.FunctionalVerificationResult;
 import top.soaringlab.longtailed.compilerbackend.service.VerifierService;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class VerifierController {
 //    }
 
     @PostMapping(value = "/verify-functional")
-    public Boolean verifyFunctional(@RequestBody Map<String, String> map) throws Exception {
+    public FunctionalVerificationResult verifyFunctional(@RequestBody Map<String, String> map) throws Exception {
         return verifierService.verifyFunctional(map.get("processId"), map.get("file"), map.get("start"));
     }
 

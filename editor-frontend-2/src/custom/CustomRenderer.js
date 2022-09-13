@@ -19,9 +19,9 @@ import $ from 'jquery';
 const HIGH_PRIORITY = 1500,
     TASK_BORDER_RADIUS = 2,
     COLOR_RED = '#CC0000',
+    COLOR_YELLOW = '#FFA500',
     COLOR_GREEN = '#008000',
-    COLOR_BLUE = '#0066CC',
-    COLOR_ORANGE = '#FFA500',
+    COLOR_BLUE = '#0080FF',
     COLOR_WHITE = '#FFFFFF',
     COLOR_BLACK = '#000000';
 
@@ -38,6 +38,11 @@ export default class CustomRenderer extends BaseRenderer {
         super(eventBus, HIGH_PRIORITY);
 
         this.bpmnRenderer = bpmnRenderer;
+
+        let resultFunctionalDetail = localStorage.getItem('resultFunctionalDetail');
+        if (resultFunctionalDetail) {
+            this.resultFunctionalDetail = JSON.parse(resultFunctionalDetail);
+        }
     }
 
     canRender(element) {
@@ -49,11 +54,46 @@ export default class CustomRenderer extends BaseRenderer {
     drawShape(parentNode, element) {
         const shape = this.bpmnRenderer.drawShape(parentNode, element);
 
-        // annotation
-
-        const {type, businessObject, di} = element;
+        const {id, type, businessObject, di} = element;
 
         const {color} = businessObject;
+
+        // counter example
+
+        if (this.resultFunctionalDetail) {
+            for (let state of this.resultFunctionalDetail) {
+                if (state['stateToBpmnNodeId'].includes(id)) {
+                    svgAttr(shape, {
+                        stroke: COLOR_RED
+                    });
+
+                    const text = svgCreate('text');
+                    svgAttr(text, {
+                        fill: COLOR_RED,
+                    });
+                    svgClasses(text).add('djs-label');
+                    for (let [name, value] of Object.entries(state)) {
+                        if (value.startsWith('_')) {
+                            value = '"' + value.substr(1, value.length - 2) + '"';
+                        }
+                        if (name !== 'state' && name !== 'stateToBpmnNodeId') {
+                            let explanation = name + '=' + value;
+                            const tspan = svgCreate('tspan');
+                            svgAttr(tspan, {
+                                x: 0,
+                                dy: 20
+                            });
+                            svgAppend(tspan, document.createTextNode(explanation));
+                            svgAppend(text, tspan);
+                        }
+                    }
+                    svgAppend(parentNode, text);
+                    break;
+                }
+            }
+        }
+
+        // annotation
 
         if (type === 'bpmn:TextAnnotation') {
             if (color === 'green') {
@@ -79,7 +119,7 @@ export default class CustomRenderer extends BaseRenderer {
         const temporalColor = this.getTemporalColor(element);
 
         if (!isNil(declarative)) {
-            let stroke = COLOR_RED;
+            let stroke = COLOR_YELLOW;
 
             if (!isNil(declarativeColor)) {
                 stroke = declarativeColor;
@@ -136,9 +176,9 @@ export default class CustomRenderer extends BaseRenderer {
     }
 
     drawConnection(parentNode, element) {
-        // constraint
+        const {id, di} = element;
 
-        const {di} = element;
+        // constraint
 
         const declarative = this.getDeclarative(element);
         const temporal = this.getTemporal(element);
@@ -148,8 +188,8 @@ export default class CustomRenderer extends BaseRenderer {
         if (!isNil(declarative)) {
             let pathData = createPathFromConnection(element);
 
-            let fill = COLOR_RED,
-                stroke = COLOR_RED;
+            let fill = COLOR_YELLOW,
+                stroke = COLOR_YELLOW;
 
             if (!isNil(declarativeColor)) {
                 fill = declarativeColor;
@@ -200,8 +240,8 @@ export default class CustomRenderer extends BaseRenderer {
         } else if (!isNil(temporal)) {
             let pathData = createPathFromConnection(element);
 
-            let fill = COLOR_ORANGE,
-                stroke = COLOR_ORANGE;
+            let fill = COLOR_BLUE,
+                stroke = COLOR_BLUE;
 
             if (!isNil(temporalColor)) {
                 // fill = temporalColor;
@@ -218,6 +258,29 @@ export default class CustomRenderer extends BaseRenderer {
             let path = drawPath(parentNode, pathData, attrs);
 
             return path;
+        }
+
+        // counter example
+
+        if (this.resultFunctionalDetail) {
+            for (let state of this.resultFunctionalDetail) {
+                if (state['state'].includes(id)) {
+                    let pathData = createPathFromConnection(element);
+
+                    let fill = COLOR_RED,
+                        stroke = COLOR_RED;
+
+                    let attrs = {
+                        strokeLinejoin: 'round',
+                        markerEnd: marker('counter-example-end', fill, stroke),
+                        stroke: stroke
+                    };
+
+                    let path = drawPath(parentNode, pathData, attrs);
+
+                    return path;
+                }
+            }
         }
 
         return this.bpmnRenderer.drawConnection(parentNode, element);
@@ -451,6 +514,21 @@ function createMarker(id, type, fill, stroke) {
     }
 
     if (type === 'temporal-end') {
+        let temporalEnd = svgCreate('path');
+        svgAttr(temporalEnd, {d: 'M 1 5 L 11 10 L 1 15 Z'});
+
+        addMarker(id, {
+            element: temporalEnd,
+            ref: {x: 11, y: 10},
+            scale: 0.5,
+            attrs: {
+                fill: fill,
+                stroke: stroke
+            }
+        });
+    }
+
+    if (type === 'counter-example-end') {
         let temporalEnd = svgCreate('path');
         svgAttr(temporalEnd, {d: 'M 1 5 L 11 10 L 1 15 Z'});
 

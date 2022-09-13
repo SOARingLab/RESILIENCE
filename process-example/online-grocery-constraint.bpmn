@@ -201,7 +201,7 @@ SET delivery_method = "contactless_locker"</bpmn:text>
           <dc:Bounds x="559" y="683" width="22" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0f8qp34_di" bpmnElement="Flow_0f8qp34" bioc:stroke="#FFA500">
+      <bpmndi:BPMNEdge id="Flow_0f8qp34_di" bpmnElement="Flow_0f8qp34" bioc:stroke="#0080FF">
         <di:waypoint x="550" y="630" />
         <di:waypoint x="710" y="540" />
         <bpmndi:BPMNLabel>

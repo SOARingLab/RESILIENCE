@@ -242,3 +242,8 @@ $("#js-verify").click(async () => {
     localStorage.setItem('start', startNodeName);
     window.location.href = '/verify';
 });
+
+$("#js-verify-clear").click(async () => {
+    localStorage.removeItem('resultFunctionalDetail');
+    location.reload();
+});

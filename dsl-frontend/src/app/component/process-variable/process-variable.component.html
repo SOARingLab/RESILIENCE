@@ -38,4 +38,7 @@
       <button class="plus" (click)="deleteValue(index)">-</button>
     </p>
   </ng-container>
+  <p *ngIf="message" class="message">
+    {{message}}
+  </p>
 </div>

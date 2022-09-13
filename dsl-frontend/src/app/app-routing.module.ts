@@ -13,6 +13,8 @@ import {ProcessVariableListComponent} from "./component/process-variable-list/pr
 import {ProcessVariableComponent} from "./component/process-variable/process-variable.component";
 import {ProcessModelListComponent} from "./component/process-model-list/process-model-list.component";
 import {ProcessModelComponent} from "./component/process-model/process-model.component";
+import {InstanceMigrationComponent} from "./component/instance-migration/instance-migration.component";
+import {InstanceMigrationListComponent} from "./component/instance-migration-list/instance-migration-list.component";
 
 const routes: Routes = [
   {path: '', redirectTo: '/index', pathMatch: 'full'},
@@ -28,6 +30,8 @@ const routes: Routes = [
   {path: 'public-api/:id', component: PublicApiComponent},
   {path: 'deploy', component: DeployComponent},
   {path: 'verify', component: VerifyComponent},
+  {path: 'instance-migration-list', component: InstanceMigrationListComponent},
+  {path: 'instance-migration/:id', component: InstanceMigrationComponent},
   {path: 'process-log', component: ProcessLogComponent},
 ];
 

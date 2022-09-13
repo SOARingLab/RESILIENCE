@@ -1,0 +1,32 @@
+<div class="container">
+  <h1>Instance Migration</h1>
+  <p>
+    <button (click)="migrateOne()">Migrate</button>
+  </p>
+  <p>
+    <span class="label">Id</span>
+    <span class="value">{{getProcessInstance.id}}</span>
+  </p>
+  <p>
+    <span class="label">Process definition id</span>
+    <span class="value">{{getProcessInstance.processDefinitionId}}</span>
+  </p>
+  <p>
+    <span class="label">Business key</span>
+    <span class="value">{{getProcessInstance.businessKey}}</span>
+  </p>
+  <p>
+    <span class="label">Process variables</span>
+  </p>
+  <p>
+    <span class="column-head">Name</span>
+    <span class="column-head">Value</span>
+  </p>
+  <p *ngFor="let variable of getProcessInstance.variables | keyvalue">
+    <span class="column">{{variable.key}}</span>
+    <span class="column">{{variable.value}}</span>
+  </p>
+  <p *ngIf="message" class="message">
+    {{message}}
+  </p>
+</div>

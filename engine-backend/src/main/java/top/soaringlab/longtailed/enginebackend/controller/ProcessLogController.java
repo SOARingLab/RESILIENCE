@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import top.soaringlab.longtailed.enginebackend.domain.ProcessLog;
 import top.soaringlab.longtailed.enginebackend.service.ProcessLogService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/api/process-log")
 public class ProcessLogController {
@@ -21,8 +23,8 @@ public class ProcessLogController {
     }
 
     @GetMapping(value = "/findByBusinessKey")
-    public Page<ProcessLog> findByBusinessKey(String businessKey, Integer page, Integer size) {
-        return processLogService.findByBusinessKey(businessKey, page, size);
+    public List<ProcessLog> findByBusinessKey(String businessKey) {
+        return processLogService.findByBusinessKey(businessKey);
     }
 
     @GetMapping(value = "/find-latest")

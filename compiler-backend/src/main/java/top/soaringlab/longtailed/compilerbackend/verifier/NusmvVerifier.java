@@ -6,7 +6,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import top.soaringlab.longtailed.compilerbackend.domain.ProcessVariable;
+import top.soaringlab.longtailed.compilerbackend.dsl.nusmvresult.NusmvResultReader;
 import top.soaringlab.longtailed.compilerbackend.dsl.simple.SimpleVerifier;
+import top.soaringlab.longtailed.compilerbackend.dto.FunctionalVerificationResult;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -77,19 +79,26 @@ public class NusmvVerifier {
 
     private Map<String, Map<String, List<ConditionValue>>> processVariableLtsTransitionConditionValueListMap = new HashMap<>();
 
+    private String verificationOutput;
+
     public List<ProcessVariable> processVariableList = new ArrayList<>();
 
-    public boolean functionalVerify(String file, String start) throws Exception {
+    public FunctionalVerificationResult functionalVerify(String fileAnnotation, String fileFunctional, String start) throws Exception {
+        FunctionalVerificationResult functionalVerificationResult = new FunctionalVerificationResult();
         startBpmnNodeName = start;
-        readBpmnXml(file);
+        readBpmnXml(fileAnnotation);
+        readConstraint(fileFunctional);
+        reduceBpmnComplexity();
         if (!bpmnToLts()) {
-            return false;
+            return functionalVerificationResult;
         }
         String inputFile = ltsToInputFile();
         if (!modelCheck(inputFile)) {
-            return false;
+            functionalVerificationResult.setDetail(explainVerificationResult());
+            return functionalVerificationResult;
         }
-        return true;
+        functionalVerificationResult.setResult(true);
+        return functionalVerificationResult;
     }
 
     private void readBpmnXml(String file) throws Exception {
@@ -208,6 +217,108 @@ public class NusmvVerifier {
                 }
             }
         }
+    }
+
+    private void readConstraint(String file) throws Exception {
+        // parse xml
+        DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        Document document = documentBuilder.parse(new InputSource(new StringReader(file)));
+
+        // name
+        String tagName = document.getDocumentElement().getTagName();
+        String xmlnsBpmn;
+        if (tagName.equals("bpmn:definitions")) {
+            xmlnsBpmn = "bpmn:";
+        } else if (tagName.equals("bpmn2:definitions")) {
+            xmlnsBpmn = "bpmn2:";
+        } else {
+            xmlnsBpmn = tagName.split(":")[0] + ":";
+        }
+        String sequenceFlowName = xmlnsBpmn + "sequenceFlow";
+        String messageFlowName = xmlnsBpmn + "messageFlow";
+        List<String> flowNames = new ArrayList<>();
+        flowNames.add(sequenceFlowName);
+        flowNames.add(messageFlowName);
+        String declarativeName = "constraint:declarative";
+
+        // flow
+        for (String flowName : flowNames) {
+            NodeList nodeList = document.getElementsByTagName(flowName);
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Element element = (Element) nodeList.item(i);
+                BpmnFlow bpmnFlow = new BpmnFlow();
+                bpmnFlow.id = element.getAttribute("id");
+                bpmnFlow.name = element.getAttribute("name");
+                bpmnFlow.source = element.getAttribute("sourceRef");
+                bpmnFlow.target = element.getAttribute("targetRef");
+                bpmnFlow.declarative = element.getAttribute(declarativeName);
+                if (!bpmnFlow.declarative.isEmpty()) {
+                    bpmnConstraintList.add(bpmnFlow);
+                }
+            }
+        }
+    }
+
+    private void reduceBpmnComplexity() {
+        List<String> bpmnNodeIdList = new ArrayList<>(bpmnNodeMap.keySet());
+        for (String bpmnNodeId : bpmnNodeIdList) {
+            BpmnNode bpmnNode = bpmnNodeMap.get(bpmnNodeId);
+            if (bpmnNode.type.equals("intermediateEvent") || bpmnNode.type.equals("task")) {
+                if (bpmnNode.annotation.isEmpty() && !bpmnNodeInConstraint(bpmnNodeId)) {
+                    removeBpmnNode(bpmnNodeId);
+                }
+            }
+        }
+    }
+
+    private boolean bpmnNodeInConstraint(String bpmnNodeId) {
+        for (BpmnFlow bpmnConstraint : bpmnConstraintList) {
+            if (bpmnConstraint.source.equals(bpmnNodeId) || bpmnConstraint.target.equals(bpmnNodeId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void removeBpmnNode(String bpmnNodeId) {
+        BpmnNode bpmnNode = bpmnNodeMap.get(bpmnNodeId);
+        {
+            String sequenceIn = bpmnNode.sequenceInList.get(0);
+            BpmnFlow sequenceInFlow = bpmnFlowMap.get(sequenceIn);
+            String sequenceOut = bpmnNode.sequenceOutList.get(0);
+            BpmnFlow sequenceOutFlow = bpmnFlowMap.get(sequenceOut);
+            BpmnNode targetBpmnNode = bpmnNodeMap.get(sequenceOutFlow.target);
+
+            sequenceInFlow.target = sequenceOutFlow.target;
+            targetBpmnNode.sequenceInList.removeIf(s -> s.equals(sequenceOut));
+            targetBpmnNode.sequenceInList.add(sequenceIn);
+            bpmnFlowMap.remove(sequenceOut);
+        }
+//        for (String sequenceIn : bpmnNode.sequenceInList) {
+//            BpmnFlow bpmnFlow = bpmnFlowMap.get(sequenceIn);
+//            BpmnNode sourceBpmnNode = bpmnNodeMap.get(bpmnFlow.source);
+//            sourceBpmnNode.sequenceOutList.removeIf(sequenceOut -> sequenceOut.equals(sequenceIn));
+//            bpmnFlowMap.remove(sequenceIn);
+//        }
+//        for (String sequenceOut : bpmnNode.sequenceOutList) {
+//            BpmnFlow bpmnFlow = bpmnFlowMap.get(sequenceOut);
+//            BpmnNode targetBpmnNode = bpmnNodeMap.get(bpmnFlow.target);
+//            targetBpmnNode.sequenceInList.removeIf(sequenceIn -> sequenceIn.equals(sequenceOut));
+//            bpmnFlowMap.remove(sequenceOut);
+//        }
+        for (String messageIn : bpmnNode.messageInList) {
+            BpmnFlow bpmnFlow = bpmnFlowMap.get(messageIn);
+            BpmnNode sourceBpmnNode = bpmnNodeMap.get(bpmnFlow.source);
+            sourceBpmnNode.messageOutList.removeIf(messageOut -> messageOut.equals(messageIn));
+            bpmnFlowMap.remove(messageIn);
+        }
+        for (String messageOut : bpmnNode.messageOutList) {
+            BpmnFlow bpmnFlow = bpmnFlowMap.get(messageOut);
+            BpmnNode targetBpmnNode = bpmnNodeMap.get(bpmnFlow.target);
+            targetBpmnNode.messageInList.removeIf(messageIn -> messageIn.equals(messageOut));
+            bpmnFlowMap.remove(messageOut);
+        }
+        bpmnNodeMap.remove(bpmnNodeId);
     }
 
     private boolean bpmnToLts() {
@@ -666,7 +777,49 @@ public class NusmvVerifier {
             }
         }
         bufferedReader.close();
-        String output = stringBuilder.toString();
+        verificationOutput = stringBuilder.toString();
         return numOfTrue == bpmnConstraintList.size();
+    }
+
+    private List<Map<String, String>> explainVerificationResult() {
+        List<String> verificationOutputList = NusmvResultReader.read(verificationOutput);
+        List<Map<String, String>> resultList = new ArrayList<>();
+        Map<String, String> variableMap = new HashMap<>();
+        String variable = "";
+        String value = "";
+        int state = 0; // 1 STATE, 2 variable, 3 value
+        for (int i = 0; i < verificationOutputList.size(); i++) {
+            if (verificationOutputList.get(i).equals("STATE")) {
+                variableMap = new HashMap<>();
+                state = 1;
+            } else if (state == 1) {
+                variable = verificationOutputList.get(i);
+                state = 2;
+            } else if (state == 2) {
+                value = verificationOutputList.get(i);
+                variableMap.put(variable, value);
+                if (variable.equals("state")) {
+                    variableMap.put("stateToBpmnNodeId", stateToBpmnNodeId(value));
+                }
+                if (i == verificationOutputList.size() - 1 || verificationOutputList.get(i + 1).equals("STATE")) {
+                    resultList.add(variableMap);
+                }
+                state = 1;
+            }
+        }
+        return resultList;
+    }
+
+    private String stateToBpmnNodeId(String state) {
+        String[] bpmnFlowIds = state.split("__");
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < bpmnFlowIds.length; i++) {
+            BpmnFlow bpmnFlow = bpmnFlowMap.get(bpmnFlowIds[i]);
+            if (i > 0) {
+                stringBuilder.append("__");
+            }
+            stringBuilder.append(bpmnFlow.source);
+        }
+        return stringBuilder.toString();
     }
 }

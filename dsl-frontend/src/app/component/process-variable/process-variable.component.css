@@ -16,3 +16,7 @@
 .value-range {
   width: 180px;
 }
+
+.message {
+  color: green;
+}

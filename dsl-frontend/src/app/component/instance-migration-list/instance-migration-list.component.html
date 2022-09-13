@@ -1,0 +1,19 @@
+<div class="container">
+  <h1>Instance Migration</h1>
+  <p>
+    Process definition key: <input [(ngModel)]="processDefinitionKey">
+    <button (click)="findOldProcessInstance()">Find old instances</button>
+  </p>
+  <p>
+    <button (click)="migrateAll()">Migrate all</button>
+  </p>
+  <p>
+    <span class="column-head">Id</span>
+  </p>
+  <p *ngFor="let processInstanceId of processInstanceIds">
+    <span class="column"><a [routerLink]="'/instance-migration/' + processInstanceId">{{processInstanceId}}</a></span>
+  </p>
+  <p *ngIf="message" class="message">
+    {{message}}
+  </p>
+</div>

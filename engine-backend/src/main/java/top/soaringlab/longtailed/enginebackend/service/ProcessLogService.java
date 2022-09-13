@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import top.soaringlab.longtailed.enginebackend.domain.ProcessLog;
 import top.soaringlab.longtailed.enginebackend.repository.ProcessLogRepository;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -22,8 +21,8 @@ public class ProcessLogService {
         return processLogRepository.findAll(PageRequest.of(page, size));
     }
 
-    public Page<ProcessLog> findByBusinessKey(String businessKey, int page, int size) {
-        return processLogRepository.findByBusinessKey(businessKey, PageRequest.of(page, size));
+    public List<ProcessLog> findByBusinessKey(String businessKey) {
+        return processLogRepository.findByBusinessKey(businessKey);
     }
 
     public String findLatest() {

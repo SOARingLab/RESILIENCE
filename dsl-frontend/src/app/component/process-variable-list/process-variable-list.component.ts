@@ -11,6 +11,7 @@ import {ProcessVariableService} from "../../service/process-variable.service";
 export class ProcessVariableListComponent implements OnInit {
 
   processVariableList: ProcessVariable[] = [];
+  message: string | undefined;
 
   constructor(
     private router: Router,
@@ -49,6 +50,7 @@ export class ProcessVariableListComponent implements OnInit {
   delete(id: number) {
     this.processVariableService.delete(id).subscribe(() => {
       this.findByProcessId();
+      this.message = 'Deleted';
     });
   }
 }

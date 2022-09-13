@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
+import {FunctionalVerificationResult} from "../model/functional-verification-result";
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,7 @@ export class VerifyService {
   verifyFunctional(processId: string, file: string, start: string) {
     let url = this.rootUrl + '/verify-functional';
     let map = {'processId': processId, 'file': file, 'start': start};
-    return this.httpClient.post<string>(url, map);
+    return this.httpClient.post<FunctionalVerificationResult>(url, map);
   }
 
   verifyNonFunctional(file: string) {

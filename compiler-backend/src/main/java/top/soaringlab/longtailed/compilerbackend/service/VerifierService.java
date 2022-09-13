@@ -2,8 +2,11 @@ package top.soaringlab.longtailed.compilerbackend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import top.soaringlab.longtailed.compilerbackend.dto.FunctionalVerificationResult;
 import top.soaringlab.longtailed.compilerbackend.verifier.NusmvVerifier;
 import top.soaringlab.longtailed.compilerbackend.verifier.StnuVerifier;
+
+import java.util.List;
 
 @Service
 public class VerifierService {
@@ -19,12 +22,14 @@ public class VerifierService {
 //        return functionalVerifier.functionalVerify(file, start);
 //    }
 
-    public boolean verifyFunctional(String processId, String file, String start) throws Exception {
-        file = compilerService.constraintRemoveNonFunctional(file);
-        file = compilerService.compileForFunctional(processId, file);
+    public FunctionalVerificationResult verifyFunctional(String processId, String file, String start) throws Exception {
+        String fileAnnotation = compilerService.constraintRemoveAll(file);
+        fileAnnotation = compilerService.compileForFunctional(processId, fileAnnotation);
+        String fileFunctional = compilerService.constraintRemoveNonFunctional(file);
+
         NusmvVerifier nusmvVerifier = new NusmvVerifier();
         nusmvVerifier.processVariableList = processVariableService.findByProcessId(processId);
-        return nusmvVerifier.functionalVerify(file, start);
+        return nusmvVerifier.functionalVerify(fileAnnotation, fileFunctional, start);
     }
 
 //    public boolean verifyNonFunctional(String file) throws Exception {

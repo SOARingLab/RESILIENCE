@@ -55,6 +55,8 @@ import { ProcessVariableComponent } from './component/process-variable/process-v
 import { ProcessVariableListComponent } from './component/process-variable-list/process-variable-list.component';
 import { ProcessModelListComponent } from './component/process-model-list/process-model-list.component';
 import { ProcessModelComponent } from './component/process-model/process-model.component';
+import { InstanceMigrationComponent } from './component/instance-migration/instance-migration.component';
+import { InstanceMigrationListComponent } from './component/instance-migration-list/instance-migration-list.component';
 
 @NgModule({
   declarations: [
@@ -73,6 +75,8 @@ import { ProcessModelComponent } from './component/process-model/process-model.c
     ProcessVariableListComponent,
     ProcessModelListComponent,
     ProcessModelComponent,
+    InstanceMigrationComponent,
+    InstanceMigrationListComponent,
   ],
   imports: [
     BrowserModule,

@@ -13,4 +13,7 @@
   <p>
     <textarea class="value-data" [(ngModel)]="processModel.data"></textarea>
   </p>
+  <p *ngIf="message" class="message">
+    {{message}}
+  </p>
 </div>

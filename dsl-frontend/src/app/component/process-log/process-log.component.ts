@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ProcessLog} from "../../model/process-log";
 import {ProcessLogService} from "../../service/process-log.service";
-import {PageEvent} from "@angular/material/paginator";
 
 @Component({
   selector: 'app-process-log',
@@ -11,11 +10,7 @@ import {PageEvent} from "@angular/material/paginator";
 export class ProcessLogComponent implements OnInit {
 
   businessKey = '';
-  page = 0;
-  size = 10;
-  content: ProcessLog[] = [];
-  totalElements = 0;
-  displayedColumns: string[] = ['id', 'businessKey', 'message'];
+  processLogs: ProcessLog[] = [];
 
   constructor(
     private processLogService: ProcessLogService
@@ -26,16 +21,9 @@ export class ProcessLogComponent implements OnInit {
   }
 
   findByBusinessKey() {
-    this.processLogService.findByBusinessKey(this.businessKey, this.page, this.size)
-      .subscribe(processLogPage => {
-        this.content = processLogPage.content;
-        this.totalElements = processLogPage.totalElements;
+    this.processLogService.findByBusinessKey(this.businessKey)
+      .subscribe(processLogs => {
+        this.processLogs = processLogs;
       });
-  }
-
-  onPageChange(event: PageEvent) {
-    this.page = event.pageIndex;
-    this.size = event.pageSize;
-    this.findByBusinessKey();
   }
 }

@@ -13,6 +13,7 @@ export class ProcessVariableComponent implements OnInit {
   types = ['Boolean', 'Number', 'String'];
   id = 0;
   processVariable = new ProcessVariable();
+  message: string | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -34,6 +35,7 @@ export class ProcessVariableComponent implements OnInit {
   save() {
     this.processVariableService.save(this.processVariable).subscribe(processVariable => {
       this.processVariable = processVariable;
+      this.message = 'Saved';
     });
   }
 

@@ -12,6 +12,7 @@ export class ProcessModelComponent implements OnInit {
 
   id = 0;
   processModel = new ProcessModel();
+  message: string | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -33,6 +34,7 @@ export class ProcessModelComponent implements OnInit {
   save() {
     this.processModelService.save(this.processModel).subscribe(processModel => {
       this.processModel = processModel;
+      this.message = 'Saved';
     });
   }
 }

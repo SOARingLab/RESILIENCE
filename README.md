@@ -94,6 +94,12 @@ Click `Open` to open the process model in `Annotation` or `Constraint`.
 
 ![dsl-frontend-third-party-api.png](image/dsl-frontend-third-party-api.png)
 
+### Instance Migration
+
+`Instance Migration` is to migrate old process instances to the new process model:
+
+![dsl-frontend-instance-migration.png](image/dsl-frontend-instance-migration.png)
+
 ### Process Log
 
 `Process Log` is to view the log of process execution in the process engine:

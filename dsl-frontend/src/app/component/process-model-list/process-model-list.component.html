@@ -14,4 +14,7 @@
       <button (click)="open(processModel.id)">Open</button>
     </span>
   </p>
+  <p *ngIf="message" class="message">
+    {{message}}
+  </p>
 </div>

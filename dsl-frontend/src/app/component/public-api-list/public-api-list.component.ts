@@ -14,6 +14,7 @@ export class PublicApiListComponent implements OnInit {
   size = 10;
   totalElements = 0;
   publicApiList: PublicApi[] = [];
+  message: string | undefined;
 
   constructor(
     private router: Router,
@@ -80,6 +81,7 @@ export class PublicApiListComponent implements OnInit {
   delete(id: number) {
     this.publicApiService.delete(id).subscribe(() => {
       this.findAll();
+      this.message = 'Deleted';
     });
   }
 }

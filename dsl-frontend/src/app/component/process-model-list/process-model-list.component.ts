@@ -11,6 +11,7 @@ import {ProcessModelService} from 'src/app/service/process-model.service';
 export class ProcessModelListComponent implements OnInit {
 
   processModelList: ProcessModel[] = [];
+  message: string | undefined;
 
   constructor(
     private router: Router,
@@ -49,6 +50,7 @@ export class ProcessModelListComponent implements OnInit {
   delete(id: number) {
     this.processModelService.delete(id).subscribe(() => {
       this.findByProcessId();
+      this.message = 'Deleted';
     });
   }
 
