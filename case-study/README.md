@@ -50,7 +50,9 @@ Event: A full lockdown will be imposed on Shanghai's Pudong and Puxi in turn for
 
 Reaction: Adjust delivery of goods in Pudong and Puxi in turn.
 
-![online-grocery-03-28.png](image/online-grocery-03-28.png)
+![online-grocery-03-28-1.png](image/online-grocery-03-28-1.png)
+
+![online-grocery-03-28-2.png](image/online-grocery-03-28-2.png)
 
 ### 2022-03-31
 
