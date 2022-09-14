@@ -120,8 +120,8 @@ S.sendMessage(execution, "Goods received");</bpmn:script>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_0omiatj" sourceRef="Activity_0d00975" targetRef="Activity_06f2qgl" constraint:declarative="response" />
     <bpmn:sequenceFlow id="Flow_0f8qp34" name="[0,60]" sourceRef="Activity_0d00975" targetRef="Activity_06f2qgl" constraint:temporal="[0,60]" />
-    <bpmn:sequenceFlow id="Flow_00y7dld" name="[0,0]" sourceRef="Activity_0d00975" targetRef="Activity_105x9s9" constraint:temporal="[0,0]" />
-    <bpmn:sequenceFlow id="Flow_0tkumzr" name="[0,0]" sourceRef="Activity_105x9s9" targetRef="Activity_06f2qgl" constraint:temporal="[0,0]" />
+    <bpmn:sequenceFlow id="Flow_00y7dld" name="[0,0]" sourceRef="Activity_0d00975" targetRef="Activity_105x9s9" constraint:temporal="sequence" />
+    <bpmn:sequenceFlow id="Flow_0tkumzr" name="[0,0]" sourceRef="Activity_105x9s9" targetRef="Activity_06f2qgl" constraint:temporal="sequence" />
     <bpmn:textAnnotation id="TextAnnotation_1jfwp8e">
       <bpmn:text>WHEN risk_level == "high"
 SET order_status = "canceled"
