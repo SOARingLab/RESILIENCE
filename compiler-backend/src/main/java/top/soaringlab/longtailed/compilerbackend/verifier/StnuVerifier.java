@@ -171,9 +171,6 @@ public class StnuVerifier {
 
         String[] runCommand = new String[]{"java", "-cp", toolName, "it.univr.di.cstnu.algorithms.STNU", stnuName};
         Process process = Runtime.getRuntime().exec(runCommand, null, directoryFile);
-        if (!process.waitFor(10, TimeUnit.SECONDS)) {
-            process.destroy();
-        }
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         StringBuilder stringBuilder = new StringBuilder();
         String line;
@@ -182,6 +179,9 @@ public class StnuVerifier {
             stringBuilder.append("\n");
         }
         bufferedReader.close();
+        if (!process.waitFor(10, TimeUnit.SECONDS)) {
+            process.destroy();
+        }
         String output = stringBuilder.toString();
         return output.contains("The given STNU is dynamic controllable!");
     }

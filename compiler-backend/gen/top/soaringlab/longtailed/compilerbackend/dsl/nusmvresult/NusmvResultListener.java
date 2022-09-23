@@ -8,15 +8,15 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface NusmvResultListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link NusmvResultParser#states}.
+	 * Enter a parse tree produced by {@link NusmvResultParser#trace}.
 	 * @param ctx the parse tree
 	 */
-	void enterStates(NusmvResultParser.StatesContext ctx);
+	void enterTrace(NusmvResultParser.TraceContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link NusmvResultParser#states}.
+	 * Exit a parse tree produced by {@link NusmvResultParser#trace}.
 	 * @param ctx the parse tree
 	 */
-	void exitStates(NusmvResultParser.StatesContext ctx);
+	void exitTrace(NusmvResultParser.TraceContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link NusmvResultParser#state}.
 	 * @param ctx the parse tree

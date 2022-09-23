@@ -5,7 +5,7 @@ import java.util.List;
 
 public class NusmvResultReaderVisitor extends NusmvResultBaseVisitor<List<String>> {
     @Override
-    public List<String> visitStates(NusmvResultParser.StatesContext ctx) {
+    public List<String> visitTrace(NusmvResultParser.TraceContext ctx) {
         List<String> result = new ArrayList<>();
         for (NusmvResultParser.StateContext stateContext : ctx.state()) {
             result.addAll(visit(stateContext));

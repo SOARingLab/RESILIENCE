@@ -199,26 +199,25 @@ public class NusmvVerifier {
                 bpmnFlow.declarative = element.getAttribute(declarativeName);
                 if (!bpmnFlow.declarative.isEmpty()) {
                     bpmnConstraintList.add(bpmnFlow);
-                } else {
-                    if (flowName.equals(sequenceFlowName)) {
-                        bpmnFlow.type = "sequenceFlow";
-                        bpmnNodeMap.get(bpmnFlow.source).sequenceOutList.add(bpmnFlow.id);
-                        bpmnNodeMap.get(bpmnFlow.target).sequenceInList.add(bpmnFlow.id);
-                    } else if (flowName.equals(messageFlowName)) {
-                        bpmnFlow.type = "messageFlow";
-                        bpmnNodeMap.get(bpmnFlow.source).messageOutList.add(bpmnFlow.id);
-                        bpmnNodeMap.get(bpmnFlow.target).messageInList.add(bpmnFlow.id);
-                    }
+                } else if (flowName.equals(sequenceFlowName)) {
+                    bpmnFlow.type = "sequenceFlow";
+                    bpmnNodeMap.get(bpmnFlow.source).sequenceOutList.add(bpmnFlow.id);
+                    bpmnNodeMap.get(bpmnFlow.target).sequenceInList.add(bpmnFlow.id);
                     NodeList conditionExpressionNodeList = element.getElementsByTagName(conditionExpressionName);
                     if (conditionExpressionNodeList.getLength() > 0) {
                         Element conditionExpressionElement = (Element) conditionExpressionNodeList.item(0);
                         bpmnFlow.condition = conditionExpressionElement.getTextContent();
                     }
                     bpmnFlowMap.put(bpmnFlow.id, bpmnFlow);
+                } else if (flowName.equals(messageFlowName)) {
+                    bpmnFlow.type = "messageFlow";
+//                    bpmnNodeMap.get(bpmnFlow.source).messageOutList.add(bpmnFlow.id);
+//                    bpmnNodeMap.get(bpmnFlow.target).messageInList.add(bpmnFlow.id);
                 }
             }
         }
     }
+
 
     private void readConstraint(String file) throws Exception {
         // parse xml
@@ -402,8 +401,6 @@ public class NusmvVerifier {
                             ltsTransitionMap.put(ltsTransition.id, ltsTransition);
                             currentLtsState.transitionList.add(ltsTransition.id);
                         }
-                    } else {
-                        ltsStateQueue.add(currentLtsState.id);
                     }
                 }
             }
@@ -589,7 +586,11 @@ public class NusmvVerifier {
             }
         }
 
-        return stringBuilder.toString();
+        String inputFile = stringBuilder.toString()
+                .replace("true", "TRUE")
+                .replace("false", "FALSE");
+
+        return inputFile;
     }
 
     private String variableDefinition(ProcessVariable processVariable) {
@@ -666,7 +667,14 @@ public class NusmvVerifier {
         if (!processVariable.getDefaultValue().equals("random")) {
             stringBuilder.append("      ").append(removeQuotation(processVariable.getDefaultValue())).append(";\n");
         } else {
-            List<String> valueRange = processVariable.getValueRange();
+            List<String> valueRange;
+            if (processVariable.getType().equals("Boolean")) {
+                valueRange = List.of("true", "false");
+            } else if (processVariable.getType().equals("Number")) {
+                valueRange = List.of(processVariable.getMinimumValue(), processVariable.getMaximumValue());
+            } else {
+                valueRange = processVariable.getValueRange();
+            }
             stringBuilder.append("      {\n");
             for (int i = 0; i < valueRange.size(); i++) {
                 String value = removeQuotation(valueRange.get(i));
@@ -758,9 +766,6 @@ public class NusmvVerifier {
 
         String[] runCommand = new String[]{"NuSMV", inputFileName};
         Process process = Runtime.getRuntime().exec(runCommand, null, directoryFile);
-        if (!process.waitFor(10, TimeUnit.SECONDS)) {
-            process.destroy();
-        }
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         StringBuilder stringBuilder = new StringBuilder();
         String line;
@@ -776,11 +781,17 @@ public class NusmvVerifier {
             }
         }
         bufferedReader.close();
+        if (!process.waitFor(10, TimeUnit.SECONDS)) {
+            process.destroy();
+        }
         verificationOutput = stringBuilder.toString();
         return numOfTrue == bpmnConstraintList.size();
     }
 
     private List<Map<String, String>> explainVerificationResult() {
+        verificationOutput = verificationOutput
+                .replace("TRUE", "true")
+                .replace("FALSE", "false");
         List<String> verificationOutputList = NusmvResultReader.read(verificationOutput);
         List<Map<String, String>> resultList = new ArrayList<>();
         Map<String, String> variableMap = new HashMap<>();

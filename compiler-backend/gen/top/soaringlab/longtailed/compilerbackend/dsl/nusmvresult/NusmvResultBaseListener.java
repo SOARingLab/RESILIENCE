@@ -16,13 +16,13 @@ public class NusmvResultBaseListener implements NusmvResultListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStates(NusmvResultParser.StatesContext ctx) { }
+	@Override public void enterTrace(NusmvResultParser.TraceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStates(NusmvResultParser.StatesContext ctx) { }
+	@Override public void exitTrace(NusmvResultParser.TraceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

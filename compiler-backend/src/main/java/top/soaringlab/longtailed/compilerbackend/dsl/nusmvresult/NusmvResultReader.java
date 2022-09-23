@@ -13,7 +13,7 @@ public class NusmvResultReader {
         NusmvResultLexer lexer = new NusmvResultLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         NusmvResultParser parser = new NusmvResultParser(tokens);
-        ParseTree tree = parser.states();
+        ParseTree tree = parser.trace();
         NusmvResultReaderVisitor visitor = new NusmvResultReaderVisitor();
         return visitor.visit(tree);
     }

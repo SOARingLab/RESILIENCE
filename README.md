@@ -40,7 +40,7 @@ This is the homepage of our tool:
 
 ### Process ID
 
-`Process ID` determines the business process application to react to long-tailed changes.
+`Process ID` determines the business process application to react to long-tailed changes. We have two example applications: `online_grocery` and `lng_logistics`.
 
 ### Annotation
 
@@ -50,13 +50,13 @@ This is the homepage of our tool:
 
 Usage:
 
-- Open a process model. Click `Choose File` to choose a .bpmn file and click `Open` to open the process model.
+- Open a process model. Click `Choose File` to choose a .bpmn file and click `Open` to open the process model. An example is `process-example/online-grocery-annotation.bpmn`.
 
-- Add a text annotattion. Choose an activity and click ![dsl-frontend-annotation-icon.png](image/dsl-frontend-annotation-icon.png) to add a text annotation.
+- Add a text annotation. Choose an activity and click ![dsl-frontend-annotation-icon.png](image/dsl-frontend-annotation-icon.png) to add a text annotation.
 
 - Write a DSL code. Use buttons and drop-down menus to write a DSL code.
 
-- Deploy the process model. Click `Deploy with annotation` to deploy the annotated process model. An example is `process-example/online-grocery-annotation.bpmn`.
+- Deploy the process model. Click `Deploy with annotation` to deploy the annotated process model.
 
 ### Constraint
 
@@ -66,11 +66,11 @@ Usage:
 
 Usage:
 
-- Open a process model. Click `Choose File` to choose a .bpmn file and click `Open` to open the process model.
+- Open a process model. Click `Choose File` to choose a .bpmn file and click `Open` to open the process model. An example is `process-example/online-grocery-constraint.bpmn`.
 
-- Specify a functional constraint. Draw a link between two activities and set the relation in `Declarative` in the property panel. An example is `process-example/online-grocery-constraint.bpmn`.
+- Specify a functional constraint. Draw a link between two activities and set the relation in `Declarative` in the property panel.
 
-- Specify a non-functional constraint. Choose an activity and set the duration in `Temporal` in the property panel. Draw a link between two activities and set the constraint in `Temporal` in the property panel. An example is `process-example/online-grocery-constraint.bpmn`.
+- Specify a non-functional constraint. Choose an activity and set the duration in `Temporal` in the property panel. Draw a link between two activities and set the constraint in `Temporal` in the property panel.
 
 - Verify the constraints. Set the start node name and click `Verify`.
 

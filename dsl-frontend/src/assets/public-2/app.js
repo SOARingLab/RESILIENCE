@@ -3690,27 +3690,21 @@ class CustomRenderer extends diagram_js_lib_draw_BaseRenderer__WEBPACK_IMPORTED_
       };
       let path = drawPath(parentNode, pathData, attrs);
       return path;
-    } // counter example
+    }
 
+    let path = this.bpmnRenderer.drawConnection(parentNode, element); // counter example
 
     if (this.resultFunctionalDetail) {
       for (let state of this.resultFunctionalDetail) {
         if (state['state'].includes(id)) {
-          let pathData = createPathFromConnection(element);
-          let fill = COLOR_RED,
-              stroke = COLOR_RED;
-          let attrs = {
-            strokeLinejoin: 'round',
-            markerEnd: marker('counter-example-end', fill, stroke),
-            stroke: stroke
-          };
-          let path = drawPath(parentNode, pathData, attrs);
-          return path;
+          (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(path, {
+            stroke: COLOR_RED
+          });
         }
       }
     }
 
-    return this.bpmnRenderer.drawConnection(parentNode, element);
+    return path;
   }
 
   getShapePath(shape) {

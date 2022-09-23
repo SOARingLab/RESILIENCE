@@ -17,12 +17,13 @@ public class NusmvResultParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__0=1, WS=2, COMMENT_STAR=3, COMMENT_LINE=4, TRACE=5, STATE=6, ID=7;
+		T__0=1, WS=2, COMMENT_STAR=3, COMMENT_LINE=4, TRACE_DESCRIPTION=5, TRACE_TYPE=6, 
+		STATE=7, ID=8;
 	public static final int
-		RULE_states = 0, RULE_state = 1, RULE_assignment = 2;
+		RULE_trace = 0, RULE_state = 1, RULE_assignment = 2;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"states", "state", "assignment"
+			"trace", "state", "assignment"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -35,7 +36,8 @@ public class NusmvResultParser extends Parser {
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, null, "WS", "COMMENT_STAR", "COMMENT_LINE", "TRACE", "STATE", "ID"
+			null, null, "WS", "COMMENT_STAR", "COMMENT_LINE", "TRACE_DESCRIPTION", 
+			"TRACE_TYPE", "STATE", "ID"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -89,50 +91,56 @@ public class NusmvResultParser extends Parser {
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 
-	public static class StatesContext extends ParserRuleContext {
+	public static class TraceContext extends ParserRuleContext {
+		public TerminalNode TRACE_DESCRIPTION() { return getToken(NusmvResultParser.TRACE_DESCRIPTION, 0); }
+		public TerminalNode TRACE_TYPE() { return getToken(NusmvResultParser.TRACE_TYPE, 0); }
 		public List<StateContext> state() {
 			return getRuleContexts(StateContext.class);
 		}
 		public StateContext state(int i) {
 			return getRuleContext(StateContext.class,i);
 		}
-		public StatesContext(ParserRuleContext parent, int invokingState) {
+		public TraceContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_states; }
+		@Override public int getRuleIndex() { return RULE_trace; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof NusmvResultListener ) ((NusmvResultListener)listener).enterStates(this);
+			if ( listener instanceof NusmvResultListener ) ((NusmvResultListener)listener).enterTrace(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof NusmvResultListener ) ((NusmvResultListener)listener).exitStates(this);
+			if ( listener instanceof NusmvResultListener ) ((NusmvResultListener)listener).exitTrace(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof NusmvResultVisitor ) return ((NusmvResultVisitor<? extends T>)visitor).visitStates(this);
+			if ( visitor instanceof NusmvResultVisitor ) return ((NusmvResultVisitor<? extends T>)visitor).visitTrace(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final StatesContext states() throws RecognitionException {
-		StatesContext _localctx = new StatesContext(_ctx, getState());
-		enterRule(_localctx, 0, RULE_states);
+	public final TraceContext trace() throws RecognitionException {
+		TraceContext _localctx = new TraceContext(_ctx, getState());
+		enterRule(_localctx, 0, RULE_trace);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(9);
+			setState(6);
+			match(TRACE_DESCRIPTION);
+			setState(7);
+			match(TRACE_TYPE);
+			setState(11);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==STATE) {
 				{
 				{
-				setState(6);
+				setState(8);
 				state();
 				}
 				}
-				setState(11);
+				setState(13);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -183,19 +191,19 @@ public class NusmvResultParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(12);
+			setState(14);
 			match(STATE);
-			setState(16);
+			setState(18);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==ID) {
 				{
 				{
-				setState(13);
+				setState(15);
 				assignment();
 				}
 				}
-				setState(18);
+				setState(20);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -244,11 +252,11 @@ public class NusmvResultParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(19);
-			((AssignmentContext)_localctx).variable = match(ID);
-			setState(20);
-			match(T__0);
 			setState(21);
+			((AssignmentContext)_localctx).variable = match(ID);
+			setState(22);
+			match(T__0);
+			setState(23);
 			((AssignmentContext)_localctx).value = match(ID);
 			}
 		}
@@ -264,13 +272,14 @@ public class NusmvResultParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\t\32\4\2\t\2\4\3"+
-		"\t\3\4\4\t\4\3\2\7\2\n\n\2\f\2\16\2\r\13\2\3\3\3\3\7\3\21\n\3\f\3\16\3"+
-		"\24\13\3\3\4\3\4\3\4\3\4\3\4\2\2\5\2\4\6\2\2\2\30\2\13\3\2\2\2\4\16\3"+
-		"\2\2\2\6\25\3\2\2\2\b\n\5\4\3\2\t\b\3\2\2\2\n\r\3\2\2\2\13\t\3\2\2\2\13"+
-		"\f\3\2\2\2\f\3\3\2\2\2\r\13\3\2\2\2\16\22\7\b\2\2\17\21\5\6\4\2\20\17"+
-		"\3\2\2\2\21\24\3\2\2\2\22\20\3\2\2\2\22\23\3\2\2\2\23\5\3\2\2\2\24\22"+
-		"\3\2\2\2\25\26\7\t\2\2\26\27\7\3\2\2\27\30\7\t\2\2\30\7\3\2\2\2\4\13\22";
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\n\34\4\2\t\2\4\3"+
+		"\t\3\4\4\t\4\3\2\3\2\3\2\7\2\f\n\2\f\2\16\2\17\13\2\3\3\3\3\7\3\23\n\3"+
+		"\f\3\16\3\26\13\3\3\4\3\4\3\4\3\4\3\4\2\2\5\2\4\6\2\2\2\32\2\b\3\2\2\2"+
+		"\4\20\3\2\2\2\6\27\3\2\2\2\b\t\7\7\2\2\t\r\7\b\2\2\n\f\5\4\3\2\13\n\3"+
+		"\2\2\2\f\17\3\2\2\2\r\13\3\2\2\2\r\16\3\2\2\2\16\3\3\2\2\2\17\r\3\2\2"+
+		"\2\20\24\7\t\2\2\21\23\5\6\4\2\22\21\3\2\2\2\23\26\3\2\2\2\24\22\3\2\2"+
+		"\2\24\25\3\2\2\2\25\5\3\2\2\2\26\24\3\2\2\2\27\30\7\n\2\2\30\31\7\3\2"+
+		"\2\31\32\7\n\2\2\32\7\3\2\2\2\4\r\24";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

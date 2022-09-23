@@ -260,30 +260,21 @@ export default class CustomRenderer extends BaseRenderer {
             return path;
         }
 
+        let path = this.bpmnRenderer.drawConnection(parentNode, element);
+
         // counter example
 
         if (this.resultFunctionalDetail) {
             for (let state of this.resultFunctionalDetail) {
                 if (state['state'].includes(id)) {
-                    let pathData = createPathFromConnection(element);
-
-                    let fill = COLOR_RED,
-                        stroke = COLOR_RED;
-
-                    let attrs = {
-                        strokeLinejoin: 'round',
-                        markerEnd: marker('counter-example-end', fill, stroke),
-                        stroke: stroke
-                    };
-
-                    let path = drawPath(parentNode, pathData, attrs);
-
-                    return path;
+                    svgAttr(path, {
+                        stroke: COLOR_RED
+                    });
                 }
             }
         }
 
-        return this.bpmnRenderer.drawConnection(parentNode, element);
+        return path;
     }
 
     getShapePath(shape) {

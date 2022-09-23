@@ -11,11 +11,11 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface NusmvResultVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link NusmvResultParser#states}.
+	 * Visit a parse tree produced by {@link NusmvResultParser#trace}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStates(NusmvResultParser.StatesContext ctx);
+	T visitTrace(NusmvResultParser.TraceContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link NusmvResultParser#state}.
 	 * @param ctx the parse tree

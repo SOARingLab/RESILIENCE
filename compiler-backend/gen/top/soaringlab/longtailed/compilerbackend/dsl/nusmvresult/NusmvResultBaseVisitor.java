@@ -17,7 +17,7 @@ public class NusmvResultBaseVisitor<T> extends AbstractParseTreeVisitor<T> imple
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitStates(NusmvResultParser.StatesContext ctx) { return visitChildren(ctx); }
+	@Override public T visitTrace(NusmvResultParser.TraceContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

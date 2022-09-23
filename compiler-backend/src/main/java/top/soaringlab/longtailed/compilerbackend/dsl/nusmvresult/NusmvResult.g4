@@ -1,6 +1,6 @@
 grammar NusmvResult;
 
-states : state*;
+trace : TRACE_DESCRIPTION TRACE_TYPE state*;
 
 state : STATE assignment*;
 
@@ -12,7 +12,9 @@ COMMENT_STAR : '***' ~[\r\n]* -> skip;
 
 COMMENT_LINE : '--' ~[\r\n]* -> skip;
 
-TRACE : 'Trace' ~[\r\n]* -> skip;
+TRACE_DESCRIPTION : 'Trace Description:' ~[\r\n]*;
+
+TRACE_TYPE : 'Trace Type:' ~[\r\n]*;
 
 STATE : '->' ~[\r\n]*;
 

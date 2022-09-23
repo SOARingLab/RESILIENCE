@@ -40,6 +40,9 @@ public class MyApplicationRunner implements ApplicationRunner {
     }
 
     private void initProcessModel() throws Exception {
+
+        // online grocery
+
         ProcessModel processModel = new ProcessModel();
         processModel.setProcessId("online_grocery");
         processModel.setFilename("online-grocery.bpmn");
@@ -63,6 +66,26 @@ public class MyApplicationRunner implements ApplicationRunner {
         processModel.setFilename("online-grocery-functional-detail.bpmn");
         processModel.setData(readResourceFile("process-model/online-grocery-functional-detail.bpmn"));
         processModelService.save(processModel);
+
+        // lng logistics
+
+        processModel = new ProcessModel();
+        processModel.setProcessId("lng_logistics");
+        processModel.setFilename("lng-logistics-emergency.bpmn");
+        processModel.setData(readResourceFile("process-model/lng-logistics-emergency.bpmn"));
+        processModelService.save(processModel);
+
+        processModel = new ProcessModel();
+        processModel.setProcessId("lng_logistics");
+        processModel.setFilename("lng-logistics-emergency-annotation.bpmn");
+        processModel.setData(readResourceFile("process-model/lng-logistics-emergency-annotation.bpmn"));
+        processModelService.save(processModel);
+
+        processModel = new ProcessModel();
+        processModel.setProcessId("lng_logistics");
+        processModel.setFilename("lng-logistics-emergency-constraint.bpmn");
+        processModel.setData(readResourceFile("process-model/lng-logistics-emergency-constraint.bpmn"));
+        processModelService.save(processModel);
     }
 
     private String readResourceFile(String filename) throws Exception {
@@ -78,6 +101,9 @@ public class MyApplicationRunner implements ApplicationRunner {
     }
 
     private void initProcessVariable() {
+
+        // online grocery
+
         ProcessVariable processVariable = new ProcessVariable();
         processVariable.setProcessId("online_grocery");
         processVariable.setName("order_status");
@@ -118,9 +144,129 @@ public class MyApplicationRunner implements ApplicationRunner {
         processVariable.setMinimumValue("0");
         processVariable.setMaximumValue("1000");
         processVariableService.save(processVariable);
+
+        // lng logistics
+
+        processVariable = new ProcessVariable();
+        processVariable.setProcessId("lng_logistics");
+        processVariable.setName("tanker_location");
+        processVariable.setType("String");
+        processVariable.setDefaultValue("\"in_dock\"");
+        processVariable.setValueRange(List.of("\"in_dock\"", "\"at_sea\""));
+        processVariableService.save(processVariable);
+
+        processVariable = new ProcessVariable();
+        processVariable.setProcessId("lng_logistics");
+        processVariable.setName("need_contact");
+        processVariable.setType("Boolean");
+        processVariable.setDefaultValue("true");
+        processVariableService.save(processVariable);
+
+        processVariable = new ProcessVariable();
+        processVariable.setProcessId("lng_logistics");
+        processVariable.setName("injury");
+        processVariable.setType("String");
+        processVariable.setDefaultValue("\"frostbite\"");
+        processVariable.setValueRange(List.of("\"frostbite\"", "\"asphyxia\""));
+        processVariableService.save(processVariable);
+
+        processVariable = new ProcessVariable();
+        processVariable.setProcessId("lng_logistics");
+        processVariable.setName("need_ambulance");
+        processVariable.setType("Boolean");
+        processVariable.setDefaultValue("true");
+        processVariableService.save(processVariable);
+
+        processVariable = new ProcessVariable();
+        processVariable.setProcessId("lng_logistics");
+        processVariable.setName("area_opening");
+        processVariable.setType("String");
+        processVariable.setDefaultValue("\"open\"");
+        processVariable.setValueRange(List.of("\"open\"", "\"close\""));
+        processVariableService.save(processVariable);
+
+        processVariable = new ProcessVariable();
+        processVariable.setProcessId("lng_logistics");
+        processVariable.setName("danger_control");
+        processVariable.setType("String");
+        processVariable.setDefaultValue("\"leak\"");
+        processVariable.setValueRange(List.of("\"leak\"", "\"fire\""));
+        processVariableService.save(processVariable);
+
+        processVariable = new ProcessVariable();
+        processVariable.setProcessId("lng_logistics");
+        processVariable.setName("goods_disposal");
+        processVariable.setType("String");
+        processVariable.setDefaultValue("\"transfer\"");
+        processVariable.setValueRange(List.of("\"transfer\"", "\"eject\""));
+        processVariableService.save(processVariable);
+
+        processVariable = new ProcessVariable();
+        processVariable.setProcessId("lng_logistics");
+        processVariable.setName("leak_type");
+        processVariable.setType("String");
+        processVariable.setDefaultValue("\"massive_leak\"");
+        processVariable.setValueRange(List.of("\"pipe\"", "\"casing\"", "\"massive_leak\""));
+        processVariableService.save(processVariable);
+
+        processVariable = new ProcessVariable();
+        processVariable.setProcessId("lng_logistics");
+        processVariable.setName("leak_location");
+        processVariable.setType("String");
+        processVariable.setDefaultValue("random");
+        processVariable.setValueRange(List.of("\"above_water\"", "\"under_water\""));
+        processVariableService.save(processVariable);
+
+        processVariable = new ProcessVariable();
+        processVariable.setProcessId("lng_logistics");
+        processVariable.setName("leak_amount");
+        processVariable.setType("String");
+        processVariable.setDefaultValue("random");
+        processVariable.setValueRange(List.of("\"little\"", "\"medium\"", "\"massive\""));
+        processVariableService.save(processVariable);
+
+        processVariable = new ProcessVariable();
+        processVariable.setProcessId("lng_logistics");
+        processVariable.setName("catch_fire");
+        processVariable.setType("Boolean");
+        processVariable.setDefaultValue("random");
+        processVariableService.save(processVariable);
+
+        processVariable = new ProcessVariable();
+        processVariable.setProcessId("lng_logistics");
+        processVariable.setName("tanker_condition");
+        processVariable.setType("String");
+        processVariable.setDefaultValue("random");
+        processVariable.setValueRange(List.of("\"stable\"", "\"unstable\""));
+        processVariableService.save(processVariable);
+
+        processVariable = new ProcessVariable();
+        processVariable.setProcessId("lng_logistics");
+        processVariable.setName("ship_nearby");
+        processVariable.setType("Boolean");
+        processVariable.setDefaultValue("random");
+        processVariableService.save(processVariable);
+
+        processVariable = new ProcessVariable();
+        processVariable.setProcessId("lng_logistics");
+        processVariable.setName("fishery_nearby");
+        processVariable.setType("Boolean");
+        processVariable.setDefaultValue("random");
+        processVariableService.save(processVariable);
+
+        processVariable = new ProcessVariable();
+        processVariable.setProcessId("lng_logistics");
+        processVariable.setName("wind_direction");
+        processVariable.setType("String");
+        processVariable.setDefaultValue("random");
+        processVariable.setValueRange(List.of("\"windward\"", "\"leeward\""));
+        processVariableService.save(processVariable);
     }
 
     private void initPublicApi() {
+
+        // online grocery
+
         PublicApi publicApi = new PublicApi();
         publicApi.setProcessId("online_grocery");
         publicApi.setName("risk level of region");
