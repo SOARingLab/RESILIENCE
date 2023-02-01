@@ -1,0 +1,19 @@
+.label {
+  display: inline-block;
+  width: 100px;
+  font-weight: bold;
+}
+
+.value {
+  display: inline-block;
+  width: 200px;
+}
+
+.value-data {
+  width: 300px;
+  height: 300px;
+}
+
+.message {
+  color: green;
+}

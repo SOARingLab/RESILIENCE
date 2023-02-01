@@ -41,7 +41,7 @@ S.sendMessageToStart(execution, "Order received");</bpmn:script>
     <bpmn:scriptTask id="Activity_1sxv7q6" name="Pay for goods" scriptFormat="groovy">
       <bpmn:incoming>Flow_0ianl30</bpmn:incoming>
       <bpmn:outgoing>Flow_1wv421j</bpmn:outgoing>
-      <bpmn:script>S.info(execution, "Goods received");
+      <bpmn:script>// S.info(execution, "Goods received");
 S.info(execution, "Pay for goods");
 S.sendMessage(execution, "Payment received");</bpmn:script>
     </bpmn:scriptTask>
@@ -73,15 +73,15 @@ S.sendMessage(execution, "Payment received");</bpmn:script>
       <bpmn:outgoing>Flow_08qvpkv</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0vhqg04" messageRef="Message_0fig6wj" />
     </bpmn:startEvent>
-    <bpmn:scriptTask id="Activity_17p63lp" name="Issue goods" scriptFormat="groovy">
+    <bpmn:scriptTask id="Activity_17p63lp" name="Process inventory" scriptFormat="groovy">
       <bpmn:incoming>Flow_08qvpkv</bpmn:incoming>
       <bpmn:outgoing>Flow_169a07k</bpmn:outgoing>
-      <bpmn:script>S.info(execution, "Order received");
+      <bpmn:script>// S.info(execution, "Order received");
 if (order_status == "canceled") {
     S.info(execution, "Order canceled");
     S.deleteProcessInstance(execution);
 } else {
-    S.info(execution, "Issue goods");
+    S.info(execution, "Process inventory");
 }</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:scriptTask id="Activity_0d00975" name="Deliver goods" scriptFormat="groovy">

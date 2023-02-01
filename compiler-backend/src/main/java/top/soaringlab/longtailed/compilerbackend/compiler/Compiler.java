@@ -5,6 +5,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import top.soaringlab.longtailed.compilerbackend.domain.PublicApi;
+import top.soaringlab.longtailed.compilerbackend.dsl.simple.SimpleTransformer;
 import top.soaringlab.longtailed.compilerbackend.dsl.simple.SimpleTranslator;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -15,10 +16,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Compiler {
 
@@ -42,29 +40,21 @@ public class Compiler {
 
     private Map<String, String> elementIdTextContentMap = new HashMap<>();
 
+    private List<Element> taskList = new ArrayList<>();
+
+    private String newIdPrefix = "compiler_";
+
+    private int newIdSuffix = 0;
+
     public String processEngine = "";
 
     public List<PublicApi> publicApiList = new ArrayList<>();
-
-//    private String httpScript = "String HTTP(String url, String request) {\n" +
-//            "    def response = \"\";\n" +
-//            "    def post = new URL(url).openConnection();\n" +
-//            "    def message = request;\n" +
-//            "    post.setRequestMethod(\"POST\")\n" +
-//            "    post.setDoOutput(true)\n" +
-//            "    post.setRequestProperty(\"Content-Type\", \"application/json\")\n" +
-//            "    post.getOutputStream().write(message.getBytes(\"UTF-8\"));\n" +
-//            "    def postRC = post.getResponseCode();\n" +
-//            "    if(postRC.equals(200)) {\n" +
-//            "       response = post.getInputStream().getText();\n" +
-//            "    }\n" +
-//            "    return response;\n" +
-//            "}\n";
 
     public String compile(String file) throws Exception {
         // parse the xml
         DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document document = documentBuilder.parse(new InputSource(new StringReader(file)));
+        document.getDocumentElement().setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 
         // name
         String tagName = document.getDocumentElement().getTagName();
@@ -94,31 +84,27 @@ public class Compiler {
         }
 
         // find textAnnotations
-        NodeList textAnnotationNodeList = document.getElementsByTagName(xmlnsBpmn + "textAnnotation");
+        List<Element> textAnnotationList = nodeListToElementList(document.getElementsByTagName(xmlnsBpmn + "textAnnotation"));
         Map<String, String> textAnnotationIdTextContentMap = new HashMap<>();
-        for (int i = 0; i < textAnnotationNodeList.getLength(); i++) {
-            Element textAnnotation = (Element) textAnnotationNodeList.item(i);
+        for (Element textAnnotation : textAnnotationList) {
             String textAnnotationId = textAnnotation.getAttribute("id");
             String textAnnotationTextContent = textAnnotation.getTextContent();
             textAnnotationIdTextContentMap.put(textAnnotationId, textAnnotationTextContent);
         }
 
         // find associations
-        NodeList associationNodeList = document.getElementsByTagName(xmlnsBpmn + "association");
-        Map<String, String> elementIdTextAnnotationIdMap = new HashMap<>();
-        for (int i = 0; i < associationNodeList.getLength(); i++) {
-            Element association = (Element) associationNodeList.item(i);
+        List<Element> associationList = nodeListToElementList(document.getElementsByTagName(xmlnsBpmn + "association"));
+        for (Element association : associationList) {
             String sourceRef = association.getAttribute("sourceRef");
             String targetRef = association.getAttribute("targetRef");
-            String textContent = textAnnotationIdTextContentMap.get(targetRef);
-            elementIdTextAnnotationIdMap.put(sourceRef, targetRef);
+            String textContent = elementIdTextContentMap.getOrDefault(sourceRef, "");
+            textContent += textAnnotationIdTextContentMap.get(targetRef) + "\n";
             elementIdTextContentMap.put(sourceRef, textContent);
         }
 
         // find participants
-        NodeList participantNodeList = document.getElementsByTagName(xmlnsBpmn + "participant");
-        for (int i = 0; i < participantNodeList.getLength(); i++) {
-            Element participant = (Element) participantNodeList.item(i);
+        List<Element> participantList = nodeListToElementList(document.getElementsByTagName(xmlnsBpmn + "participant"));
+        for (Element participant : participantList) {
             String participantId = participant.getAttribute("id");
             String processRef = participant.getAttribute("processRef");
             if (elementIdTextContentMap.containsKey(participantId)) {
@@ -127,11 +113,14 @@ public class Compiler {
             }
         }
 
+        // find tasks
         for (String taskName : taskNames) {
-            convertTask(document, taskName);
+            taskList.addAll(nodeListToElementList(document.getElementsByTagName(taskName)));
         }
 
-//        convertProcess(document, processName);
+        convertTask(document);
+
+//        convertProcess(document);
 
         // output the new xml
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -140,150 +129,205 @@ public class Compiler {
         return byteArrayOutputStream.toString();
     }
 
-    private void convertTask(Document document, String name) {
-        String suffixBegin = "_begin";
-        String suffixEnd = "_end";
+    private List<Element> nodeListToElementList(NodeList nodeList) {
+        List<Element> elementList = new ArrayList<>();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Element element = (Element) nodeList.item(i);
+            elementList.add(element);
+        }
+        return elementList;
+    }
 
-        // find tasks
-        NodeList taskNodeList = document.getElementsByTagName(name);
-        Map<String, String> taskIdSequenceFlowInIdMap = new HashMap<>();
-//        Map<String, String> taskIdSequenceFlowOutIdMap = new HashMap<>();
-        for (int i = 0; i < taskNodeList.getLength(); i++) {
-            Element task = (Element) taskNodeList.item(i);
+    private void convertTask(Document document) {
+        for (Element task : taskList) {
             String taskId = task.getAttribute("id");
-            String taskBeginId = taskId + suffixBegin;
-            String taskEndId = taskId + suffixEnd;
-
-            String textContent = elementIdTextContentMap.get(taskId);
-            if (textContent != null) {
-                Element incoming = (Element) task.getElementsByTagName(xmlnsBpmn + "incoming").item(0);
-                String sequenceFlowInId = incoming.getTextContent();
-                taskIdSequenceFlowInIdMap.put(taskId, sequenceFlowInId);
-                String sequenceFlowBeginId = sequenceFlowInId + suffixBegin;
-                incoming.setTextContent(sequenceFlowBeginId);
-
-//                Element outgoing = (Element) task.getElementsByTagName(xmlnsBpmn + "outgoing").item(0);
-//                String sequenceFlowOutId = outgoing.getTextContent();
-//                taskIdSequenceFlowOutIdMap.put(taskId, sequenceFlowOutId);
-//                String sequenceFlowEndId = sequenceFlowOutId + suffixEnd;
-//                outgoing.setTextContent(sequenceFlowEndId);
-
+            if (elementIdTextContentMap.containsKey(taskId)) {
+                String textContent = elementIdTextContentMap.get(taskId);
                 Element process = (Element) task.getParentNode();
-                String scriptBegin = defaultScript + elementIdTextContentMap.getOrDefault(taskId, "");
-                scriptBegin = convertScript(scriptBegin);
-                Element taskBegin = createScriptTask(document, taskBeginId, sequenceFlowInId, sequenceFlowBeginId, scriptBegin);
-                process.insertBefore(taskBegin, task);
-//                String scriptEnd = defaultScript;
-//                Element taskEnd = createScriptTask(document, taskEndId, sequenceFlowEndId, sequenceFlowOutId, scriptEnd);
-//                process.insertBefore(taskEnd, task);
 
-                if (name.equals(xmlnsBpmn + "scriptTask")) {
-//                    i = i + 2;
-                    i = i + 1;
+                Map<String, List<String>> insertBeforeMap = new HashMap<>();
+                Map<String, List<String>> insertAfterMap = new HashMap<>();
+                Map<String, List<String>> replaceMap = new HashMap<>();
+
+                // preprocess
+                {
+                    List<String> result = transformScript(textContent);
+                    String condition = "";
+                    String type = "";
+                    String value = "";
+                    int state = 0; // 2 condition, 3 action type, 4 action value
+                    for (String s : result) {
+                        if (s.equals("input")) {
+                            condition = "";
+                        } else if (s.equals("condition")) {
+                            state = 2;
+                        } else if (s.equals("action")) {
+                            state = 3;
+                        } else if (state == 2) {
+                            condition = s;
+                        } else if (state == 3) {
+                            type = s;
+                            state = 4;
+                        } else if (state == 4) {
+                            value = s;
+                            if (type.equals("INSERT BEFORE")) {
+                                if (!insertBeforeMap.containsKey(condition)) {
+                                    insertBeforeMap.put(condition, new ArrayList<>());
+                                }
+                                insertBeforeMap.get(condition).add(value);
+                            } else if (type.equals("INSERT AFTER")) {
+                                if (!insertAfterMap.containsKey(condition)) {
+                                    insertAfterMap.put(condition, new ArrayList<>());
+                                }
+                                insertAfterMap.get(condition).add(value);
+                            } else if (type.equals("SKIP")) {
+                                if (!replaceMap.containsKey(condition)) {
+                                    replaceMap.put(condition, new ArrayList<>());
+                                }
+                                replaceMap.get(condition).add("compiler_SKIP");
+                            } else if (type.equals("REPLACE")) {
+                                if (!replaceMap.containsKey(condition)) {
+                                    replaceMap.put(condition, new ArrayList<>());
+                                }
+                                replaceMap.get(condition).add(value);
+                            } else if (type.equals("ABORT")) {
+                                if (!replaceMap.containsKey(condition)) {
+                                    replaceMap.put(condition, new ArrayList<>());
+                                }
+                                replaceMap.get(condition).add("compiler_ABORT");
+                            }
+                        }
+                    }
+                }
+
+                // modify variables
+                {
+                    String scriptTaskId = getNewId();
+                    String endFlowId = getNewId();
+
+                    List<String> sequenceFlowInIdList = insertBeforeNode(document, task, scriptTaskId, endFlowId);
+
+                    String script = convertScript(defaultScript + textContent);
+                    Element scriptTask = createScriptTask(document, scriptTaskId, sequenceFlowInIdList, List.of(endFlowId), script);
+                    process.insertBefore(scriptTask, task);
+
+                    Element endFlow = createSequenceFlow(document, endFlowId, scriptTaskId, taskId);
+                    process.insertBefore(endFlow, task);
+
+                    shapeReference(document, scriptTaskId, taskId);
+                    edgeReference(document, endFlowId, taskId);
+                }
+
+                // insert before
+                if (!insertBeforeMap.isEmpty()) {
+                    String splitGatewayId = getNewId();
+                    String defaultFlowId = getNewId();
+                    String mergeGatewayId = getNewId();
+                    String endFlowId = getNewId();
+
+                    List<String> sequenceFlowInIdList = insertBeforeNode(document, task, splitGatewayId, endFlowId);
+
+                    Element splitGateway = createExclusiveGateway(document, splitGatewayId, sequenceFlowInIdList, List.of(defaultFlowId));
+                    splitGateway.setAttribute("default", defaultFlowId);
+                    process.insertBefore(splitGateway, task);
+
+                    Element defaultFlow = createSequenceFlow(document, defaultFlowId, splitGatewayId, mergeGatewayId);
+                    process.insertBefore(defaultFlow, task);
+
+                    Element mergeGateway = createExclusiveGateway(document, mergeGatewayId, List.of(defaultFlowId), List.of(endFlowId));
+                    process.insertBefore(mergeGateway, task);
+
+                    Element endFlow = createSequenceFlow(document, endFlowId, mergeGatewayId, taskId);
+                    process.insertBefore(endFlow, task);
+
+                    shapeReference(document, splitGatewayId, taskId);
+                    edgeReference(document, defaultFlowId, taskId);
+                    shapeReference(document, mergeGatewayId, taskId);
+                    edgeReference(document, endFlowId, taskId);
+
+                    for (Map.Entry<String, List<String>> entry : insertBeforeMap.entrySet()) {
+                        String condition = entry.getKey();
+                        List<String> taskNameList = entry.getValue();
+                        addThread(document, splitGateway, mergeGateway, condition, taskNameList);
+                    }
+                }
+
+                // insert after
+                if (!insertAfterMap.isEmpty()) {
+                    String beginFlowId = getNewId();
+                    String splitGatewayId = getNewId();
+                    String defaultFlowId = getNewId();
+                    String mergeGatewayId = getNewId();
+
+                    List<String> sequenceFlowOutIdList = insertAfterNode(document, task, beginFlowId, mergeGatewayId);
+
+                    Element beginFlow = createSequenceFlow(document, beginFlowId, taskId, splitGatewayId);
+                    process.insertBefore(beginFlow, task);
+
+                    Element splitGateway = createExclusiveGateway(document, splitGatewayId, List.of(beginFlowId), List.of(defaultFlowId));
+                    splitGateway.setAttribute("default", defaultFlowId);
+                    process.insertBefore(splitGateway, task);
+
+                    Element defaultFlow = createSequenceFlow(document, defaultFlowId, splitGatewayId, mergeGatewayId);
+                    process.insertBefore(defaultFlow, task);
+
+                    Element mergeGateway = createExclusiveGateway(document, mergeGatewayId, List.of(defaultFlowId), sequenceFlowOutIdList);
+                    process.insertBefore(mergeGateway, task);
+
+                    edgeReference(document, beginFlowId, taskId);
+                    shapeReference(document, splitGatewayId, taskId);
+                    edgeReference(document, defaultFlowId, taskId);
+                    shapeReference(document, mergeGatewayId, taskId);
+
+                    for (Map.Entry<String, List<String>> entry : insertAfterMap.entrySet()) {
+                        String condition = entry.getKey();
+                        List<String> taskNameList = entry.getValue();
+                        addThread(document, splitGateway, mergeGateway, condition, taskNameList);
+                    }
+                }
+
+                // replace
+                if (!replaceMap.isEmpty()) {
+                    String splitGatewayId = getNewId();
+                    String inFlowId = getNewId();
+                    String outFlowId = getNewId();
+                    String mergeGatewayId = getNewId();
+
+                    List<String> sequenceFlowInIdList = insertBeforeNode(document, task, splitGatewayId, inFlowId);
+                    List<String> sequenceFlowOutIdList = insertAfterNode(document, task, outFlowId, mergeGatewayId);
+
+                    Element splitGateway = createExclusiveGateway(document, splitGatewayId, sequenceFlowInIdList, List.of(inFlowId));
+                    splitGateway.setAttribute("default", inFlowId);
+                    process.insertBefore(splitGateway, task);
+
+                    Element inFlow = createSequenceFlow(document, inFlowId, splitGatewayId, taskId);
+                    process.insertBefore(inFlow, task);
+
+                    Element outFlow = createSequenceFlow(document, outFlowId, taskId, mergeGatewayId);
+                    process.insertBefore(outFlow, task);
+
+                    Element mergeGateway = createExclusiveGateway(document, mergeGatewayId, List.of(outFlowId), sequenceFlowOutIdList);
+                    process.insertBefore(mergeGateway, task);
+
+                    shapeReference(document, splitGatewayId, taskId);
+                    edgeReference(document, inFlowId, taskId);
+                    edgeReference(document, outFlowId, taskId);
+                    shapeReference(document, mergeGatewayId, taskId);
+
+                    for (Map.Entry<String, List<String>> entry : replaceMap.entrySet()) {
+                        String condition = entry.getKey();
+                        List<String> taskNameList = entry.getValue();
+                        addThread(document, splitGateway, mergeGateway, condition, taskNameList);
+                    }
                 }
             }
         }
-
-        // find sequenceFlows
-        NodeList sequenceFlowNodeList = document.getElementsByTagName(xmlnsBpmn + "sequenceFlow");
-        for (int i = 0; i < sequenceFlowNodeList.getLength(); i++) {
-            Element sequenceFlow = (Element) sequenceFlowNodeList.item(i);
-            String sequenceFlowId = sequenceFlow.getAttribute("id");
-
-            String taskTargetId = sequenceFlow.getAttribute("targetRef");
-            if (taskIdSequenceFlowInIdMap.containsKey(taskTargetId)) {
-                String sequenceFlowBeginId = sequenceFlowId + suffixBegin;
-                String taskBeginId = taskTargetId + suffixBegin;
-                sequenceFlow.setAttribute("targetRef", taskBeginId);
-
-                Element sequenceFlowBegin = createSequenceFlow(document, sequenceFlowBeginId, taskBeginId, taskTargetId);
-                Element process = (Element) sequenceFlow.getParentNode();
-                process.insertBefore(sequenceFlowBegin, sequenceFlow);
-
-                i = i + 1;
-            }
-
-//            String taskSourceId = sequenceFlow.getAttribute("sourceRef");
-//            if (taskIdSequenceFlowOutIdMap.containsKey(taskSourceId)) {
-//                String sequenceFlowEndId = sequenceFlowId + suffixEnd;
-//                String taskEndId = taskSourceId + suffixEnd;
-//                sequenceFlow.setAttribute("sourceRef", taskEndId);
-//
-//                Element sequenceFlowEnd = createSequenceFlow(document, sequenceFlowEndId, taskSourceId, taskEndId);
-//                Element process = (Element) sequenceFlow.getParentNode();
-//                process.insertBefore(sequenceFlowEnd, sequenceFlow);
-//
-//                i = i + 1;
-//            }
-        }
-
-        // find BPMNShapes
-        NodeList BPMNShapeNodeList = document.getElementsByTagName(xmlnsBpmndi + "BPMNShape");
-        for (int i = 0; i < BPMNShapeNodeList.getLength(); i++) {
-            Element BPMNShape = (Element) BPMNShapeNodeList.item(i);
-            String taskId = BPMNShape.getAttribute("bpmnElement");
-
-            if (taskIdSequenceFlowInIdMap.containsKey(taskId)) {
-                Element bounds = (Element) BPMNShape.getElementsByTagName(xmlnsDc + "Bounds").item(0);
-                String x = bounds.getAttribute("x");
-                String y = bounds.getAttribute("y");
-
-                Element BPMNDiagram = (Element) BPMNShape.getParentNode();
-
-                String taskBeginId = taskId + suffixBegin;
-                Element BPMNShapeBegin = createBPMNShape(document, taskBeginId, String.valueOf(Integer.parseInt(x) + 10), y);
-                BPMNDiagram.insertBefore(BPMNShapeBegin, BPMNShape);
-
-//                String taskEndId = taskId + suffixEnd;
-//                Element BPMNShapeEnd = createBPMNShape(document, taskEndId, String.valueOf(Integer.parseInt(x) + 10), y);
-//                BPMNDiagram.insertBefore(BPMNShapeEnd, BPMNShape);
-
-//                i = i + 2;
-                i = i + 1;
-            }
-        }
-
-        // find BPMNEdges
-        NodeList BPMNEdgeNodeList = document.getElementsByTagName(xmlnsBpmndi + "BPMNEdge");
-        for (int i = 0; i < BPMNEdgeNodeList.getLength(); i++) {
-            Element BPMNEdge = (Element) BPMNEdgeNodeList.item(i);
-            String sequenceFlowId = BPMNEdge.getAttribute("bpmnElement");
-
-            if (taskIdSequenceFlowInIdMap.containsValue(sequenceFlowId)) {
-                String sequenceFlowBegin = sequenceFlowId + suffixBegin;
-
-                Element waypoint = (Element) BPMNEdge.getElementsByTagName(xmlnsDi + "waypoint").item(1);
-                String x = waypoint.getAttribute("x");
-                String y = waypoint.getAttribute("y");
-
-                Element diagram = (Element) BPMNEdge.getParentNode();
-                Element BPMNEdgeBegin = createBPMNEdge(document, sequenceFlowBegin, x, y);
-                diagram.insertBefore(BPMNEdgeBegin, BPMNEdge);
-
-                i = i + 1;
-            }
-
-//            if (taskIdSequenceFlowOutIdMap.containsValue(sequenceFlowId)) {
-//                String sequenceFlowEnd = sequenceFlowId + suffixEnd;
-//
-//                Element waypoint = (Element) BPMNEdge.getElementsByTagName(xmlnsDi + "waypoint").item(0);
-//                String x = waypoint.getAttribute("x");
-//                String y = waypoint.getAttribute("y");
-//
-//                Element diagram = (Element) BPMNEdge.getParentNode();
-//                Element BPMNEdgeEnd = createBPMNEdge(document, sequenceFlowEnd, x, y);
-//                diagram.insertBefore(BPMNEdgeEnd, BPMNEdge);
-//
-//                i = i + 1;
-//            }
-        }
     }
 
-    private void convertProcess(Document document, String name) {
+    private void convertProcess(Document document) {
         // find processes
-        NodeList processNodeList = document.getElementsByTagName(name);
-        for (int i = 0; i < processNodeList.getLength(); i++) {
-            Element process = (Element) processNodeList.item(i);
+        List<Element> processList = nodeListToElementList(document.getElementsByTagName(processName));
+        for (Element process : processList) {
             String processId = process.getAttribute("id");
 
             String messageId = processId + "_message";
@@ -306,7 +350,7 @@ public class Compiler {
             startEvent.appendChild(createMessageEventDefinition(document, messageEventDefinitionId, messageId));
             subProcess.appendChild(startEvent);
             subProcess.appendChild(createSequenceFlow(document, sequenceFlow1Id, startEventId, scriptTaskId));
-            subProcess.appendChild(createScriptTask(document, scriptTaskId, sequenceFlow1Id, sequenceFlow2Id, script));
+            subProcess.appendChild(createScriptTask(document, scriptTaskId, List.of(sequenceFlow1Id), List.of(sequenceFlow2Id), script));
             subProcess.appendChild(createSequenceFlow(document, sequenceFlow2Id, scriptTaskId, endEventId));
             subProcess.appendChild(createEndEvent(document, endEventId, sequenceFlow2Id));
 
@@ -317,24 +361,214 @@ public class Compiler {
         }
     }
 
-    private Element createScriptTask(Document document, String id, String sequenceFlowInId, String sequenceFlowOutId, String scriptTextContent) {
+    private List<String> insertBeforeNode(Document document, Element node, String beginId, String endId) {
+        String nodeId = node.getAttribute("id");
+
+        List<Element> sequenceFlowList = nodeListToElementList(document.getElementsByTagName(xmlnsBpmn + "sequenceFlow"));
+        for (Element sequenceFlow : sequenceFlowList) {
+            String sequenceFlowId = sequenceFlow.getAttribute("id");
+            String targetRef = sequenceFlow.getAttribute("targetRef");
+            if (targetRef.equals(nodeId)) {
+                sequenceFlow.setAttribute("targetRef", beginId);
+            }
+        }
+
+        List<String> sequenceFlowInIdList = new ArrayList<>();
+        List<Element> incomingList = nodeListToElementList(node.getElementsByTagName(xmlnsBpmn + "incoming"));
+        int i = 0;
+        for (Element incoming : incomingList) {
+            sequenceFlowInIdList.add(incoming.getTextContent());
+            if (i++ == 0) {
+                incoming.setTextContent(endId);
+            } else {
+                node.removeChild(incoming);
+            }
+        }
+
+        return sequenceFlowInIdList;
+    }
+
+    private List<String> insertAfterNode(Document document, Element node, String beginId, String endId) {
+        String nodeId = node.getAttribute("id");
+
+        List<Element> sequenceFlowList = nodeListToElementList(document.getElementsByTagName(xmlnsBpmn + "sequenceFlow"));
+        for (Element sequenceFlow : sequenceFlowList) {
+            String sequenceFlowId = sequenceFlow.getAttribute("id");
+            String sourceRef = sequenceFlow.getAttribute("sourceRef");
+            if (sourceRef.equals(nodeId)) {
+                sequenceFlow.setAttribute("sourceRef", endId);
+            }
+        }
+
+        List<String> sequenceFlowOutIdList = new ArrayList<>();
+        List<Element> outgoingList = nodeListToElementList(node.getElementsByTagName(xmlnsBpmn + "outgoing"));
+        int i = 0;
+        for (Element outgoing : outgoingList) {
+            sequenceFlowOutIdList.add(outgoing.getTextContent());
+            if (i++ == 0) {
+                outgoing.setTextContent(beginId);
+            } else {
+                node.removeChild(outgoing);
+            }
+        }
+
+        return sequenceFlowOutIdList;
+    }
+
+    private void addThread(Document document, Element splitGateway, Element mergeGateway, String condition, List<String> taskNameList) {
+        Element process = (Element) splitGateway.getParentNode();
+        String splitGatewayId = splitGateway.getAttribute("id");
+        String mergeGatewayId = mergeGateway.getAttribute("id");
+        String currentTaskId = splitGatewayId;
+        String currentFlowId = getNewId();
+
+        Element outgoing = document.createElement(xmlnsBpmn + "outgoing");
+        outgoing.setTextContent(currentFlowId);
+        splitGateway.appendChild(outgoing);
+
+        int i = 0;
+        for (String taskName : taskNameList) {
+            String taskId = null;
+
+            if (taskName.equals("compiler_SKIP")) {
+                break;
+            } else if (taskName.equals("compiler_ABORT")) {
+            } else {
+                taskId = findTask(taskName);
+                if (taskId == null) {
+                    continue;
+                }
+            }
+
+            String newTaskId = getNewId();
+            String newFlowId = getNewId();
+
+            Element currentFlow = createSequenceFlow(document, currentFlowId, currentTaskId, newTaskId);
+            if (i++ == 0) {
+                Element conditionExpression = document.createElement(xmlnsBpmn + "conditionExpression");
+                conditionExpression.setAttribute("xsi:type", xmlnsBpmn + "tFormalExpression");
+                conditionExpression.setTextContent(condition);
+                currentFlow.appendChild(conditionExpression);
+            }
+            process.insertBefore(currentFlow, mergeGateway);
+            edgeReference(document, currentFlowId, mergeGatewayId);
+
+            if (taskName.equals("compiler_ABORT")) {
+                Element endEvent = createEndEvent(document, newTaskId, currentFlowId);
+                process.insertBefore(endEvent, mergeGateway);
+                shapeReference(document, newTaskId, mergeGatewayId);
+                return;
+            }
+
+            Element newTask = cloneTask(document, taskId, currentFlowId, newFlowId);
+            newTask.setAttribute("id", newTaskId);
+            process.insertBefore(newTask, mergeGateway);
+            shapeReference(document, newTaskId, mergeGatewayId);
+
+            currentTaskId = newTaskId;
+            currentFlowId = newFlowId;
+        }
+
+        Element currentFlow = createSequenceFlow(document, currentFlowId, currentTaskId, mergeGatewayId);
+        if (i++ == 0) {
+            Element conditionExpression = document.createElement(xmlnsBpmn + "conditionExpression");
+            conditionExpression.setAttribute("xsi:type", xmlnsBpmn + "tFormalExpression");
+            conditionExpression.setTextContent(condition);
+            currentFlow.appendChild(conditionExpression);
+        }
+        process.insertBefore(currentFlow, mergeGateway);
+        edgeReference(document, currentFlowId, mergeGatewayId);
+
+        Element incoming = document.createElement(xmlnsBpmn + "incoming");
+        incoming.setTextContent(currentFlowId);
+        Element ref = (Element) mergeGateway.getElementsByTagName(xmlnsBpmn + "outgoing").item(0);
+        mergeGateway.insertBefore(incoming, ref);
+    }
+
+    private String findTask(String name) {
+        for (Element task : taskList) {
+            String taskId = task.getAttribute("id");
+            String taskName = task.getAttribute("name");
+            if (taskName.equals(name)) {
+                return taskId;
+            }
+        }
+        return null;
+    }
+
+    private Element cloneTask(Document document, String id, String sequenceFlowInId, String sequenceFlowOutId) {
+        for (Element task : taskList) {
+            String taskId = task.getAttribute("id");
+            if (taskId.equals(id)) {
+                Element newTask = (Element) task.cloneNode(true);
+
+                List<Element> incomingList = nodeListToElementList(newTask.getElementsByTagName(xmlnsBpmn + "incoming"));
+                int i = 0;
+                for (Element incoming : incomingList) {
+                    if (i++ == 0) {
+                        incoming.setTextContent(sequenceFlowInId);
+                    } else {
+                        newTask.removeChild(incoming);
+                    }
+                }
+
+                List<Element> outgoingList = nodeListToElementList(newTask.getElementsByTagName(xmlnsBpmn + "outgoing"));
+                i = 0;
+                for (Element outgoing : outgoingList) {
+                    if (i++ == 0) {
+                        outgoing.setTextContent(sequenceFlowOutId);
+                    } else {
+                        newTask.removeChild(outgoing);
+                    }
+                }
+
+                return newTask;
+            }
+        }
+        return null;
+    }
+
+    private Element createScriptTask(Document document, String id, List<String> sequenceFlowInIdList, List<String> sequenceFlowOutIdList, String scriptTextContent) {
         Element scriptTask = document.createElement(xmlnsBpmn + "scriptTask");
         scriptTask.setAttribute("id", id);
         scriptTask.setAttribute("scriptFormat", scriptLanguage);
 
-        Element incoming = document.createElement(xmlnsBpmn + "incoming");
-        incoming.setTextContent(sequenceFlowInId);
-        scriptTask.appendChild(incoming);
+        for (String sequenceFlowInId : sequenceFlowInIdList) {
+            Element incoming = document.createElement(xmlnsBpmn + "incoming");
+            incoming.setTextContent(sequenceFlowInId);
+            scriptTask.appendChild(incoming);
+        }
 
-        Element outgoing = document.createElement(xmlnsBpmn + "outgoing");
-        outgoing.setTextContent(sequenceFlowOutId);
-        scriptTask.appendChild(outgoing);
+        for (String sequenceFlowOutId : sequenceFlowOutIdList) {
+            Element outgoing = document.createElement(xmlnsBpmn + "outgoing");
+            outgoing.setTextContent(sequenceFlowOutId);
+            scriptTask.appendChild(outgoing);
+        }
 
         Element script = document.createElement(xmlnsBpmn + "script");
         script.setTextContent(scriptTextContent);
         scriptTask.appendChild(script);
 
         return scriptTask;
+    }
+
+    private Element createExclusiveGateway(Document document, String id, List<String> sequenceFlowInIdList, List<String> sequenceFlowOutIdList) {
+        Element exclusiveGateway = document.createElement(xmlnsBpmn + "exclusiveGateway");
+        exclusiveGateway.setAttribute("id", id);
+
+        for (String sequenceFlowInId : sequenceFlowInIdList) {
+            Element incoming = document.createElement(xmlnsBpmn + "incoming");
+            incoming.setTextContent(sequenceFlowInId);
+            exclusiveGateway.appendChild(incoming);
+        }
+
+        for (String sequenceFlowOutId : sequenceFlowOutIdList) {
+            Element outgoing = document.createElement(xmlnsBpmn + "outgoing");
+            outgoing.setTextContent(sequenceFlowOutId);
+            exclusiveGateway.appendChild(outgoing);
+        }
+
+        return exclusiveGateway;
     }
 
     private Element createSequenceFlow(Document document, String id, String taskSourceId, String taskTargetId) {
@@ -385,6 +619,38 @@ public class Compiler {
         return message;
     }
 
+    private void shapeReference(Document document, String nodeId, String referenceId) {
+        List<Element> BPMNShapeList = nodeListToElementList(document.getElementsByTagName(xmlnsBpmndi + "BPMNShape"));
+        for (Element BPMNShape : BPMNShapeList) {
+            String bpmnElement = BPMNShape.getAttribute("bpmnElement");
+            if (bpmnElement.equals(referenceId)) {
+                Element bounds = (Element) BPMNShape.getElementsByTagName(xmlnsDc + "Bounds").item(0);
+                String x = String.valueOf(Integer.parseInt(bounds.getAttribute("x")) + 10);
+                String y = bounds.getAttribute("y");
+
+                Element BPMNDiagram = (Element) BPMNShape.getParentNode();
+                Element nodeBPMNShape = createBPMNShape(document, nodeId, x, y);
+                BPMNDiagram.insertBefore(nodeBPMNShape, BPMNShape);
+            }
+        }
+    }
+
+    private void edgeReference(Document document, String nodeId, String referenceId) {
+        List<Element> BPMNShapeList = nodeListToElementList(document.getElementsByTagName(xmlnsBpmndi + "BPMNShape"));
+        for (Element BPMNShape : BPMNShapeList) {
+            String bpmnElement = BPMNShape.getAttribute("bpmnElement");
+            if (bpmnElement.equals(referenceId)) {
+                Element bounds = (Element) BPMNShape.getElementsByTagName(xmlnsDc + "Bounds").item(0);
+                String x = String.valueOf(Integer.parseInt(bounds.getAttribute("x")) + 10);
+                String y = bounds.getAttribute("y");
+
+                Element BPMNDiagram = (Element) BPMNShape.getParentNode();
+                Element nodeBPMNEdge = createBPMNEdge(document, nodeId, x, y);
+                BPMNDiagram.insertBefore(nodeBPMNEdge, BPMNShape);
+            }
+        }
+    }
+
     private Element createBPMNShape(Document document, String taskId, String x, String y) {
         Element BPMNShape = document.createElement(xmlnsBpmndi + "BPMNShape");
         BPMNShape.setAttribute("id", taskId + "_di");
@@ -393,8 +659,8 @@ public class Compiler {
         Element bounds = document.createElement(xmlnsDc + "Bounds");
         bounds.setAttribute("x", x);
         bounds.setAttribute("y", y);
-        bounds.setAttribute("width", "1");
-        bounds.setAttribute("height", "1");
+        bounds.setAttribute("width", "10");
+        bounds.setAttribute("height", "10");
         BPMNShape.appendChild(bounds);
 
         return BPMNShape;
@@ -416,6 +682,10 @@ public class Compiler {
         BPMNEdge.appendChild(waypoint2);
 
         return BPMNEdge;
+    }
+
+    private String getNewId() {
+        return newIdPrefix + newIdSuffix++;
     }
 
     private String convertScript(String script) {
@@ -489,5 +759,9 @@ public class Compiler {
             result += scriptContext + ".setVariable(\"" + publicApi.getOutputTos().get(i) + "\", result." + publicApi.getOutputFroms().get(i) + ");\n";
         }
         return result;
+    }
+
+    private List<String> transformScript(String script) {
+        return SimpleTransformer.transform(script);
     }
 }

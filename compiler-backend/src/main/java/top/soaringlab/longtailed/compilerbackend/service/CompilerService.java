@@ -3,7 +3,6 @@ package top.soaringlab.longtailed.compilerbackend.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.soaringlab.longtailed.compilerbackend.compiler.Compiler;
-import top.soaringlab.longtailed.compilerbackend.compiler.CompilerScript;
 import top.soaringlab.longtailed.compilerbackend.compiler.ConstraintRemover;
 
 @Service
@@ -41,10 +40,5 @@ public class CompilerService {
         Compiler compiler = new Compiler();
         compiler.processEngine = "functional";
         return compiler.compile(file);
-    }
-
-    public String compileScript(String text) throws Exception {
-        CompilerScript compilerScript = new CompilerScript();
-        return compilerScript.compileScript(text);
     }
 }

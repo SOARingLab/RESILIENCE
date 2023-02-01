@@ -1,0 +1,19 @@
+<div class="container">
+  <h1>Process Activity List</h1>
+  <p>
+    <button (click)="add()">Add</button>
+  </p>
+  <p>
+    <span class="column-head">Name</span>
+    <span class="column-head">Operation</span>
+  </p>
+  <p *ngFor="let processActivity of processActivityList">
+    <span class="column"><a [routerLink]="'/process-activity/' + processActivity.id">{{processActivity.name}}</a></span>
+    <span class="column">
+      <button (click)="delete(processActivity.id)">Delete</button>
+    </span>
+  </p>
+  <p *ngIf="message" class="message">
+    {{message}}
+  </p>
+</div>

@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Page} from "../model/page";
 import {PublicApi} from "../model/public-api";
 import {environment} from "../../environments/environment";
 
@@ -14,11 +13,6 @@ export class PublicApiService {
   constructor(
     private httpClient: HttpClient
   ) {
-  }
-
-  findAll(page: number, size: number) {
-    let url = this.rootUrl + '/find-all?page=' + page + '&size=' + size;
-    return this.httpClient.get<Page<PublicApi>>(url);
   }
 
   findByProcessId(processId: string) {

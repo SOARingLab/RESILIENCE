@@ -23,35 +23,7 @@ export class PublicApiListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.findAll();
     this.findByProcessId();
-  }
-
-  firstPage() {
-    this.page = 0;
-    this.findAll();
-  }
-
-  previousPage() {
-    this.page--;
-    this.findAll();
-  }
-
-  nextPage() {
-    this.page++;
-    this.findAll();
-  }
-
-  lastPage() {
-    this.page = Math.floor(this.totalElements / this.size);
-    this.findAll();
-  }
-
-  findAll() {
-    this.publicApiService.findAll(this.page, this.size).subscribe(publicApiPage => {
-      this.totalElements = publicApiPage.totalElements;
-      this.publicApiList = publicApiPage.content;
-    });
   }
 
   findByProcessId() {
@@ -80,7 +52,7 @@ export class PublicApiListComponent implements OnInit {
 
   delete(id: number) {
     this.publicApiService.delete(id).subscribe(() => {
-      this.findAll();
+      this.findByProcessId();
       this.message = 'Deleted';
     });
   }

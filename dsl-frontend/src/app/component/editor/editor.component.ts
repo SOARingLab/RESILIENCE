@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {Grammar} from "../../model/grammar";
 import {ProcessVariableService} from "../../service/process-variable.service";
+import {ProcessActivityService} from "../../service/process-activity.service";
 
 @Component({
   selector: 'app-editor',
@@ -22,14 +22,16 @@ export class EditorComponent implements OnInit {
   grammarActionList = [''];
   grammarConditionMap = new Map();
   grammarActionMap = new Map();
+  grammarActivities = [''];
   inputs = [
-    [[['', '', '', '']], [['', '', '']]]
+    [[['', '', '', '']], [['', '', '', '']]]
   ];
   text = '';
   editorReady = false;
 
   constructor(
-    private processVariableService: ProcessVariableService
+    private processVariableService: ProcessVariableService,
+    private processActivityService: ProcessActivityService
   ) {
   }
 
@@ -42,6 +44,7 @@ export class EditorComponent implements OnInit {
     // }
     // this.editorInit();
     this.processVariableToGrammar();
+    this.processActivityToGrammar();
   }
 
   processVariableToGrammar() {
@@ -90,6 +93,22 @@ export class EditorComponent implements OnInit {
     });
   }
 
+  processActivityToGrammar() {
+    let processId = localStorage.getItem('processId');
+    if (!processId) {
+      return;
+    }
+
+    this.grammarActivities = [''];
+    this.grammarActivities.pop();
+
+    this.processActivityService.findByProcessId(processId).subscribe(processActivityList => {
+      for (let processActivity of processActivityList) {
+        this.grammarActivities.push('"' + processActivity.name + '"');
+      }
+    });
+  }
+
   editorInit() {
     this.grammarConditionList.pop();
     for (let i = 0; i < this.grammarConditions.length; i++) {
@@ -113,7 +132,7 @@ export class EditorComponent implements OnInit {
   }
 
   inputAdd(inputId: number) {
-    this.inputs.splice(inputId, 0, [[['', '', '', '']], [['', '', '']]]);
+    this.inputs.splice(inputId, 0, [[['', '', '', '']], [['', '', '', '']]]);
     this.inputConditionDelete(inputId, 0);
     this.inputConditionAdd(inputId, 0);
     this.inputActionDelete(inputId, 0);
@@ -138,7 +157,7 @@ export class EditorComponent implements OnInit {
   }
 
   inputActionAdd(inputId: number, actionId: number) {
-    this.inputs[inputId][1].splice(actionId, 0, [this.grammarActions[0][0][0], this.grammarActions[0][1][0], this.grammarActions[0][2][0]]);
+    this.inputs[inputId][1].splice(actionId, 0, ['SET', this.grammarActions[0][0][0], this.grammarActions[0][1][0], this.grammarActions[0][2][0]]);
   }
 
   inputActionDelete(inputId: number, actionId: number) {
@@ -146,8 +165,32 @@ export class EditorComponent implements OnInit {
   }
 
   inputActionChange(inputAction: Array<string>) {
-    inputAction[1] = this.grammarActions[this.grammarActionMap.get(inputAction[0])][1][0];
-    inputAction[2] = this.grammarActions[this.grammarActionMap.get(inputAction[0])][2][0];
+    if (inputAction[0] === 'SET') {
+      if (!this.grammarActionMap.get(inputAction[1])) {
+        inputAction[1] = this.grammarActions[0][0][0];
+        inputAction[2] = this.grammarActions[0][1][0];
+        inputAction[3] = this.grammarActions[0][2][0];
+      } else {
+        inputAction[2] = this.grammarActions[this.grammarActionMap.get(inputAction[1])][1][0];
+        inputAction[3] = this.grammarActions[this.grammarActionMap.get(inputAction[1])][2][0];
+      }
+    } else if (inputAction[0] === 'INSERT') {
+      inputAction[1] = this.grammarActivities[0];
+      inputAction[2] = 'BEFORE';
+      inputAction[3] = '';
+    } else if (inputAction[0] === 'SKIP') {
+      inputAction[1] = '';
+      inputAction[2] = '';
+      inputAction[3] = '';
+    } else if (inputAction[0] === 'REPLACE') {
+      inputAction[1] = this.grammarActivities[0];
+      inputAction[2] = '';
+      inputAction[3] = '';
+    } else if (inputAction[0] === 'ABORT') {
+      inputAction[1] = '';
+      inputAction[2] = '';
+      inputAction[3] = '';
+    }
   }
 
   generateText() {
@@ -162,7 +205,7 @@ export class EditorComponent implements OnInit {
         this.text += ' ' + this.inputs[i][0][k][1] + ' ' + this.inputs[i][0][k][2] + ' ' + this.inputs[i][0][k][3] + '\n';
       }
       for (let k = 0; k < this.inputs[i][1].length; k++) {
-        this.text += 'SET ' + this.inputs[i][1][k][0] + ' ' + this.inputs[i][1][k][1] + ' ' + this.inputs[i][1][k][2] + '\n';
+        this.text += this.inputs[i][1][k][0] + ' ' + this.inputs[i][1][k][1] + ' ' + this.inputs[i][1][k][2] + ' ' + this.inputs[i][1][k][3] + '\n';
       }
     }
     localStorage.setItem('text', this.text);

@@ -1,4 +1,4 @@
-// Generated from C:/zjw5962/fudan/long-tailed-3/compiler-backend/src/main/java/top/soaringlab/longtailed/compilerbackend/dsl/simple\Simple.g4 by ANTLR 4.9.2
+// Generated from C:/zjw5962/fudan/long-tailed-3/compiler-backend/src/main/java/top/soaringlab/longtailed/compilerbackend/dsl/simple\Simple.g4 by ANTLR 4.9.3
 package top.soaringlab.longtailed.compilerbackend.dsl.simple;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -52,13 +52,61 @@ public class SimpleBaseListener implements SimpleListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAction(SimpleParser.ActionContext ctx) { }
+	@Override public void enterSet(SimpleParser.SetContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAction(SimpleParser.ActionContext ctx) { }
+	@Override public void exitSet(SimpleParser.SetContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterInsert(SimpleParser.InsertContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitInsert(SimpleParser.InsertContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSkip(SimpleParser.SkipContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSkip(SimpleParser.SkipContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterReplace(SimpleParser.ReplaceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitReplace(SimpleParser.ReplaceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAbort(SimpleParser.AbortContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAbort(SimpleParser.AbortContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -1,4 +1,4 @@
-// Generated from C:/zjw5962/fudan/long-tailed-3/compiler-backend/src/main/java/top/soaringlab/longtailed/compilerbackend/dsl/simple\Simple.g4 by ANTLR 4.9.2
+// Generated from C:/zjw5962/fudan/long-tailed-3/compiler-backend/src/main/java/top/soaringlab/longtailed/compilerbackend/dsl/simple\Simple.g4 by ANTLR 4.9.3
 package top.soaringlab.longtailed.compilerbackend.dsl.simple;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
@@ -38,7 +38,35 @@ public class SimpleBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAction(SimpleParser.ActionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitSet(SimpleParser.SetContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitInsert(SimpleParser.InsertContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitSkip(SimpleParser.SkipContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitReplace(SimpleParser.ReplaceContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitAbort(SimpleParser.AbortContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

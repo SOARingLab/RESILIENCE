@@ -1,4 +1,4 @@
-// Generated from C:/zjw5962/fudan/long-tailed-3/compiler-backend/src/main/java/top/soaringlab/longtailed/compilerbackend/dsl/simple\Simple.g4 by ANTLR 4.9.2
+// Generated from C:/zjw5962/fudan/long-tailed-3/compiler-backend/src/main/java/top/soaringlab/longtailed/compilerbackend/dsl/simple\Simple.g4 by ANTLR 4.9.3
 package top.soaringlab.longtailed.compilerbackend.dsl.simple;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -38,15 +38,65 @@ public interface SimpleListener extends ParseTreeListener {
 	 */
 	void exitCondition(SimpleParser.ConditionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SimpleParser#action}.
+	 * Enter a parse tree produced by the {@code set}
+	 * labeled alternative in {@link SimpleParser#action}.
 	 * @param ctx the parse tree
 	 */
-	void enterAction(SimpleParser.ActionContext ctx);
+	void enterSet(SimpleParser.SetContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SimpleParser#action}.
+	 * Exit a parse tree produced by the {@code set}
+	 * labeled alternative in {@link SimpleParser#action}.
 	 * @param ctx the parse tree
 	 */
-	void exitAction(SimpleParser.ActionContext ctx);
+	void exitSet(SimpleParser.SetContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code insert}
+	 * labeled alternative in {@link SimpleParser#action}.
+	 * @param ctx the parse tree
+	 */
+	void enterInsert(SimpleParser.InsertContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code insert}
+	 * labeled alternative in {@link SimpleParser#action}.
+	 * @param ctx the parse tree
+	 */
+	void exitInsert(SimpleParser.InsertContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code skip}
+	 * labeled alternative in {@link SimpleParser#action}.
+	 * @param ctx the parse tree
+	 */
+	void enterSkip(SimpleParser.SkipContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code skip}
+	 * labeled alternative in {@link SimpleParser#action}.
+	 * @param ctx the parse tree
+	 */
+	void exitSkip(SimpleParser.SkipContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code replace}
+	 * labeled alternative in {@link SimpleParser#action}.
+	 * @param ctx the parse tree
+	 */
+	void enterReplace(SimpleParser.ReplaceContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code replace}
+	 * labeled alternative in {@link SimpleParser#action}.
+	 * @param ctx the parse tree
+	 */
+	void exitReplace(SimpleParser.ReplaceContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code abort}
+	 * labeled alternative in {@link SimpleParser#action}.
+	 * @param ctx the parse tree
+	 */
+	void enterAbort(SimpleParser.AbortContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code abort}
+	 * labeled alternative in {@link SimpleParser#action}.
+	 * @param ctx the parse tree
+	 */
+	void exitAbort(SimpleParser.AbortContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code number}
 	 * labeled alternative in {@link SimpleParser#expression}.

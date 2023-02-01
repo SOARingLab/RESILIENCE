@@ -6,9 +6,11 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
+import top.soaringlab.longtailed.compilerbackend.domain.ProcessActivity;
 import top.soaringlab.longtailed.compilerbackend.domain.ProcessModel;
 import top.soaringlab.longtailed.compilerbackend.domain.ProcessVariable;
 import top.soaringlab.longtailed.compilerbackend.domain.PublicApi;
+import top.soaringlab.longtailed.compilerbackend.service.ProcessActivityService;
 import top.soaringlab.longtailed.compilerbackend.service.ProcessModelService;
 import top.soaringlab.longtailed.compilerbackend.service.ProcessVariableService;
 import top.soaringlab.longtailed.compilerbackend.service.PublicApiService;
@@ -24,6 +26,9 @@ public class MyApplicationRunner implements ApplicationRunner {
     private ProcessModelService processModelService;
 
     @Autowired
+    private ProcessActivityService processActivityService;
+
+    @Autowired
     private ProcessVariableService processVariableService;
 
     @Autowired
@@ -35,6 +40,7 @@ public class MyApplicationRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         initProcessModel();
+        initProcessActivity();
         initProcessVariable();
         initPublicApi();
     }
@@ -59,12 +65,6 @@ public class MyApplicationRunner implements ApplicationRunner {
         processModel.setProcessId("online_grocery");
         processModel.setFilename("online-grocery-constraint.bpmn");
         processModel.setData(readResourceFile("process-model/online-grocery-constraint.bpmn"));
-        processModelService.save(processModel);
-
-        processModel = new ProcessModel();
-        processModel.setProcessId("online_grocery");
-        processModel.setFilename("online-grocery-functional-detail.bpmn");
-        processModel.setData(readResourceFile("process-model/online-grocery-functional-detail.bpmn"));
         processModelService.save(processModel);
 
         // lng logistics
@@ -98,6 +98,38 @@ public class MyApplicationRunner implements ApplicationRunner {
         }
         bufferedReader.close();
         return stringBuilder.toString();
+    }
+
+    private void initProcessActivity() {
+
+        // online grocery
+
+        ProcessActivity processActivity = new ProcessActivity();
+        processActivity.setProcessId("online_grocery");
+        processActivity.setName("Process inventory");
+        processActivityService.save(processActivity);
+
+        processActivity = new ProcessActivity();
+        processActivity.setProcessId("online_grocery");
+        processActivity.setName("Deliver goods");
+        processActivityService.save(processActivity);
+
+        processActivity = new ProcessActivity();
+        processActivity.setProcessId("online_grocery");
+        processActivity.setName("Confirm delivery");
+        processActivityService.save(processActivity);
+
+        processActivity = new ProcessActivity();
+        processActivity.setProcessId("online_grocery");
+        processActivity.setName("Process payment");
+        processActivityService.save(processActivity);
+
+        // lng logistics
+
+        processActivity = new ProcessActivity();
+        processActivity.setProcessId("lng_logistics");
+        processActivity.setName("");
+        processActivityService.save(processActivity);
     }
 
     private void initProcessVariable() {

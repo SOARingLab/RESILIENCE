@@ -6,7 +6,13 @@ input : condition* action+;
 
 condition : logical=('WHEN'|'AND'|'OR') operand1=ID operator=('=='|'!='|'<'|'<='|'>'|'>=') operand2=expression;
 
-action : 'SET' operand1=ID '=' operand2=expression;
+action
+    : 'SET' operand1=ID '=' operand2=expression # set
+    | 'INSERT' operand=STRING operator=('BEFORE'|'AFTER') # insert
+    | 'SKIP' # skip
+    | 'REPLACE' operand=STRING # replace
+    | 'ABORT' # abort
+    ;
 
 expression
     : '(' expression ')' # parenthesis

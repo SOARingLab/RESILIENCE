@@ -152,17 +152,18 @@ export default class CustomRenderer extends BaseRenderer {
                 stroke = temporalColor;
             }
 
-            const rect = drawRect(parentNode, 50, 20, TASK_BORDER_RADIUS, stroke);
-
-            svgAttr(rect, {
-                transform: 'translate(' + (width / 2 - 25) + ', ' + (height) + ')'
-            });
+            // const rect = drawRect(parentNode, 50, 20, TASK_BORDER_RADIUS, stroke);
+            //
+            // svgAttr(rect, {
+            //     transform: 'translate(' + (width / 2 - 25) + ', ' + (height -20) + ')',
+            // });
 
             const text = svgCreate('text');
 
             svgAttr(text, {
                 fill: stroke,
-                transform: 'translate(' + (width / 2 - 20) + ', ' + (height + 15) + ')'
+                transform: 'translate(' + (width / 2) + ', ' + (height -5) + ')',
+                textAnchor: 'middle'
             });
 
             svgClasses(text).add('djs-label');
@@ -198,7 +199,7 @@ export default class CustomRenderer extends BaseRenderer {
 
             let attrs = {
                 strokeLinejoin: 'round',
-                stroke: stroke
+                stroke: stroke,
             };
 
             let path = drawPath(parentNode, pathData, attrs);
@@ -252,7 +253,8 @@ export default class CustomRenderer extends BaseRenderer {
             let attrs = {
                 strokeLinejoin: 'round',
                 markerEnd: marker('temporal-end', fill, stroke),
-                stroke: stroke
+                stroke: stroke,
+                strokeDasharray: [4,4]
             };
 
             let path = drawPath(parentNode, pathData, attrs);

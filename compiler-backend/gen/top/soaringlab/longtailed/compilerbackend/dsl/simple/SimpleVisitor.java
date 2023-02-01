@@ -1,4 +1,4 @@
-// Generated from C:/zjw5962/fudan/long-tailed-3/compiler-backend/src/main/java/top/soaringlab/longtailed/compilerbackend/dsl/simple\Simple.g4 by ANTLR 4.9.2
+// Generated from C:/zjw5962/fudan/long-tailed-3/compiler-backend/src/main/java/top/soaringlab/longtailed/compilerbackend/dsl/simple\Simple.g4 by ANTLR 4.9.3
 package top.soaringlab.longtailed.compilerbackend.dsl.simple;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -29,11 +29,40 @@ public interface SimpleVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCondition(SimpleParser.ConditionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SimpleParser#action}.
+	 * Visit a parse tree produced by the {@code set}
+	 * labeled alternative in {@link SimpleParser#action}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitAction(SimpleParser.ActionContext ctx);
+	T visitSet(SimpleParser.SetContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code insert}
+	 * labeled alternative in {@link SimpleParser#action}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInsert(SimpleParser.InsertContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code skip}
+	 * labeled alternative in {@link SimpleParser#action}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSkip(SimpleParser.SkipContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code replace}
+	 * labeled alternative in {@link SimpleParser#action}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReplace(SimpleParser.ReplaceContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code abort}
+	 * labeled alternative in {@link SimpleParser#action}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAbort(SimpleParser.AbortContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code number}
 	 * labeled alternative in {@link SimpleParser#expression}.

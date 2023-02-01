@@ -31,8 +31,11 @@ public class SimpleVerifierVisitor extends SimpleBaseVisitor<List<String>> {
             result.add(removeQuotation(conditionBuilder.toString()));
         }
         for (SimpleParser.ActionContext actionContext : ctx.action()) {
-            result.add("action");
-            result.addAll(visit(actionContext));
+            List<String> action = visit(actionContext);
+            if (action != null) {
+                result.add("action");
+                result.addAll(action);
+            }
         }
         return result;
     }
@@ -56,11 +59,31 @@ public class SimpleVerifierVisitor extends SimpleBaseVisitor<List<String>> {
     }
 
     @Override
-    public List<String> visitAction(SimpleParser.ActionContext ctx) {
+    public List<String> visitSet(SimpleParser.SetContext ctx) {
         List<String> result = new ArrayList<>();
         result.add(ctx.operand1.getText());
         result.add(removeQuotation(ctx.operand2.getText()));
         return result;
+    }
+
+    @Override
+    public List<String> visitInsert(SimpleParser.InsertContext ctx) {
+        return null;
+    }
+
+    @Override
+    public List<String> visitSkip(SimpleParser.SkipContext ctx) {
+        return null;
+    }
+
+    @Override
+    public List<String> visitReplace(SimpleParser.ReplaceContext ctx) {
+        return null;
+    }
+
+    @Override
+    public List<String> visitAbort(SimpleParser.AbortContext ctx) {
+        return null;
     }
 
     private String removeQuotation(String s) {

@@ -26,7 +26,10 @@ public class SimpleTranslatorVisitor extends SimpleBaseVisitor<String> {
         }
         stringBuilder.append("{\n");
         for (SimpleParser.ActionContext actionContext : ctx.action()) {
-            stringBuilder.append("    ").append(visit(actionContext)).append("\n");
+            String action = visit(actionContext);
+            if (action != null) {
+                stringBuilder.append("    ").append(action).append("\n");
+            }
         }
         stringBuilder.append("}\n");
         return stringBuilder.toString();
@@ -45,9 +48,29 @@ public class SimpleTranslatorVisitor extends SimpleBaseVisitor<String> {
     }
 
     @Override
-    public String visitAction(SimpleParser.ActionContext ctx) {
+    public String visitSet(SimpleParser.SetContext ctx) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("execution.setVariable(\"").append(ctx.operand1.getText()).append("\", ").append(ctx.operand2.getText()).append(");");
         return stringBuilder.toString();
+    }
+
+    @Override
+    public String visitInsert(SimpleParser.InsertContext ctx) {
+        return null;
+    }
+
+    @Override
+    public String visitSkip(SimpleParser.SkipContext ctx) {
+        return null;
+    }
+
+    @Override
+    public String visitReplace(SimpleParser.ReplaceContext ctx) {
+        return null;
+    }
+
+    @Override
+    public String visitAbort(SimpleParser.AbortContext ctx) {
+        return null;
     }
 }

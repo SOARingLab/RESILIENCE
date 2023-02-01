@@ -6,8 +6,6 @@ import org.camunda.bpm.engine.ProcessEngines;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-//import org.springframework.kafka.support.converter.RecordMessageConverter;
-//import org.springframework.kafka.support.converter.StringJsonMessageConverter;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -38,9 +36,4 @@ public class EngineBackendApplication {
             }
         };
     }
-
-//    @Bean
-//    public RecordMessageConverter converter() {
-//        return new StringJsonMessageConverter();
-//    }
 }

@@ -641,11 +641,18 @@ public class NusmvVerifier {
             } else {
                 stringBuilder.append("            case\n");
                 String defaultTarget = "";
-                for (String ltsTransitionId : ltsTransitionList) {
+                for (int j = 0; j < ltsTransitionList.size(); j++) {
+                    String ltsTransitionId = ltsTransitionList.get(j);
                     LtsTransition ltsTransition = ltsTransitionMap.get(ltsTransitionId);
                     String condition = translateCondition(ltsTransition.condition);
-                    stringBuilder.append("              ").append(condition).append(" : ").append(ltsTransition.target).append(";\n");
-                    defaultTarget = ltsTransition.target;
+                    if (j == 0) {
+                        defaultTarget = ltsTransition.target;
+                    }
+                    if (condition.equals("TRUE")) {
+                        defaultTarget = ltsTransition.target;
+                    } else {
+                        stringBuilder.append("              ").append(condition).append(" : ").append(ltsTransition.target).append(";\n");
+                    }
                 }
                 stringBuilder.append("              ").append("TRUE").append(" : ").append(defaultTarget).append(";\n");
                 stringBuilder.append("            esac");
@@ -730,7 +737,11 @@ public class NusmvVerifier {
     }
 
     private String translateCondition(String condition) {
-        return ExpressionLanguageTranslator.translate(condition);
+        if (condition == null || condition.isEmpty()) {
+            return "TRUE";
+        } else {
+            return ExpressionLanguageTranslator.translate(condition);
+        }
     }
 
     private List<String> translateAnnotation(String annotation) {

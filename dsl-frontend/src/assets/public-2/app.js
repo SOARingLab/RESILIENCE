@@ -3592,16 +3592,18 @@ class CustomRenderer extends diagram_js_lib_draw_BaseRenderer__WEBPACK_IMPORTED_
 
       if (!(0,min_dash__WEBPACK_IMPORTED_MODULE_4__.isNil)(temporalColor)) {
         stroke = temporalColor;
-      }
+      } // const rect = drawRect(parentNode, 50, 20, TASK_BORDER_RADIUS, stroke);
+      //
+      // svgAttr(rect, {
+      //     transform: 'translate(' + (width / 2 - 25) + ', ' + (height -20) + ')',
+      // });
 
-      const rect = drawRect(parentNode, 50, 20, TASK_BORDER_RADIUS, stroke);
-      (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(rect, {
-        transform: 'translate(' + (width / 2 - 25) + ', ' + height + ')'
-      });
+
       const text = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.create)('text');
       (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(text, {
         fill: stroke,
-        transform: 'translate(' + (width / 2 - 20) + ', ' + (height + 15) + ')'
+        transform: 'translate(' + width / 2 + ', ' + (height - 5) + ')',
+        textAnchor: 'middle'
       });
       (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.classes)(text).add('djs-label');
       (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.append)(text, document.createTextNode(temporal));
@@ -3686,7 +3688,8 @@ class CustomRenderer extends diagram_js_lib_draw_BaseRenderer__WEBPACK_IMPORTED_
       let attrs = {
         strokeLinejoin: 'round',
         markerEnd: marker('temporal-end', fill, stroke),
-        stroke: stroke
+        stroke: stroke,
+        strokeDasharray: [4, 4]
       };
       let path = drawPath(parentNode, pathData, attrs);
       return path;

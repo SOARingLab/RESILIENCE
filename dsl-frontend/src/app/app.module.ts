@@ -43,9 +43,6 @@ import {MatTreeModule} from '@angular/material/tree';
 import {FormsModule} from "@angular/forms";
 import {IndexComponent} from './component/index/index.component';
 import {EditorComponent} from './component/editor/editor.component';
-import {GeneratorComponent} from './component/generator/generator.component';
-import {EditNodeComponent} from './component/edit-node/edit-node.component';
-import {EditComponent} from './component/edit/edit.component';
 import {PublicApiComponent} from './component/public-api/public-api.component';
 import { PublicApiListComponent } from './component/public-api-list/public-api-list.component';
 import { VerifyComponent } from './component/verify/verify.component';
@@ -57,15 +54,14 @@ import { ProcessModelListComponent } from './component/process-model-list/proces
 import { ProcessModelComponent } from './component/process-model/process-model.component';
 import { InstanceMigrationComponent } from './component/instance-migration/instance-migration.component';
 import { InstanceMigrationListComponent } from './component/instance-migration-list/instance-migration-list.component';
+import { ProcessActivityListComponent } from './component/process-activity-list/process-activity-list.component';
+import { ProcessActivityComponent } from './component/process-activity/process-activity.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     IndexComponent,
     EditorComponent,
-    GeneratorComponent,
-    EditNodeComponent,
-    EditComponent,
     PublicApiComponent,
     PublicApiListComponent,
     VerifyComponent,
@@ -77,6 +73,8 @@ import { InstanceMigrationListComponent } from './component/instance-migration-l
     ProcessModelComponent,
     InstanceMigrationComponent,
     InstanceMigrationListComponent,
+    ProcessActivityListComponent,
+    ProcessActivityComponent,
   ],
   imports: [
     BrowserModule,

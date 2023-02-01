@@ -19,7 +19,6 @@
         <module>engine-activiti</module>
         <module>engine-jbpm</module>
         <module>compiler-backend</module>
-        <module>editor-frontend</module>
         <module>editor-frontend-2</module>
         <module>dsl-frontend</module>
     </modules>
