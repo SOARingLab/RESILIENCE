@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.soaringlab.longtailed.compilerbackend.dto.FunctionalVerificationResult;
 import top.soaringlab.longtailed.compilerbackend.verifier.NusmvVerifier;
+import top.soaringlab.longtailed.compilerbackend.verifier.StnuHDCVerifier;
 import top.soaringlab.longtailed.compilerbackend.verifier.StnuVerifier;
 
 import java.util.List;
@@ -32,13 +33,19 @@ public class VerifierService {
         return nusmvVerifier.functionalVerify(fileAnnotation, fileFunctional, start);
     }
 
-//    public boolean verifyNonFunctional(String file) throws Exception {
-//        NonFunctionalVerifier nonFunctionalVerifier = new NonFunctionalVerifier();
-//        return nonFunctionalVerifier.nonFunctionalVerify(file);
-//    }
 
+    /* 
     public boolean verifyNonFunctional(String file) throws Exception {
         StnuVerifier stnuVerifier = new StnuVerifier();
         return stnuVerifier.nonFunctionalVerify(file);
     }
+    */
+    
+    
+    public boolean verifyNonFunctional(String file, String SLIs) throws Exception {
+        StnuHDCVerifier stnuHDCVerifier = new StnuHDCVerifier();
+        return stnuHDCVerifier.nonFunctionalVerify(file,SLIs);
+    }
+    
+    
 }

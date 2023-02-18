@@ -30,6 +30,7 @@ public class VerifierController {
 
     @PostMapping(value = "/verify-non-functional")
     public Boolean verifyNonFunctional(@RequestBody String file) throws Exception {
-        return verifierService.verifyNonFunctional(file);
+        //return verifierService.verifyNonFunctional(file);
+        return verifierService.verifyNonFunctional(file, "P,R=AAA>AA>A>BBB>BB>B>CCC>CC>C>0,T,max");
     }
 }
