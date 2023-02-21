@@ -6,7 +6,6 @@ import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 import org.springframework.core.io.ClassPathResource;
-
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -271,7 +270,7 @@ public class StnuHDCVerifier {
 
     private float qualitative_weight = 0;
 
-    private String stnPolicy = "max"; //只可是"max" or "min"
+    private String stnPolicy = "max"; //可是Max or max or MAX或者 Min or min or MIN
 
 
 
@@ -287,62 +286,58 @@ public class StnuHDCVerifier {
         //得到每个SLI，如果是定性SLI则还包含了它的全序关系。
         //例如：T,P,R=[AAA>AA>A>....]
         String[] SLI_arrary = SLIs.split(",");
-        int indexPolicy = SLI_arrary.length-1; //stn的调度策略： Max 或者 Min
-        stnPolicy = SLI_arrary[indexPolicy];
-        int sli_index = 0;
+        
+       
 
         //处理定性SLI,计算集合的Borda分数
-        for (String sli: SLI_arrary) {
-            if (sli_index < indexPolicy){
-                String[] sli_inf = sli.split("=");
-                if (sli_inf.length > 1){
-                    String[] sli_element = sli_inf[1].split(">");
-                    int j = 0;
-                    for (int i = sli_element.length-1; i >= 0; i--) {
-                        BordaScore bds = new BordaScore();
-                        bds.score = String.valueOf(i);
-                        bordaScore.put(sli_element[j], bds);
-                        j++;
-                    }
+        for(int k = 0; k < SLI_arrary.length; k+=2){   
+            String[] sli_inf = SLI_arrary[k].split("=");
+            if (sli_inf.length > 1){ //如果是定性sli
+                String[] sli_element = sli_inf[1].split(">");
+                int j = 0;
+                for (int i = sli_element.length-1; i >= 0; i--) {
+                    BordaScore bds = new BordaScore();
+                    bds.score = String.valueOf(i);
+                    bordaScore.put(sli_element[j], bds);
+                    j++;
                 }
-
-
-                nonDCData nonDC = new nonDCData(sli);//每个sli 都有一个nonDCData对象，存在nonDCDataMap中
-                nonDCDataMap.put(sli, nonDC); //该map存储了是否DC（即SLI_arrary[i]).bpmnIdList.size() != 0)则非DC）和非DC时涉及的pid 含+start +end
-
-                nonDCpIdMap.clear(); //新的sli,需要清空该Map。该Map用于防止在非DC时记录重复的pid
-
-                readBpmnXml(file,sli);
-                sli_index++;
-
-                boolean HDC_Result = true;
-
-                if (nonDCDataMap.get(sli).bpmnIdList.size() != 0){// bpmnIdList.size() 大于0则表示存在非DC
-                    HDC_Result = false; //当前sli的HDC结果
-                }
-
-
-                if (!HDC_Result){
-                    //////////////该函数计算非HDC涉及的id(xml元素)以及相应的sli
-                    //前端UI请读取nonDcXmlIdMap里的数据！！！
-                    compute_nonDC_Xml_Data(sli);
-
-                }
-
-                //重置配置数据
-                sli_kind = 0;
-                bordaScore.clear();
-                processEdgeMap.clear();
-                processNodeMap.clear();
-                parGatewayPairMap.clear();
-                ExcGateTreePid.clear();
-                SerilizedParaGatewayMap.clear();
-
-                pointsID.clear();
-                parGatePID.clear();
-                excGatePID.clear();
-
             }
+                      
+            nonDCData nonDC = new nonDCData(SLI_arrary[k]);//每个sli 都有一个nonDCData对象，存在nonDCDataMap中
+            nonDCDataMap.put(SLI_arrary[k], nonDC); //该map存储了是否DC（即SLI_arrary[i]).bpmnIdList.size() != 0)则非DC）和非DC时涉及的pid 含+start +end
+    
+            nonDCpIdMap.clear(); //新的sli,需要清空该Map。该Map用于防止在非DC时记录重复的pid
+
+            stnPolicy = SLI_arrary[k+1]; //SLI_arrary[偶数]为SLI的namespace，奇数index为该sli的stnPolicy，stn的调度策略： Max or max or MAX或者 Min or min or MIN
+            readBpmnXml(file,SLI_arrary[k]);
+
+            boolean HDC_Result = true;
+                
+            if (nonDCDataMap.get(SLI_arrary[k]).bpmnIdList.size() != 0){// bpmnIdList.size() 大于0则表示存在非DC
+                HDC_Result = false; //当前sli的HDC结果
+            }
+                
+
+            if (!HDC_Result){
+                //////////////该函数计算非HDC涉及的id(xml元素)以及相应的sli
+                //前端UI请读取nonDcXmlIdMap里的数据！！！
+                compute_nonDC_Xml_Data(SLI_arrary[k]);
+                   
+            }
+         
+            //重置配置数据
+            sli_kind = 0; 
+            bordaScore.clear(); 
+            processEdgeMap.clear();
+            processNodeMap.clear();
+            parGatewayPairMap.clear();
+            ExcGateTreePid.clear();
+            SerilizedParaGatewayMap.clear();
+
+            pointsID.clear();
+            parGatePID.clear();
+            excGatePID.clear();            
+     
         }
 
         //UI反例！！！
@@ -459,20 +454,13 @@ public class StnuHDCVerifier {
             constraint = constraint_data[0];
             float constraint_weight = Float.parseFloat(constraint_data[1]); //定量约束的weight默认返回1。
 
-            /*
-             //统计所有边的id和数量（除了功能性约束的边）
-            if (declarative == "") {
-
-                edgeKeys.add(id);
-            }
-            */
-
+         
             ProcessEdge processEdge = new ProcessEdge();
             processEdge.id = id;
             processEdge.name = name;
 
             ////得到所有边（控制流、消息流（消息流HDC时不可考虑，因为它破坏了网关的成对结构关系），prescriptive约束等）的数据
-            if (constraint.indexOf("S") == 0 || constraint.indexOf("E") == 0 && declarative == "") { // 边为SLO（prescriptive约束），边上带有S或E的标识
+            if (constraint.indexOf("S") == 0 || constraint.indexOf("E") == 0 && Objects.equals(declarative, "")) { // 边为SLO（prescriptive约束），边上带有S或E的标识
                 int t = constraint.length();
                 processEdge.edgeType = "nonFlow"; //是prescriptiveEdge，非控制或消息流的边
                 processEdge.constraintsType = "requirement"; // 为[a,b]
@@ -534,7 +522,7 @@ public class StnuHDCVerifier {
 
                     edgeKeys.add(id);
                 }
-            } else if (declarative == "" && constraint == "" && !complete_xml_constraint.contains(":S") && !complete_xml_constraint.contains(":E")) {
+            } else if (Objects.equals(declarative, "") && Objects.equals(constraint, "") && !complete_xml_constraint.contains(":S") && !complete_xml_constraint.contains(":E")) {
                 ////其中 !complete_xml_constraint.contains(":S") && !complete_xml_constraint.contains(":E") 用于判断当前的边是否为其他sli的SLO边
                 //约束区间为[0,0]
                 processEdge.edgeType = "flow"; //控制流的边
@@ -697,13 +685,13 @@ public class StnuHDCVerifier {
 
         for (int i = 0; i < edgeKeys.size(); i++) {
             ProcessEdge tmp_processEdge = processEdgeMap.get(edgeKeys.get(i));
-            if (tmp_processEdge.edgeType == "flow"){
+            if (Objects.equals(tmp_processEdge.edgeType, "flow")){
                 flowAdjacentMatrix[pointsID.indexOf(tmp_processEdge.source)][pointsID.indexOf(tmp_processEdge.target)] = tmp_processEdge.Upper;
                 flowAdjacentMatrix[pointsID.indexOf(tmp_processEdge.target)][pointsID.indexOf(tmp_processEdge.source)] = tmp_processEdge.Lower;
                 flowWeightMatrix[pointsID.indexOf(tmp_processEdge.source)][pointsID.indexOf(tmp_processEdge.target)] = tmp_processEdge.weight;
                 flowWeightMatrix[pointsID.indexOf(tmp_processEdge.target)][pointsID.indexOf(tmp_processEdge.source)] = tmp_processEdge.weight;
 
-                if (tmp_processEdge.constraintsType == "requirement") {
+                if (Objects.equals(tmp_processEdge.constraintsType, "requirement")) {
                     flowConstraintTypeMatrix[pointsID.indexOf(tmp_processEdge.source)][pointsID.indexOf(tmp_processEdge.target)] = "requirement";
                     flowConstraintTypeMatrix[pointsID.indexOf(tmp_processEdge.target)][pointsID.indexOf(tmp_processEdge.source)] = "requirement";
                 } else {
@@ -740,7 +728,7 @@ public class StnuHDCVerifier {
             flowWeightMatrix[pointsID.indexOf(tmp_processNode.source)][pointsID.indexOf(tmp_processNode.target)] = tmp_processNode.weight;
             flowWeightMatrix[pointsID.indexOf(tmp_processNode.target)][pointsID.indexOf(tmp_processNode.source)] = tmp_processNode.weight;
 
-            if (tmp_processNode.constraintsType == "requirement") {
+            if (Objects.equals(tmp_processNode.constraintsType, "requirement")) {
                 flowConstraintTypeMatrix[pointsID.indexOf(tmp_processNode.source)][pointsID.indexOf(tmp_processNode.target)] = "requirement";
                 flowConstraintTypeMatrix[pointsID.indexOf(tmp_processNode.target)][pointsID.indexOf(tmp_processNode.source)] = "requirement";
             } else {
@@ -1419,7 +1407,7 @@ public class StnuHDCVerifier {
                 float root_to_leaf_weight_sum = getExcTraceWeight(1, threadPointsID.get(0), leaf_pointsId.get(i), sli_kind, threadMatrix, threadPointsID);
 
                 //得到root至lead在G-STNU中的约束，并且去掉offset.
-                if (Objects.equals(schedulePolicy,"min")){
+                if (Objects.equals(schedulePolicy,"min") || Objects.equals(schedulePolicy,"Min") || Objects.equals(schedulePolicy,"MIN")){
 
                     if (sli_kind == 0){ //定量
                         leaf_points_upper_Gstnu_matrix[i] = leaf_points_lower_maxSTN_matrix[i] - offset_unit * root_to_leaf_weight_sum;
@@ -1673,7 +1661,7 @@ public class StnuHDCVerifier {
                         String lower_int = threadMatrix[j][i].flow.split("\\.")[0];
                         String upper_int = threadMatrix[i][j].flow.split("\\.")[0];
 
-                        if (threadMatrix[i][j].flowType == "requirement"){
+                        if (Objects.equals(threadMatrix[i][j].flowType, "requirement")){
                             temporal = "[" + lower_int + "," + upper_int + "]";
                         }
                         else { //"contingent"
