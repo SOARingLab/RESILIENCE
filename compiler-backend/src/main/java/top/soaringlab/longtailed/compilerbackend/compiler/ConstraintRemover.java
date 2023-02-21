@@ -12,20 +12,20 @@ public class ConstraintRemover {
 
     public String constraintRemoveAll(String file) throws Exception {
         readBpmnXml(file);
-        removeAttribute("constraint:declarative");
-        removeAttribute("constraint:temporal");
+        removeFunctional();
+        removeNonFunctional();
         return writeBpmnXml();
     }
 
     public String constraintRemoveFunctional(String file) throws Exception {
         readBpmnXml(file);
-        removeAttribute("constraint:declarative");
+        removeFunctional();
         return writeBpmnXml();
     }
 
     public String constraintRemoveNonFunctional(String file) throws Exception {
         readBpmnXml(file);
-        removeAttribute("constraint:temporal");
+        removeNonFunctional();
         return writeBpmnXml();
     }
 
@@ -38,13 +38,30 @@ public class ConstraintRemover {
         return document.asXML();
     }
 
-    private void removeAttribute(String attribute) {
-        List<Node> nodeList = document.selectNodes("//*[@" + attribute + "]");
+    private void removeFunctional() {
+        List<Node> nodeList = document.selectNodes("//*[@constraint:declarative]");
         for (Node node : nodeList) {
             String localName = node.valueOf("local-name()");
             String id = node.valueOf("@id");
-            String value = node.valueOf("@" + attribute);
+            String value = node.valueOf("@constraint:declarative");
             if (localName.equals("sequenceFlow") || localName.equals("messageFlow")) {
+                node.getParent().remove(node);
+                removeGoing(id);
+                removeDi(id);
+            }
+        }
+    }
+
+    private void removeNonFunctional() {
+        List<Node> nodeList = document.selectNodes("//*[@constraint:temporal]");
+        for (Node node : nodeList) {
+            String localName = node.valueOf("local-name()");
+            String id = node.valueOf("@id");
+            String value = node.valueOf("@constraint:temporal");
+            if (
+                    (localName.equals("sequenceFlow") || localName.equals("messageFlow"))
+                            && (value.contains(":S") || value.contains(":E"))
+            ) {
                 node.getParent().remove(node);
                 removeGoing(id);
                 removeDi(id);

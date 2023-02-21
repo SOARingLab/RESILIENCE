@@ -10,9 +10,8 @@ import org.springframework.core.io.ClassPathResource;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import top.soaringlab.longtailed.compilerbackend.verifier.FloydGraph;
 
-import javax.swing.text.html.HTML.Tag;
+import top.soaringlab.longtailed.compilerbackend.dto.NonFunctionalVerificationResult;
 
 public class StnuHDCVerifier {
 
@@ -67,7 +66,7 @@ public class StnuHDCVerifier {
         String splitGatewayID = ""; //split网关的 ”id+end”
         String mergeGatewayID = ""; //mergeGatewayId网关的 ”id+start”
         ArrayList<String> threads = new ArrayList<String>();
-       
+
     }
 
     static class ExcGatewayPair {
@@ -98,8 +97,8 @@ public class StnuHDCVerifier {
         //ArrayList<String> Threads = new ArrayList<String>();
 
         public GatewayTreeNode(String id, GatewayTreeNode pTNode){
-           this.id = id;
-           this.parentsNode = pTNode;
+            this.id = id;
+            this.parentsNode = pTNode;
         }
         public GatewayTreeNode(){
             this.id = "";
@@ -179,28 +178,43 @@ public class StnuHDCVerifier {
         String sli_id = "";
         ArrayList<String> bpmnIdList = new ArrayList<String>(); //带有pid+start 或 +end
         //ArrayList<String> current_hdc_relationshipList = new ArrayList<String>(); //用于记录当前个start event 流程中非DC所出现的层次
-        
+
 
         public nonDCData(String sli_id){
             this.sli_id = sli_id;
         }
 
-        public void addNonDCpid(String bpmnId) {            
+        public void addNonDCpid(String bpmnId) {
             bpmnIdList.add(bpmnId);
         }
     }
 
-    static class nonDcXmlId{
+    public static class nonDcXmlId{
         String xmlNodeId = "";
-        
+
         ArrayList<String> nonDC_sliList = new ArrayList<String>(); //该list中的sli
-        
+
+        public String getXmlNodeId() {
+            return xmlNodeId;
+        }
+
+        public void setXmlNodeId(String xmlNodeId) {
+            this.xmlNodeId = xmlNodeId;
+        }
+
+        public ArrayList<String> getNonDC_sliList() {
+            return nonDC_sliList;
+        }
+
+        public void setNonDC_sliList(ArrayList<String> nonDC_sliList) {
+            this.nonDC_sliList = nonDC_sliList;
+        }
 
         public nonDcXmlId(String xmlNodeId){
             this.xmlNodeId = xmlNodeId;
         }
 
-        public void addNonDcSli(String sli) {            
+        public void addNonDcSli(String sli) {
             nonDC_sliList.add(sli);
         }
     }
@@ -240,7 +254,7 @@ public class StnuHDCVerifier {
 
     private Map<String, nonDCData> nonDCDataMap = new HashMap<>();
 
-    private Map<String, SerilizedParaGateway> SerilizedParaGatewayMap = new HashMap<>(); 
+    private Map<String, SerilizedParaGateway> SerilizedParaGatewayMap = new HashMap<>();
 
     private Map<String, nonDcXmlId> nonDcXmlIdMap = new HashMap<>();
 
@@ -259,17 +273,17 @@ public class StnuHDCVerifier {
 
     private String stnPolicy = "max"; //只可是"max" or "min"
 
-    
+
 
 
     private ArrayList<String> pointsID = new ArrayList<String>();
     private ArrayList<String> parGatePID = new ArrayList<String>();
     private ArrayList<String> excGatePID = new ArrayList<String>();
-    
 
 
 
-    public boolean nonFunctionalVerify(String file, String SLIs) throws Exception {
+
+    public NonFunctionalVerificationResult nonFunctionalVerify(String file, String SLIs) throws Exception {
         //得到每个SLI，如果是定性SLI则还包含了它的全序关系。
         //例如：T,P,R=[AAA>AA>A>....]
         String[] SLI_arrary = SLIs.split(",");
@@ -291,33 +305,33 @@ public class StnuHDCVerifier {
                         j++;
                     }
                 }
-                
-                
+
+
                 nonDCData nonDC = new nonDCData(sli);//每个sli 都有一个nonDCData对象，存在nonDCDataMap中
                 nonDCDataMap.put(sli, nonDC); //该map存储了是否DC（即SLI_arrary[i]).bpmnIdList.size() != 0)则非DC）和非DC时涉及的pid 含+start +end
-    
+
                 nonDCpIdMap.clear(); //新的sli,需要清空该Map。该Map用于防止在非DC时记录重复的pid
 
                 readBpmnXml(file,sli);
                 sli_index++;
 
                 boolean HDC_Result = true;
-                
+
                 if (nonDCDataMap.get(sli).bpmnIdList.size() != 0){// bpmnIdList.size() 大于0则表示存在非DC
                     HDC_Result = false; //当前sli的HDC结果
                 }
-                
+
 
                 if (!HDC_Result){
                     //////////////该函数计算非HDC涉及的id(xml元素)以及相应的sli
                     //前端UI请读取nonDcXmlIdMap里的数据！！！
                     compute_nonDC_Xml_Data(sli);
-                   
+
                 }
-                
+
                 //重置配置数据
-                sli_kind = 0; 
-                bordaScore.clear(); 
+                sli_kind = 0;
+                bordaScore.clear();
                 processEdgeMap.clear();
                 processNodeMap.clear();
                 parGatewayPairMap.clear();
@@ -326,25 +340,28 @@ public class StnuHDCVerifier {
 
                 pointsID.clear();
                 parGatePID.clear();
-                excGatePID.clear();            
+                excGatePID.clear();
 
             }
         }
-        
+
         //UI反例！！！
         //在执行完上述循环，即所有compute_nonDC_Xml_Data后，遍历读取nonDcXmlIdMap（引用数据类型）获得需要标红的xml元素id和该id下相应需要标红的sli
         //nonDcXmlIdMap的数据结构是：key为需要标红的xml元素的id, value为nonDcXmlId类的对象，
         //其中对象的nonDC_sliList列表存储了该xml元素需要标红的sli（也就是namespace,比如列表可能是{P,R,T}等）。
-                    
+
 
         //也可看是否nonDcXmlIdMap.size() == 0 ，为0则所有sli都HDC
+        NonFunctionalVerificationResult nonFunctionalVerificationResult = new NonFunctionalVerificationResult();
         if (nonDcXmlIdMap.size() == 0){
-            return true; //这个返回值是原版代码中需要的结果
+            //return true; //这个返回值是原版代码中需要的结果
+            nonFunctionalVerificationResult.setResult(true);
         }
         else {
-            return false;
+            nonFunctionalVerificationResult.setResult(false);
+            nonFunctionalVerificationResult.setDetail(nonDcXmlIdMap);
         }
-       
+        return nonFunctionalVerificationResult;
 
     }
 
@@ -354,13 +371,13 @@ public class StnuHDCVerifier {
             String xmlId = entry.getKey();
             String source = entry.getValue().source; //包含+start or +end
             String target = entry.getValue().target;
-           
+
             String sli_namespace = sli;
             if (sli.contains("=")){
                 //因为定性sli会写成如：R=AAA>AA>A>BBB>BB>B>CCC>CC>C>0
                 sli_namespace = sli.split("=")[0];
             }
-            if (nonDCDataMap.get(sli).bpmnIdList.contains(source) && nonDCDataMap.get(sli).bpmnIdList.contains(target)){              
+            if (nonDCDataMap.get(sli).bpmnIdList.contains(source) && nonDCDataMap.get(sli).bpmnIdList.contains(target)){
                 if (nonDcXmlIdMap.containsKey(xmlId)){
                     nonDcXmlIdMap.get(xmlId).addNonDcSli(sli_namespace);
                 }
@@ -368,16 +385,16 @@ public class StnuHDCVerifier {
                     nonDcXmlId tmp = new nonDcXmlId(xmlId);
                     tmp.addNonDcSli(sli_namespace);
                     nonDcXmlIdMap.put(xmlId,tmp);
-                }                                      
+                }
             }
-            
+
         }
 
         for(Map.Entry<String,ProcessEdge> entry : processEdgeMap.entrySet()){
             String xmlId = entry.getKey();
             String source = entry.getValue().source; //包含+start or +end
             String target = entry.getValue().target;
-          
+
             String sli_namespace = sli;
             if (sli.contains("=")){
                 //因为定性sli会写成如：R=AAA>AA>A>BBB>BB>B>CCC>CC>C>0
@@ -391,14 +408,14 @@ public class StnuHDCVerifier {
                     nonDcXmlId tmp = new nonDcXmlId(xmlId);
                     tmp.addNonDcSli(sli_namespace);
                     nonDcXmlIdMap.put(xmlId,tmp);
-                }   
+                }
             }
-            
+
         }
     }
 
     private boolean check_serialization_gateways(String source, String target){
-         //用于防止将已验证DC的子并行网关对的split和merge的原有requirement标红
+        //用于防止将已验证DC的子并行网关对的split和merge的原有requirement标红
         for(Map.Entry<String,SerilizedParaGateway> entry : SerilizedParaGatewayMap.entrySet()){
             if(Objects.equals(entry.getValue().splitGId, source) && Objects.equals(entry.getValue().mergeGId, target)){
                 return false;
@@ -426,7 +443,7 @@ public class StnuHDCVerifier {
         current_sli = sli;
 
 
-         for (Node node : listEdges) {
+        for (Node node : listEdges) {
 
             String source = node.valueOf("@sourceRef");
             String target = node.valueOf("@targetRef");
@@ -442,10 +459,10 @@ public class StnuHDCVerifier {
             constraint = constraint_data[0];
             float constraint_weight = Float.parseFloat(constraint_data[1]); //定量约束的weight默认返回1。
 
-            /* 
+            /*
              //统计所有边的id和数量（除了功能性约束的边）
-            if (declarative == "") { 
-                
+            if (declarative == "") {
+
                 edgeKeys.add(id);
             }
             */
@@ -671,7 +688,7 @@ public class StnuHDCVerifier {
         String flowConstraintTypeMatrix[][] = new String[pointEventNumber][pointEventNumber]; //该矩阵判断 2个point(具有flow连接)的约束类型（即为requirement:[]或contingent[[]]）
         //下面2个hdc关系矩阵存储了所有point的层次信息，即属于哪一个父并行网关或top，后续由于构建每层每个Thread的PTN，因此无需考虑nonflow约束
         String hdc_relationship[][] = new String[pointEventNumber][pointEventNumber]; //该矩阵用于记录2个point之间的约束（如果存在）所属于的HDC层次（即所属的split 并行网关，或最顶层top）
-        int hdc_thread_relationship[][] = new int[pointEventNumber][pointEventNumber]; //该矩阵用于记录2个point之间的约束所属于的thread(需与hdc_relationship结合使用). 
+        int hdc_thread_relationship[][] = new int[pointEventNumber][pointEventNumber]; //该矩阵用于记录2个point之间的约束所属于的thread(需与hdc_relationship结合使用).
 
         float flowWeightMatrix[][] = new float[pointEventNumber][pointEventNumber];
         float nonFlowWeightMatrix[][] = new float[pointEventNumber][pointEventNumber];  //只有定性sli才需要nonFlow权重（默认为1，或为其他），因为定量则默认也只能为1
@@ -756,7 +773,7 @@ public class StnuHDCVerifier {
             excGatePID.add(tmp_id+"+end");
         }
 
-        List<Node> startNodes = document.selectNodes("//bpmn:startEvent"); 
+        List<Node> startNodes = document.selectNodes("//bpmn:startEvent");
         nonDCData nonDCdata = nonDCDataMap.get(current_sli);
 
         for (Node startNode : startNodes){
@@ -765,8 +782,8 @@ public class StnuHDCVerifier {
 
             GatewayTreeNode rootGTNode = new GatewayTreeNode("top",null);
             ThreadTree rootThread = new ThreadTree(0,null);
-            
-           
+
+
             //调用递归函数，获取各元素所属的HDC层次
             compute_paraGate_relationship(startPointIdStartNode,rootGTNode,rootThread,hdc_relationship,constraintOritationMatrix,hdc_thread_relationship,flowAdjacentMatrix);
 
@@ -785,11 +802,11 @@ public class StnuHDCVerifier {
 
             //根据从最深层至最上层的顺序（存储在unexpand..中）展开并行网关对中的排它网关、验证每一层（即每一对）并行网关的DC
             for (int i = unexpanded_parallel_gateways.size()-1; i >= 0; i--){ //该for是每一对的并行网关
-                
+
                 float[] nonTemporalDataSerilization = new float[2];
                 float[] TemporalDataSerilization = new float[parGatewayPairMap.get(unexpanded_parallel_gateways.get(i)).threads.size()*2]; //存储当前并行网关中所有thread的lower和upper
                 int tj = 0;
-                
+
                 if (i > 0){
                     for (int k = 0; k < parGatewayPairMap.get(unexpanded_parallel_gateways.get(i)).threads.size(); k++) { //当下并行网关中的每一个thread
                         float[] thread_result;
@@ -815,7 +832,7 @@ public class StnuHDCVerifier {
                     }
 
                     if (nonDCdata.bpmnIdList.size() > 0){//当前start流程中的当前并行网关中存在1个或多个thread为non-DC
-                        
+
                         break; //跳出当前start为起点流程的验证循环// 即 for (int i = unexpanded_parallel_gateways.size()-1; i >= 0; i--)
                     }
 
@@ -824,7 +841,7 @@ public class StnuHDCVerifier {
                     if (Objects.equals(sli, "T")){ //时间sli
                         float[] tData = findTop2AndTop1(TemporalDataSerilization); // index 0为top2, index 1 为top1
 
-                        ParGatewayPair PGP = parGatewayPairMap.get(unexpanded_parallel_gateways.get(i)); //得到当前并行网关的split+end和merge+start的ID 
+                        ParGatewayPair PGP = parGatewayPairMap.get(unexpanded_parallel_gateways.get(i)); //得到当前并行网关的split+end和merge+start的ID
                         int split_index = pointsID.indexOf(PGP.splitGatewayID);
                         int merge_index = pointsID.indexOf(PGP.mergeGatewayID);
 
@@ -839,32 +856,32 @@ public class StnuHDCVerifier {
                             flowConstraintTypeMatrix[merge_index][split_index] = "requirement";
                         }
 
-                       
+
                         flowWeightMatrix[split_index][merge_index] = 1;
                         flowWeightMatrix[merge_index][split_index] = 1;
-                        
+
                         constraintOritationMatrix[split_index][merge_index] = 1;
                         constraintOritationMatrix[merge_index][split_index] = -1;
 
-                         //hdc,hdc_thread只需赋值split to merge 的控制流正方向
+                        //hdc,hdc_thread只需赋值split to merge 的控制流正方向
                         hdc_relationship[split_index][merge_index] = hdc_relationship[pointsID.indexOf(PGP.splitGatewayID.replace("+end","+start"))][split_index];
                         hdc_thread_relationship[split_index][merge_index] = hdc_thread_relationship[pointsID.indexOf(PGP.splitGatewayID.replace("+end","+start"))][split_index];
-                       
+
                         //无论是否存在split to merge的nonFlow，都置为空，因为如果有已经验证过了
                         nonFlowAdjacentMatrix[split_index][merge_index] = null;
                         nonFlowAdjacentMatrix[merge_index][split_index] = null;
 
                         //标识当前已经验证且封装的所有并行网关的pid
                         //用于防止将已验证DC的子并行网关对的split和merge的原有requirement标红
-                        //得到当前并行网关的split+end和merge+start的ID 
-                        SerilizedParaGateway SPG = new SerilizedParaGateway(sli,PGP.splitGatewayID,PGP.mergeGatewayID); 
+                        //得到当前并行网关的split+end和merge+start的ID
+                        SerilizedParaGateway SPG = new SerilizedParaGateway(sli,PGP.splitGatewayID,PGP.mergeGatewayID);
                         SerilizedParaGatewayMap.put(SPG.splitGId, SPG);
 
 
                     }
                     else { //非时间sli,直接使用nonTemporalDataSerilization的数据即可，因为已经累加了
 
-                        ParGatewayPair PGP = parGatewayPairMap.get(unexpanded_parallel_gateways.get(i)); //得到当前并行网关的split+end和merge+start的ID 
+                        ParGatewayPair PGP = parGatewayPairMap.get(unexpanded_parallel_gateways.get(i)); //得到当前并行网关的split+end和merge+start的ID
                         int split_index = pointsID.indexOf(PGP.splitGatewayID);
                         int merge_index = pointsID.indexOf(PGP.mergeGatewayID);
 
@@ -893,21 +910,21 @@ public class StnuHDCVerifier {
                         constraintOritationMatrix[split_index][merge_index] = 1;
                         constraintOritationMatrix[merge_index][split_index] = -1;
 
-                         //hdc,hdc_thread只需赋值split to merge 的控制流正方向
+                        //hdc,hdc_thread只需赋值split to merge 的控制流正方向
                         hdc_relationship[split_index][merge_index] = hdc_relationship[pointsID.indexOf(PGP.splitGatewayID.replace("+end","+start"))][split_index];
                         hdc_thread_relationship[split_index][merge_index] = hdc_thread_relationship[pointsID.indexOf(PGP.splitGatewayID.replace("+end","+start"))][split_index];
-                       
-                        
+
+
                         //无论是否存在split to merge的nonFlow，都置为空，因为如果有已经验证过了
                         nonFlowAdjacentMatrix[split_index][merge_index] = null;
                         nonFlowAdjacentMatrix[merge_index][split_index] = null;
 
-                         //标识当前已经验证且封装的所有并行网关的pid
+                        //标识当前已经验证且封装的所有并行网关的pid
                         //用于防止将已验证DC的子并行网关对的split和merge的原有requirement标红
-                        //得到当前并行网关的split+end和merge+start的ID 
-                        SerilizedParaGateway SPG = new SerilizedParaGateway(sli,PGP.splitGatewayID,PGP.mergeGatewayID); 
+                        //得到当前并行网关的split+end和merge+start的ID
+                        SerilizedParaGateway SPG = new SerilizedParaGateway(sli,PGP.splitGatewayID,PGP.mergeGatewayID);
                         SerilizedParaGatewayMap.put(SPG.splitGId, SPG);
-                       
+
                     }
 
                 }
@@ -920,7 +937,7 @@ public class StnuHDCVerifier {
                     if (nonDCdata.bpmnIdList.size() > 0){
                         //top为非DC，即当前sli在整个流程中为non-HDC
 
-               
+
                         break;  //跳出当前start流程的验证循环 //即 for (int i = unexpanded_parallel_gateways.size()-1; i >= 0; i--)
                     }
                 }
@@ -1034,7 +1051,7 @@ public class StnuHDCVerifier {
                         GatewayTreeNode cGTNode = new GatewayTreeNode();
                         if (!parGatewayPairMap.containsKey(next_cnode_key)) { //只需在首次遍历时加入并记录thread数量
                             cGTNode = current_GTNode.addChildrenNode(next_cnode_key);
-                           
+
                         }
                         else {
                             for (int t = 0; t < current_GTNode.childrenNodes.size(); t++){
@@ -1125,7 +1142,7 @@ public class StnuHDCVerifier {
             else {
                 data[1] = "*";
             }
-            
+
         }
         else { //sli为定量约束
             data[0] = values[1];
@@ -1229,7 +1246,7 @@ public class StnuHDCVerifier {
                                 minimal_flowCons_negValue = temp_value_1;
                             }
                         }
-                        
+
                     }
                     else if (end_length - begin_length == 1 && excGatePID.contains(begin_point_id.split("&")[0]) && begin_point_id.split("&")[0].matches("(.*)end")  && Objects.equals(begin_point_id,ExcGateTreePid.get(end_point_id).begin_tree_id)){
                         //begin点为父排它网关的end点，另一点为与该end点在同一排它路径中控制流相连接元素的start点
@@ -1257,7 +1274,7 @@ public class StnuHDCVerifier {
                                 minimal_flowCons_negValue = temp_value_2;
                             }
                         }
-                        
+
                     }
                     else if(begin_length == 1 && end_length == 1){
                         //2点为无父排它网关的点
@@ -1291,7 +1308,7 @@ public class StnuHDCVerifier {
                         threadMatrix[j][i].nonFlowWeight = nonFlowWeightMatrix[oj][oi];
                         threadMatrix[j][i].nonFlowOritation = nonFlowOritationMatrix[oj][oi];
                     }
-                }                
+                }
             }
         }
 
@@ -1304,8 +1321,8 @@ public class StnuHDCVerifier {
         addFlowOffsets(PTN.id,offset_unit,sli_kind,threadMatrix, threadPointsID);
         addNonFlowOffsets(offset_unit,sli_kind,threadMatrix,threadPointsID);
         //至此，该函数当前thread的子G-STNU数据以处理完成，下一步需要针对该thread进行DC验证
-       
-        String stnuXml = writeStnuXml(threadMatrix,threadPointsID);  
+
+        String stnuXml = writeStnuXml(threadMatrix,threadPointsID);
         boolean dc_result = checkDc(stnuXml);
         float[][] Min_STN_FloydMatrix = new float[threadPointsID.size()][threadPointsID.size()];
         float[][] Max_STN_FloydMatrix = new float[threadPointsID.size()][threadPointsID.size()];
@@ -1316,7 +1333,7 @@ public class StnuHDCVerifier {
             String[] vertex = new String[threadPointsID.size()];
             threadPointsID.toArray(vertex);
 
-            
+
             float N = 1000000000;
             for (int i = 0; i < threadPointsID.size(); i++){
                 for (int j = 0; j < threadPointsID.size(); j++){
@@ -1324,43 +1341,43 @@ public class StnuHDCVerifier {
                     Min_STN_FloydMatrix[i][j] = N;
                     Max_STN_FloydMatrix[i][j] = N;
                 }
-            } 
+            }
 
             for (int i = 0; i < threadPointsID.size(); i++){
                 for (int j = 0; j < threadPointsID.size(); j++){
                     if (Objects.equals(threadMatrix[i][j].flowType, "requirement")){
-                        if (threadMatrix[i][j].flow != null && !threadMatrix[i][j].flow.contains("*")){   
-                            if (threadMatrix[i][j].constraintOritation == 1){                                         
+                        if (threadMatrix[i][j].flow != null && !threadMatrix[i][j].flow.contains("*")){
+                            if (threadMatrix[i][j].constraintOritation == 1){
                                 Min_STN_FloydMatrix[i][j] = Float.parseFloat(threadMatrix[i][j].flow);
-                                Max_STN_FloydMatrix[i][j] = Float.parseFloat(threadMatrix[i][j].flow);                                 
+                                Max_STN_FloydMatrix[i][j] = Float.parseFloat(threadMatrix[i][j].flow);
                             }
-                            else if (threadMatrix[i][j].constraintOritation == -1){                                                  
+                            else if (threadMatrix[i][j].constraintOritation == -1){
                                 Min_STN_FloydMatrix[i][j] =  -1 * Float.parseFloat(threadMatrix[i][j].flow);
-                                Max_STN_FloydMatrix[i][j] =  -1 * Float.parseFloat(threadMatrix[i][j].flow);                                                        
+                                Max_STN_FloydMatrix[i][j] =  -1 * Float.parseFloat(threadMatrix[i][j].flow);
                             }
                         }
                     }else if (Objects.equals(threadMatrix[i][j].flowType, "contingent")){
-                        if (threadMatrix[i][j].flow != null && !threadMatrix[i][j].flow.contains("*")){          
-                            if (threadMatrix[i][j].constraintOritation == 1){                                         
+                        if (threadMatrix[i][j].flow != null && !threadMatrix[i][j].flow.contains("*")){
+                            if (threadMatrix[i][j].constraintOritation == 1){
                                 Max_STN_FloydMatrix[i][j] = Float.parseFloat(threadMatrix[i][j].flow);
                                 Max_STN_FloydMatrix[j][i] = -1 * Float.parseFloat(threadMatrix[i][j].flow);
-                                
+
                                 Min_STN_FloydMatrix[i][j] =  Float.parseFloat(threadMatrix[j][i].flow);
                                 Min_STN_FloydMatrix[j][i] =  -1 * Float.parseFloat(threadMatrix[j][i].flow);
                             }
-                        }  
+                        }
                     }
-                    else  if (threadMatrix[i][j].nonFlow != null && !threadMatrix[i][j].nonFlow.contains("*")){          
-                        if (threadMatrix[i][j].nonFlowOritation == 1){                                         
+                    else  if (threadMatrix[i][j].nonFlow != null && !threadMatrix[i][j].nonFlow.contains("*")){
+                        if (threadMatrix[i][j].nonFlowOritation == 1){
                             Min_STN_FloydMatrix[i][j] = Float.parseFloat(threadMatrix[i][j].nonFlow);
-                            Max_STN_FloydMatrix[i][j] = Float.parseFloat(threadMatrix[i][j].nonFlow);                                 
+                            Max_STN_FloydMatrix[i][j] = Float.parseFloat(threadMatrix[i][j].nonFlow);
                         }
-                        else if (threadMatrix[i][j].nonFlowOritation == -1){                                                  
+                        else if (threadMatrix[i][j].nonFlowOritation == -1){
                             Min_STN_FloydMatrix[i][j] =  -1 * Float.parseFloat(threadMatrix[i][j].nonFlow);
-                            Max_STN_FloydMatrix[i][j] =  -1 * Float.parseFloat(threadMatrix[i][j].nonFlow);                                                        
+                            Max_STN_FloydMatrix[i][j] =  -1 * Float.parseFloat(threadMatrix[i][j].nonFlow);
                         }
-                    }  
-                }               
+                    }
+                }
             }
 
             ArrayList<String> leaf_pointsId = new ArrayList<String>();
@@ -1371,7 +1388,7 @@ public class StnuHDCVerifier {
                         leaf_pointsId.add(leaf_point_number, threadPointsID.get(i));
                         leaf_point_number++;
                     }
-                }            
+                }
             }
 
             float[] leaf_points_upper_minSTN_matrix = new float[leaf_point_number];
@@ -1383,7 +1400,7 @@ public class StnuHDCVerifier {
             float[] leaf_points_upper_Gstnu_matrix = new float[leaf_point_number];
             float[] leaf_points_lower_Gstnu_matrix = new float[leaf_point_number];
 
-             // 调用弗洛伊德算法
+            // 调用弗洛伊德算法
             FloydGraph min_graph = new FloydGraph(threadPointsID.size(), Min_STN_FloydMatrix, vertex);
             FloydGraph max_graph = new FloydGraph(threadPointsID.size(), Max_STN_FloydMatrix, vertex);
             min_graph.floyd();
@@ -1398,7 +1415,7 @@ public class StnuHDCVerifier {
 
                 leaf_points_upper_maxSTN_matrix[i] = Max_STN_FloydMatrix[0][threadPointsID.indexOf(leaf_pointsId.get(i))];
                 leaf_points_lower_maxSTN_matrix[i] = -1 * Max_STN_FloydMatrix[threadPointsID.indexOf(leaf_pointsId.get(i))][0];
-                
+
                 float root_to_leaf_weight_sum = getExcTraceWeight(1, threadPointsID.get(0), leaf_pointsId.get(i), sli_kind, threadMatrix, threadPointsID);
 
                 //得到root至lead在G-STNU中的约束，并且去掉offset.
@@ -1413,15 +1430,15 @@ public class StnuHDCVerifier {
                             //防止出现0除以0，报错，NaN
                             leaf_points_upper_Gstnu_matrix[i] = 0;
                             leaf_points_lower_Gstnu_matrix[i] = 0;
-                 
+
                         }
                         else {
                             leaf_points_upper_Gstnu_matrix[i] = leaf_points_lower_maxSTN_matrix[i] / root_to_leaf_weight_sum;
                             leaf_points_lower_Gstnu_matrix[i] = leaf_points_lower_minSTN_matrix[i] / root_to_leaf_weight_sum;
                         }
-                        
+
                     }
-                    
+
                     temp_arr[arr_i] = leaf_points_upper_Gstnu_matrix[i];
                     temp_arr[arr_i+1] =  leaf_points_lower_Gstnu_matrix[i];
                     arr_i += 2;
@@ -1431,7 +1448,7 @@ public class StnuHDCVerifier {
                     if (sli_kind == 0){
                         leaf_points_upper_Gstnu_matrix[i] = leaf_points_upper_maxSTN_matrix[i] - offset_unit * root_to_leaf_weight_sum;
                         leaf_points_lower_Gstnu_matrix[i] = leaf_points_upper_minSTN_matrix[i] - offset_unit * root_to_leaf_weight_sum;
-    
+
                     }
                     else{
 
@@ -1439,22 +1456,22 @@ public class StnuHDCVerifier {
                             //防止出现0除以0，报错，NaN
                             leaf_points_upper_Gstnu_matrix[i] = 0;
                             leaf_points_lower_Gstnu_matrix[i] = 0;
-                 
+
                         }
                         else {
                             leaf_points_upper_Gstnu_matrix[i] = leaf_points_upper_maxSTN_matrix[i] / root_to_leaf_weight_sum;
                             leaf_points_lower_Gstnu_matrix[i] = leaf_points_upper_minSTN_matrix[i] / root_to_leaf_weight_sum;
-                      
+
                         }
-                    
+
                     }
-                   
+
                     temp_arr[arr_i] = leaf_points_upper_Gstnu_matrix[i];
                     temp_arr[arr_i+1] =  leaf_points_lower_Gstnu_matrix[i];
                     arr_i += 2;
                 }
             }
-            
+
             //同一个thread但不同排它网关路径合并为一条路径，即每个thread关于排它网关的串行化
             float[] minAndMax = findMaxAndMin(temp_arr);
             return minAndMax; //index 0为lower，1为upper.
@@ -1469,7 +1486,7 @@ public class StnuHDCVerifier {
             for (int i = 0; i < threadPointsID.size(); i++){
                 String pid = threadPointsID.get(i).split("&")[0]; //threadId（含+start or +end）中存在相同Pid,但存在不同排它网关路径id需要去除，
                 if (!nonDCpIdMap.containsKey(pid)){ //如果当前非DC涉及的pid还未被记录
-                   
+
                     nonDCdata.bpmnIdList.add(pid);
                 }
                 nonDCpIdMap.put(pid, pid);//用于去重
@@ -1477,7 +1494,7 @@ public class StnuHDCVerifier {
             float[] ttt = {3.1415926f};//随便写的数据，此if条件下该数据ttt无用
             return ttt;
         }
-        
+
     }
 
 
@@ -1488,7 +1505,7 @@ public class StnuHDCVerifier {
 
         //给定量sli（即sli_kind标记不为1）控制流中的每个非0约束了增加1个单位的offset
         for (int j = 0; j < matrix_column_number; j++){
-            if (threadMatrix[begin_index][j].flow != null && threadMatrix[begin_index][j].constraintOritation == 1 && sli_kind != 1){ 
+            if (threadMatrix[begin_index][j].flow != null && threadMatrix[begin_index][j].constraintOritation == 1 && sli_kind != 1){
                 if (threadMatrix[begin_index][j].flowWeight != 0) { //控制流中存在约束[0,0]且权重为0，[0,0]约束无需添加offset
 
                     //下面的2个if用于处理[*,number] or [number,*]这类无下界，或无下界的情况
@@ -1509,8 +1526,8 @@ public class StnuHDCVerifier {
     private void addNonFlowOffsets(float offset_unit, int sli_kind,ThreadDataNode[][] threadMatrix, ArrayList<String> threadPointsID){
         int matrix_column_number = threadPointsID.size();
 
-       
-        
+
+
         //定量sli_kind标记为0,定性sli_kind的1
         for (int i = 0; i < matrix_column_number; i++){
             for (int j = 0; j < matrix_column_number; j++){
@@ -1526,24 +1543,24 @@ public class StnuHDCVerifier {
                         }
                         if (!threadMatrix[j][i].nonFlow.contains("*")){
                             threadMatrix[j][i].nonFlow = String.valueOf(Float.parseFloat(threadMatrix[j][i].nonFlow)+ excTrace_weight_sum*offset_unit);
-                        }              
+                        }
                     }
                     else if (tag_oritation == 1 && sli_kind == 1){
                         //定性sli, sli_kind为1,将sli的除法运算变成加法运算，通过在在nonFlow上进行乘法放大。
                         float excTrace_weight_sum = getExcTraceWeight(tag_oritation, threadPointsID.get(i), threadPointsID.get(j), sli_kind, threadMatrix, threadPointsID);
-                        
+
                         if (!threadMatrix[i][j].nonFlow.contains("*")){
                             threadMatrix[i][j].nonFlow = String.valueOf(Float.parseFloat(threadMatrix[i][j].nonFlow) * excTrace_weight_sum);
                         }
                         if (!threadMatrix[j][i].nonFlow.contains("*")){
                             threadMatrix[j][i].nonFlow = String.valueOf(Float.parseFloat(threadMatrix[j][i].nonFlow) * excTrace_weight_sum);
                         }
-                      
+
                     }
                 }
             }
         }
-        
+
     }
 
     private float getExcTraceWeight(int tag_oritation, String begin_ExcTree_pid, String end_id, int sli_kind, ThreadDataNode[][] threadMatrix, ArrayList<String> threadPointsID){
@@ -1557,7 +1574,7 @@ public class StnuHDCVerifier {
         for (int j = 0; j < matrix_column_number; j++){
             if (threadMatrix[begin_index][j].flow != null && threadMatrix[begin_index][j].constraintOritation == tag_oritation){ //只会统计非0权重的控制流，因为0权重的值为0
                 String next_ExcTree_pid = threadPointsID.get(j);
-                 //无需检查begin_ExcTree_pid结点，因为)首次调用时（它为nonFlow约束的begin结点），确保了begin结点为路径中的点，后续调用的begin则已经被父调用函数检查过
+                //无需检查begin_ExcTree_pid结点，因为)首次调用时（它为nonFlow约束的begin结点），确保了begin结点为路径中的点，后续调用的begin则已经被父调用函数检查过
                 if (check_same_excGateway_trace(next_ExcTree_pid, end_id)){
                     float local_weight = threadMatrix[begin_index][j].flowWeight;
                     if (Objects.equals(threadPointsID.get(j),end_id)){
@@ -1567,7 +1584,7 @@ public class StnuHDCVerifier {
                     else{
                         return local_weight + getExcTraceWeight(tag_oritation,next_ExcTree_pid,end_id,sli_kind,threadMatrix,threadPointsID);
                     }
-                } 
+                }
 
             }
         }
@@ -1578,7 +1595,7 @@ public class StnuHDCVerifier {
 
         int next_length = nextThreadPId.split("&").length; //要检查next结点
         boolean same_trace = false;
-    
+
         if ((next_length == 1)){ //路径中还未出现排它网关,只要控制流相连的point一定为同一路径
             same_trace = true;
         }
@@ -1600,7 +1617,7 @@ public class StnuHDCVerifier {
             if (data_arr[j] > max){
                 max = data_arr[j];
             }
-        } 
+        }
 
         float[] result = {min,max};
         return result;
@@ -1641,7 +1658,7 @@ public class StnuHDCVerifier {
                 String id = threadPointsID.get(i).replace("+", "_").replace(":","_").replace("&", "_");
                 graphElement.addElement("node").addAttribute("id", id);
             }
-            
+
             nVertices = nVertices + 1;
         }
 
@@ -1666,22 +1683,22 @@ public class StnuHDCVerifier {
                         String start_id = threadPointsID.get(i).replace("+", "_").replace(":","_").replace("&", "_");
                         String end_id = threadPointsID.get(j).replace("+", "_").replace(":","_").replace("&", "_");
                         addEdgeElement(graphElement, start_id + "_to_" + end_id, start_id, end_id, temporal);
-                 
+
                     }
                 }
                 else if (threadMatrix[i][j].nonFlow != null && threadMatrix[i][j].nonFlowOritation == 1){ //nonFlow的约束只会为 requirement。即 [,]
-                        //调用的DC_Checker 要求 整数上下界
-                        String lower_int = threadMatrix[j][i].nonFlow.split("\\.")[0];
-                        String upper_int = threadMatrix[i][j].nonFlow.split("\\.")[0];
+                    //调用的DC_Checker 要求 整数上下界
+                    String lower_int = threadMatrix[j][i].nonFlow.split("\\.")[0];
+                    String upper_int = threadMatrix[i][j].nonFlow.split("\\.")[0];
 
-                        temporal = "[" + lower_int + "," + upper_int + "]";
+                    temporal = "[" + lower_int + "," + upper_int + "]";
 
-                        String start_id = threadPointsID.get(i).replace("+", "_").replace(":","_").replace("&", "_");
-                        String end_id = threadPointsID.get(j).replace("+", "_").replace(":","_").replace("&", "_");
-                        addEdgeElement(graphElement, start_id + "_to_" + end_id, start_id, end_id, temporal);
-                        
-                    }
-            
+                    String start_id = threadPointsID.get(i).replace("+", "_").replace(":","_").replace("&", "_");
+                    String end_id = threadPointsID.get(j).replace("+", "_").replace(":","_").replace("&", "_");
+                    addEdgeElement(graphElement, start_id + "_to_" + end_id, start_id, end_id, temporal);
+
+                }
+
             }
         }
 
@@ -1708,7 +1725,7 @@ public class StnuHDCVerifier {
         nEdges = nEdges + 2;
 
         int temp_tag_1 = 0;
- 
+
         if (temporal.startsWith("[[")) {
             String[] values = temporal.split("\\[\\[|\\]\\]|,");
             if (!values[1].contains("*")){
@@ -1717,12 +1734,12 @@ public class StnuHDCVerifier {
             if (!values[2].contains("*")){
                 addDataElement(upperEdgeElement, "contingent", values[2]);
             }
-            
+
             nContingent = nContingent + 1;
         } else {
             String[] values = temporal.split("\\[|\\]|,");
             //因为SLO的下界会出现负数(SLO一定至单括弧[,])，因此这里需要处理，不然给STNU的值会变成字符串"--数字"
-            
+
             if (!values[1].contains("*")){
                 if (values[1].contains("-")){
                     //values[1] = String.valueOf(Math.abs(Integer.parseInt(values[1])));
@@ -1738,7 +1755,7 @@ public class StnuHDCVerifier {
             if (!values[2].contains("*")){
                 addDataElement(upperEdgeElement, "requirement", values[2]);
             }
-            
+
         }
     }
 

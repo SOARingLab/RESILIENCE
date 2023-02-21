@@ -17,18 +17,18 @@ export default function (element) {
             component: Temporal,
             isEdited: isTextFieldEntryEdited
         },
-        {
-            id: 'declarativeColor',
-            element,
-            component: DeclarativeColor,
-            isEdited: isTextFieldEntryEdited
-        },
-        {
-            id: 'temporalColor',
-            element,
-            component: TemporalColor,
-            isEdited: isTextFieldEntryEdited
-        }
+        // {
+        //     id: 'declarativeColor',
+        //     element,
+        //     component: DeclarativeColor,
+        //     isEdited: isTextFieldEntryEdited
+        // },
+        // {
+        //     id: 'temporalColor',
+        //     element,
+        //     component: TemporalColor,
+        //     isEdited: isTextFieldEntryEdited
+        // }
     ];
 }
 
@@ -76,8 +76,7 @@ function Declarative(props) {
     return <SelectEntry
         id={id}
         element={element}
-        description={translate('Add declarative constraint')}
-        label={translate('Declarative')}
+        label={translate('Functional constraint')}
         getValue={getValue}
         setValue={setValue}
         getOptions={getOptions}
@@ -105,8 +104,7 @@ function Temporal(props) {
     return <TextFieldEntry
         id={id}
         element={element}
-        description={translate('Add temporal constraint')}
-        label={translate('Temporal')}
+        label={translate('SLO / proposition')}
         getValue={getValue}
         setValue={setValue}
         debounce={debounce}
@@ -133,7 +131,6 @@ function DeclarativeColor(props) {
     return <TextFieldEntry
         id={id}
         element={element}
-        description={translate('Set declarative color')}
         label={translate('Declarative color')}
         getValue={getValue}
         setValue={setValue}
@@ -161,7 +158,6 @@ function TemporalColor(props) {
     return <TextFieldEntry
         id={id}
         element={element}
-        description={translate('Set temporal color')}
         label={translate('Temporal color')}
         getValue={getValue}
         setValue={setValue}

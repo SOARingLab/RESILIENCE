@@ -29,5 +29,8 @@
   </div>
   <div *ngIf="resultNonFunctional === 'false'">
     <h3>Not OK</h3>
+    <p>
+      <button (click)="explainResultNonFunctional()">Show conflicts</button>
+    </p>
   </div>
 </div>

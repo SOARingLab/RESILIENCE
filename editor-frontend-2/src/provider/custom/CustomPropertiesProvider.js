@@ -68,7 +68,7 @@ function createConstraintGroup(element, translate) {
     // create a group called "Magic properties".
     const constraintGroup = {
         id: 'constraint',
-        label: translate('Constraint properties'),
+        label: translate('Constraint'),
         entries: constraintProps(element),
     };
 

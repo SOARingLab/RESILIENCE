@@ -3488,6 +3488,12 @@ class CustomRenderer extends diagram_js_lib_draw_BaseRenderer__WEBPACK_IMPORTED_
     if (resultFunctionalDetail) {
       this.resultFunctionalDetail = JSON.parse(resultFunctionalDetail);
     }
+
+    let resultNonFunctionalDetail = localStorage.getItem('resultNonFunctionalDetail');
+
+    if (resultNonFunctionalDetail) {
+      this.resultNonFunctionalDetail = JSON.parse(resultNonFunctionalDetail);
+    }
   }
 
   canRender(element) {
@@ -3606,7 +3612,21 @@ class CustomRenderer extends diagram_js_lib_draw_BaseRenderer__WEBPACK_IMPORTED_
         textAnchor: 'middle'
       });
       (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.classes)(text).add('djs-label');
-      (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.append)(text, document.createTextNode(temporal));
+      let slos = this.splitTemporal(temporal);
+
+      for (let slo of slos) {
+        const tspan = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.create)('tspan');
+
+        if (this.resultNonFunctionalDetail && this.resultNonFunctionalDetail[id] && this.resultNonFunctionalDetail[id]['nonDC_sliList'] && this.resultNonFunctionalDetail[id]['nonDC_sliList'].includes(slo[0])) {
+          (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(tspan, {
+            fill: COLOR_RED
+          });
+        }
+
+        (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.append)(tspan, document.createTextNode(slo));
+        (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.append)(text, tspan);
+      }
+
       (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.append)(parentNode, text);
     }
 
@@ -3676,21 +3696,29 @@ class CustomRenderer extends diagram_js_lib_draw_BaseRenderer__WEBPACK_IMPORTED_
       return path;
     } else if (!(0,min_dash__WEBPACK_IMPORTED_MODULE_4__.isNil)(temporal)) {
       let pathData = createPathFromConnection(element);
-      let fill = COLOR_BLUE,
-          stroke = COLOR_BLUE;
+      let attrs;
 
-      if (!(0,min_dash__WEBPACK_IMPORTED_MODULE_4__.isNil)(temporalColor)) {
-        // fill = temporalColor;
-        // stroke = temporalColor;
-        di.set('bioc:stroke', temporalColor);
+      if (temporal.search(/:S|:E/) >= 0) {
+        di.set('bioc:stroke', COLOR_BLUE);
+        let fill = COLOR_BLUE,
+            stroke = COLOR_BLUE;
+        attrs = {
+          strokeLinejoin: 'round',
+          markerEnd: marker('temporal-end', fill, stroke),
+          stroke: stroke,
+          strokeDasharray: [4, 4]
+        };
+      } else {
+        di.set('bioc:stroke', COLOR_GREEN);
+        let fill = COLOR_BLACK,
+            stroke = COLOR_BLACK;
+        attrs = {
+          strokeLinejoin: 'round',
+          markerEnd: marker('temporal-end', fill, stroke),
+          stroke: stroke
+        };
       }
 
-      let attrs = {
-        strokeLinejoin: 'round',
-        markerEnd: marker('temporal-end', fill, stroke),
-        stroke: stroke,
-        strokeDasharray: [4, 4]
-      };
       let path = drawPath(parentNode, pathData, attrs);
       return path;
     }
@@ -3752,6 +3780,13 @@ class CustomRenderer extends diagram_js_lib_draw_BaseRenderer__WEBPACK_IMPORTED_
       temporalColor
     } = businessObject;
     return temporalColor;
+  }
+
+  splitTemporal(temporal) {
+    temporal = temporal.replace(/S,/g, 'S&');
+    temporal = temporal.replace(/E,/g, 'E&');
+    temporal = temporal.replace(/],/g, ']&');
+    return temporal.split('&');
   }
 
 }
@@ -4078,7 +4113,7 @@ function createConstraintGroup(element, translate) {
   // create a group called "Magic properties".
   const constraintGroup = {
     id: 'constraint',
-    label: translate('Constraint properties'),
+    label: translate('Constraint'),
     entries: (0,_parts_ConstraintProps__WEBPACK_IMPORTED_MODULE_0__["default"])(element)
   };
   return constraintGroup;
@@ -4135,17 +4170,19 @@ __webpack_require__.r(__webpack_exports__);
     element,
     component: Temporal,
     isEdited: _bpmn_io_properties_panel__WEBPACK_IMPORTED_MODULE_0__.isTextFieldEntryEdited
-  }, {
-    id: 'declarativeColor',
-    element,
-    component: DeclarativeColor,
-    isEdited: _bpmn_io_properties_panel__WEBPACK_IMPORTED_MODULE_0__.isTextFieldEntryEdited
-  }, {
-    id: 'temporalColor',
-    element,
-    component: TemporalColor,
-    isEdited: _bpmn_io_properties_panel__WEBPACK_IMPORTED_MODULE_0__.isTextFieldEntryEdited
-  }];
+  } // {
+  //     id: 'declarativeColor',
+  //     element,
+  //     component: DeclarativeColor,
+  //     isEdited: isTextFieldEntryEdited
+  // },
+  // {
+  //     id: 'temporalColor',
+  //     element,
+  //     component: TemporalColor,
+  //     isEdited: isTextFieldEntryEdited
+  // }
+  ];
 }
 
 function Declarative(props) {
@@ -4210,8 +4247,7 @@ function Declarative(props) {
   return (0,_bpmn_io_properties_panel_preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_bpmn_io_properties_panel__WEBPACK_IMPORTED_MODULE_0__.SelectEntry, {
     id: id,
     element: element,
-    description: translate('Add declarative constraint'),
-    label: translate('Declarative'),
+    label: translate('Functional constraint'),
     getValue: getValue,
     setValue: setValue,
     getOptions: getOptions,
@@ -4241,8 +4277,7 @@ function Temporal(props) {
   return (0,_bpmn_io_properties_panel_preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_bpmn_io_properties_panel__WEBPACK_IMPORTED_MODULE_0__.TextFieldEntry, {
     id: id,
     element: element,
-    description: translate('Add temporal constraint'),
-    label: translate('Temporal'),
+    label: translate('SLO / proposition'),
     getValue: getValue,
     setValue: setValue,
     debounce: debounce
@@ -4271,7 +4306,6 @@ function DeclarativeColor(props) {
   return (0,_bpmn_io_properties_panel_preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_bpmn_io_properties_panel__WEBPACK_IMPORTED_MODULE_0__.TextFieldEntry, {
     id: id,
     element: element,
-    description: translate('Set declarative color'),
     label: translate('Declarative color'),
     getValue: getValue,
     setValue: setValue,
@@ -4301,7 +4335,6 @@ function TemporalColor(props) {
   return (0,_bpmn_io_properties_panel_preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_bpmn_io_properties_panel__WEBPACK_IMPORTED_MODULE_0__.TextFieldEntry, {
     id: id,
     element: element,
-    description: translate('Set temporal color'),
     label: translate('Temporal color'),
     getValue: getValue,
     setValue: setValue,
@@ -109554,8 +109587,10 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()("#js-verify").click(async () => {
     format: true
   });
   const startNodeName = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#start-node-name").val();
+  const SLIs = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#sli-list").val();
   localStorage.setItem('file', xml);
   localStorage.setItem('start', startNodeName);
+  localStorage.setItem('SLIs', SLIs);
   window.location.href = '/verify';
 });
 jquery__WEBPACK_IMPORTED_MODULE_0___default()("#js-verify-clear").click(async () => {

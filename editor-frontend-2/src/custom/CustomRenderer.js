@@ -43,6 +43,10 @@ export default class CustomRenderer extends BaseRenderer {
         if (resultFunctionalDetail) {
             this.resultFunctionalDetail = JSON.parse(resultFunctionalDetail);
         }
+        let resultNonFunctionalDetail = localStorage.getItem('resultNonFunctionalDetail');
+        if (resultNonFunctionalDetail) {
+            this.resultNonFunctionalDetail = JSON.parse(resultNonFunctionalDetail);
+        }
     }
 
     canRender(element) {
@@ -162,13 +166,30 @@ export default class CustomRenderer extends BaseRenderer {
 
             svgAttr(text, {
                 fill: stroke,
-                transform: 'translate(' + (width / 2) + ', ' + (height -5) + ')',
+                transform: 'translate(' + (width / 2) + ', ' + (height - 5) + ')',
                 textAnchor: 'middle'
             });
 
             svgClasses(text).add('djs-label');
 
-            svgAppend(text, document.createTextNode(temporal));
+            let slos = this.splitTemporal(temporal);
+            for (let slo of slos) {
+                const tspan = svgCreate('tspan');
+                if (
+                    this.resultNonFunctionalDetail
+                    && this.resultNonFunctionalDetail[id]
+                    && this.resultNonFunctionalDetail[id]['nonDC_sliList']
+                    && this.resultNonFunctionalDetail[id]['nonDC_sliList'].includes(slo[0])
+                ) {
+                    svgAttr(tspan, {
+                        fill: COLOR_RED,
+                    });
+                }
+
+                svgAppend(tspan, document.createTextNode(slo));
+
+                svgAppend(text, tspan);
+            }
 
             svgAppend(parentNode, text);
         }
@@ -241,21 +262,28 @@ export default class CustomRenderer extends BaseRenderer {
         } else if (!isNil(temporal)) {
             let pathData = createPathFromConnection(element);
 
-            let fill = COLOR_BLUE,
-                stroke = COLOR_BLUE;
+            let attrs;
 
-            if (!isNil(temporalColor)) {
-                // fill = temporalColor;
-                // stroke = temporalColor;
-                di.set('bioc:stroke', temporalColor);
+            if (temporal.search(/:S|:E/) >= 0) {
+                di.set('bioc:stroke', COLOR_BLUE);
+                let fill = COLOR_BLUE,
+                    stroke = COLOR_BLUE;
+                attrs = {
+                    strokeLinejoin: 'round',
+                    markerEnd: marker('temporal-end', fill, stroke),
+                    stroke: stroke,
+                    strokeDasharray: [4, 4]
+                };
+            } else {
+                di.set('bioc:stroke', COLOR_GREEN);
+                let fill = COLOR_BLACK,
+                    stroke = COLOR_BLACK;
+                attrs = {
+                    strokeLinejoin: 'round',
+                    markerEnd: marker('temporal-end', fill, stroke),
+                    stroke: stroke
+                };
             }
-
-            let attrs = {
-                strokeLinejoin: 'round',
-                markerEnd: marker('temporal-end', fill, stroke),
-                stroke: stroke,
-                strokeDasharray: [4,4]
-            };
 
             let path = drawPath(parentNode, pathData, attrs);
 
@@ -323,6 +351,13 @@ export default class CustomRenderer extends BaseRenderer {
         const {temporalColor} = businessObject;
 
         return temporalColor;
+    }
+
+    splitTemporal(temporal) {
+        temporal = temporal.replace(/S,/g, 'S&');
+        temporal = temporal.replace(/E,/g, 'E&');
+        temporal = temporal.replace(/],/g, ']&');
+        return temporal.split('&');
     }
 }
 

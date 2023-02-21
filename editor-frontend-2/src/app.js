@@ -238,8 +238,10 @@ $("#js-deploy-with-annotations").click(async () => {
 $("#js-verify").click(async () => {
     const {xml} = await bpmnModeler.saveXML({format: true});
     const startNodeName = $("#start-node-name").val();
+    const SLIs = $("#sli-list").val();
     localStorage.setItem('file', xml);
     localStorage.setItem('start', startNodeName);
+    localStorage.setItem('SLIs', SLIs);
     window.location.href = '/verify';
 });
 

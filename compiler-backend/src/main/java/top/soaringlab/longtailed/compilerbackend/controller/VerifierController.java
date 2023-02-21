@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.soaringlab.longtailed.compilerbackend.dto.FunctionalVerificationResult;
+import top.soaringlab.longtailed.compilerbackend.dto.NonFunctionalVerificationResult;
 import top.soaringlab.longtailed.compilerbackend.service.VerifierService;
 
 import java.util.List;
@@ -28,9 +29,13 @@ public class VerifierController {
         return verifierService.verifyFunctional(map.get("processId"), map.get("file"), map.get("start"));
     }
 
+//    @PostMapping(value = "/verify-non-functional")
+//    public Boolean verifyNonFunctional(@RequestBody String file) throws Exception {
+//        return verifierService.verifyNonFunctional(file);
+//    }
+
     @PostMapping(value = "/verify-non-functional")
-    public Boolean verifyNonFunctional(@RequestBody String file) throws Exception {
-        //return verifierService.verifyNonFunctional(file);
-        return verifierService.verifyNonFunctional(file, "P,R=AAA>AA>A>BBB>BB>B>CCC>CC>C>0,T,max");
+    public NonFunctionalVerificationResult verifyNonFunctional(@RequestBody Map<String, String> map) throws Exception {
+        return verifierService.verifyNonFunctional(map.get("file"), map.get("SLIs"));
     }
 }
