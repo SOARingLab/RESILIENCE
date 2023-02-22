@@ -247,5 +247,8 @@ $("#js-verify").click(async () => {
 
 $("#js-verify-clear").click(async () => {
     localStorage.removeItem('resultFunctionalDetail');
+    localStorage.removeItem('resultNonFunctionalDetail');
+    const {xml} = await bpmnModeler.saveXML({format: true});
+    localStorage.setItem('file', xml);
     location.reload();
 });

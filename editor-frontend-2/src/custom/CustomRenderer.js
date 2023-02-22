@@ -2,7 +2,7 @@ import BaseRenderer from 'diagram-js/lib/draw/BaseRenderer';
 
 import {append as svgAppend, attr as svgAttr, classes as svgClasses, create as svgCreate} from 'tiny-svg';
 
-import {getFillColor, getRoundRectPath, getSemantic, getStrokeColor} from 'bpmn-js/lib/draw/BpmnRenderUtil';
+import {getRoundRectPath} from 'bpmn-js/lib/draw/BpmnRenderUtil';
 
 import {getBusinessObject, is} from 'bpmn-js/lib/util/ModelUtil';
 
@@ -10,9 +10,7 @@ import {assign, isNil} from 'min-dash';
 
 import Ids from 'ids';
 
-import {
-    query as domQuery
-} from 'min-dom';
+import {query as domQuery} from 'min-dom';
 
 import $ from 'jquery';
 
@@ -52,15 +50,28 @@ export default class CustomRenderer extends BaseRenderer {
     canRender(element) {
 
         // ignore labels
-        return !element.labelTarget;
+        // return !element.labelTarget;
+        if (
+            element.labelTarget
+            && isNil(this.getTemporal(element.labelTarget))
+        ) {
+            return false;
+        }
+        return true;
     }
 
     drawShape(parentNode, element) {
-        const shape = this.bpmnRenderer.drawShape(parentNode, element);
-
         const {id, type, businessObject, di} = element;
 
         const {color} = businessObject;
+
+        // label
+
+        if (type === 'label') {
+            return this.renderLabel(parentNode, element);
+        }
+
+        const shape = this.bpmnRenderer.drawShape(parentNode, element);
 
         // counter example
 
@@ -162,34 +173,13 @@ export default class CustomRenderer extends BaseRenderer {
             //     transform: 'translate(' + (width / 2 - 25) + ', ' + (height -20) + ')',
             // });
 
-            const text = svgCreate('text');
+            const text = this.renderTemporal(id, temporal);
 
             svgAttr(text, {
                 fill: stroke,
                 transform: 'translate(' + (width / 2) + ', ' + (height - 5) + ')',
                 textAnchor: 'middle'
             });
-
-            svgClasses(text).add('djs-label');
-
-            let slos = this.splitTemporal(temporal);
-            for (let slo of slos) {
-                const tspan = svgCreate('tspan');
-                if (
-                    this.resultNonFunctionalDetail
-                    && this.resultNonFunctionalDetail[id]
-                    && this.resultNonFunctionalDetail[id]['nonDC_sliList']
-                    && this.resultNonFunctionalDetail[id]['nonDC_sliList'].includes(slo[0])
-                ) {
-                    svgAttr(tspan, {
-                        fill: COLOR_RED,
-                    });
-                }
-
-                svgAppend(tspan, document.createTextNode(slo));
-
-                svgAppend(text, tspan);
-            }
 
             svgAppend(parentNode, text);
         }
@@ -198,7 +188,7 @@ export default class CustomRenderer extends BaseRenderer {
     }
 
     drawConnection(parentNode, element) {
-        const {id, di} = element;
+        const {id, di, businessObject} = element;
 
         // constraint
 
@@ -260,12 +250,14 @@ export default class CustomRenderer extends BaseRenderer {
 
             return path;
         } else if (!isNil(temporal)) {
+            // businessObject.name = 'label';
+
             let pathData = createPathFromConnection(element);
 
             let attrs;
 
             if (temporal.search(/:S|:E/) >= 0) {
-                di.set('bioc:stroke', COLOR_BLUE);
+                // di.set('bioc:stroke', COLOR_BLUE);
                 let fill = COLOR_BLUE,
                     stroke = COLOR_BLUE;
                 attrs = {
@@ -275,7 +267,7 @@ export default class CustomRenderer extends BaseRenderer {
                     strokeDasharray: [4, 4]
                 };
             } else {
-                di.set('bioc:stroke', COLOR_GREEN);
+                // di.set('bioc:stroke', COLOR_GREEN);
                 let fill = COLOR_BLACK,
                     stroke = COLOR_BLACK;
                 attrs = {
@@ -353,12 +345,59 @@ export default class CustomRenderer extends BaseRenderer {
         return temporalColor;
     }
 
-    splitTemporal(temporal) {
+    renderTemporal(id, temporal) {
+        const text = svgCreate('text');
+
+        svgClasses(text).add('djs-label');
+
         temporal = temporal.replace(/S,/g, 'S&');
         temporal = temporal.replace(/E,/g, 'E&');
         temporal = temporal.replace(/],/g, ']&');
-        return temporal.split('&');
+        let slos = temporal.split('&');
+        for (let [i, slo] of slos.entries()) {
+            if (i > 0) {
+                const tspan = svgCreate('tspan');
+                svgAppend(tspan, document.createTextNode(','));
+                svgAppend(text, tspan);
+            }
+
+            const tspan = svgCreate('tspan');
+            if (
+                this.resultNonFunctionalDetail
+                && this.resultNonFunctionalDetail[id]
+                && this.resultNonFunctionalDetail[id]['nonDC_sliList']
+                && this.resultNonFunctionalDetail[id]['nonDC_sliList'].includes(slo.split(':')[0])
+            ) {
+                svgAttr(tspan, {
+                    fill: COLOR_RED,
+                });
+            }
+            svgAppend(tspan, document.createTextNode(slo));
+            svgAppend(text, tspan);
+        }
+
+        return text;
     }
+
+    renderLabel(parentGfx, element) {
+        const id = element.labelTarget.id;
+        const temporal = this.getTemporal(element.labelTarget);
+        var text = this.renderTemporal(id, temporal);
+
+        if (temporal.search(/:S|:E/) >= 0) {
+            svgAttr(text, {
+                fill: COLOR_BLUE
+            });
+        } else {
+            svgAttr(text, {
+                fill: COLOR_GREEN
+            });
+        }
+        svgAppend(parentGfx, text);
+
+        return text;
+    }
+
 }
 
 CustomRenderer.$inject = ['eventBus', 'bpmnRenderer'];

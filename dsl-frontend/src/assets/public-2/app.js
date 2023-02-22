@@ -3451,10 +3451,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ CustomRenderer)
 /* harmony export */ });
 /* harmony import */ var diagram_js_lib_draw_BaseRenderer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! diagram-js/lib/draw/BaseRenderer */ "./node_modules/diagram-js/lib/draw/BaseRenderer.js");
-/* harmony import */ var tiny_svg__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! tiny-svg */ "./node_modules/tiny-svg/dist/index.esm.js");
+/* harmony import */ var tiny_svg__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! tiny-svg */ "./node_modules/tiny-svg/dist/index.esm.js");
 /* harmony import */ var bpmn_js_lib_draw_BpmnRenderUtil__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! bpmn-js/lib/draw/BpmnRenderUtil */ "./node_modules/bpmn-js/lib/draw/BpmnRenderUtil.js");
 /* harmony import */ var bpmn_js_lib_util_ModelUtil__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! bpmn-js/lib/util/ModelUtil */ "./node_modules/bpmn-js/lib/util/ModelUtil.js");
-/* harmony import */ var min_dash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! min-dash */ "./node_modules/min-dash/dist/index.esm.js");
+/* harmony import */ var min_dash__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! min-dash */ "./node_modules/min-dash/dist/index.esm.js");
 /* harmony import */ var ids__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ids */ "./node_modules/ids/dist/index.esm.js");
 /* harmony import */ var min_dom__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! min-dom */ "./node_modules/min-dom/dist/index.esm.js");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
@@ -3498,11 +3498,15 @@ class CustomRenderer extends diagram_js_lib_draw_BaseRenderer__WEBPACK_IMPORTED_
 
   canRender(element) {
     // ignore labels
-    return !element.labelTarget;
+    // return !element.labelTarget;
+    if (element.labelTarget && (0,min_dash__WEBPACK_IMPORTED_MODULE_3__.isNil)(this.getTemporal(element.labelTarget))) {
+      return false;
+    }
+
+    return true;
   }
 
   drawShape(parentNode, element) {
-    const shape = this.bpmnRenderer.drawShape(parentNode, element);
     const {
       id,
       type,
@@ -3511,19 +3515,25 @@ class CustomRenderer extends diagram_js_lib_draw_BaseRenderer__WEBPACK_IMPORTED_
     } = element;
     const {
       color
-    } = businessObject; // counter example
+    } = businessObject; // label
+
+    if (type === 'label') {
+      return this.renderLabel(parentNode, element);
+    }
+
+    const shape = this.bpmnRenderer.drawShape(parentNode, element); // counter example
 
     if (this.resultFunctionalDetail) {
       for (let state of this.resultFunctionalDetail) {
         if (state['stateToBpmnNodeId'].includes(id)) {
-          (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(shape, {
+          (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(shape, {
             stroke: COLOR_RED
           });
-          const text = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.create)('text');
-          (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(text, {
+          const text = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.create)('text');
+          (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(text, {
             fill: COLOR_RED
           });
-          (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.classes)(text).add('djs-label');
+          (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.classes)(text).add('djs-label');
 
           for (let [name, value] of Object.entries(state)) {
             if (value.startsWith('_')) {
@@ -3532,17 +3542,17 @@ class CustomRenderer extends diagram_js_lib_draw_BaseRenderer__WEBPACK_IMPORTED_
 
             if (name !== 'state' && name !== 'stateToBpmnNodeId') {
               let explanation = name + '=' + value;
-              const tspan = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.create)('tspan');
-              (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(tspan, {
+              const tspan = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.create)('tspan');
+              (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(tspan, {
                 x: 0,
                 dy: 20
               });
-              (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.append)(tspan, document.createTextNode(explanation));
-              (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.append)(text, tspan);
+              (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.append)(tspan, document.createTextNode(explanation));
+              (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.append)(text, tspan);
             }
           }
 
-          (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.append)(parentNode, text);
+          (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.append)(parentNode, text);
           break;
         }
       }
@@ -3572,31 +3582,31 @@ class CustomRenderer extends diagram_js_lib_draw_BaseRenderer__WEBPACK_IMPORTED_
     const declarativeColor = this.getDeclarativeColor(element);
     const temporalColor = this.getTemporalColor(element);
 
-    if (!(0,min_dash__WEBPACK_IMPORTED_MODULE_4__.isNil)(declarative)) {
+    if (!(0,min_dash__WEBPACK_IMPORTED_MODULE_3__.isNil)(declarative)) {
       let stroke = COLOR_YELLOW;
 
-      if (!(0,min_dash__WEBPACK_IMPORTED_MODULE_4__.isNil)(declarativeColor)) {
+      if (!(0,min_dash__WEBPACK_IMPORTED_MODULE_3__.isNil)(declarativeColor)) {
         stroke = declarativeColor;
       }
 
       const rect = drawRect(parentNode, 50, 20, TASK_BORDER_RADIUS, stroke);
-      (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(rect, {
+      (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(rect, {
         transform: 'translate(' + (width / 2 - 25) + ', ' + -20 + ')'
       });
-      const text = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.create)('text');
-      (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(text, {
+      const text = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.create)('text');
+      (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(text, {
         fill: stroke,
         transform: 'translate(' + (width / 2 - 20) + ', ' + -5 + ')'
       });
-      (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.classes)(text).add('djs-label');
-      (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.append)(text, document.createTextNode(declarative));
-      (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.append)(parentNode, text);
+      (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.classes)(text).add('djs-label');
+      (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.append)(text, document.createTextNode(declarative));
+      (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.append)(parentNode, text);
     }
 
-    if (!(0,min_dash__WEBPACK_IMPORTED_MODULE_4__.isNil)(temporal)) {
+    if (!(0,min_dash__WEBPACK_IMPORTED_MODULE_3__.isNil)(temporal)) {
       let stroke = COLOR_GREEN;
 
-      if (!(0,min_dash__WEBPACK_IMPORTED_MODULE_4__.isNil)(temporalColor)) {
+      if (!(0,min_dash__WEBPACK_IMPORTED_MODULE_3__.isNil)(temporalColor)) {
         stroke = temporalColor;
       } // const rect = drawRect(parentNode, 50, 20, TASK_BORDER_RADIUS, stroke);
       //
@@ -3605,29 +3615,13 @@ class CustomRenderer extends diagram_js_lib_draw_BaseRenderer__WEBPACK_IMPORTED_
       // });
 
 
-      const text = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.create)('text');
-      (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(text, {
+      const text = this.renderTemporal(id, temporal);
+      (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(text, {
         fill: stroke,
         transform: 'translate(' + width / 2 + ', ' + (height - 5) + ')',
         textAnchor: 'middle'
       });
-      (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.classes)(text).add('djs-label');
-      let slos = this.splitTemporal(temporal);
-
-      for (let slo of slos) {
-        const tspan = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.create)('tspan');
-
-        if (this.resultNonFunctionalDetail && this.resultNonFunctionalDetail[id] && this.resultNonFunctionalDetail[id]['nonDC_sliList'] && this.resultNonFunctionalDetail[id]['nonDC_sliList'].includes(slo[0])) {
-          (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(tspan, {
-            fill: COLOR_RED
-          });
-        }
-
-        (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.append)(tspan, document.createTextNode(slo));
-        (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.append)(text, tspan);
-      }
-
-      (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.append)(parentNode, text);
+      (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.append)(parentNode, text);
     }
 
     return shape;
@@ -3636,7 +3630,8 @@ class CustomRenderer extends diagram_js_lib_draw_BaseRenderer__WEBPACK_IMPORTED_
   drawConnection(parentNode, element) {
     const {
       id,
-      di
+      di,
+      businessObject
     } = element; // constraint
 
     const declarative = this.getDeclarative(element);
@@ -3644,12 +3639,12 @@ class CustomRenderer extends diagram_js_lib_draw_BaseRenderer__WEBPACK_IMPORTED_
     const declarativeColor = this.getDeclarativeColor(element);
     const temporalColor = this.getTemporalColor(element);
 
-    if (!(0,min_dash__WEBPACK_IMPORTED_MODULE_4__.isNil)(declarative)) {
+    if (!(0,min_dash__WEBPACK_IMPORTED_MODULE_3__.isNil)(declarative)) {
       let pathData = createPathFromConnection(element);
       let fill = COLOR_YELLOW,
           stroke = COLOR_YELLOW;
 
-      if (!(0,min_dash__WEBPACK_IMPORTED_MODULE_4__.isNil)(declarativeColor)) {
+      if (!(0,min_dash__WEBPACK_IMPORTED_MODULE_3__.isNil)(declarativeColor)) {
         fill = declarativeColor;
         stroke = declarativeColor;
       }
@@ -3661,45 +3656,46 @@ class CustomRenderer extends diagram_js_lib_draw_BaseRenderer__WEBPACK_IMPORTED_
       let path = drawPath(parentNode, pathData, attrs);
 
       if (declarative === 'responded existence') {
-        (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(path, {
+        (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(path, {
           markerStart: marker('declarative-circle-start', fill, stroke)
         });
       }
 
       if (declarative === 'co-existence') {
-        (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(path, {
+        (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(path, {
           markerStart: marker('declarative-circle-start', fill, stroke),
           markerEnd: marker('declarative-circle-end', fill, stroke)
         });
       }
 
       if (declarative === 'response') {
-        (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(path, {
+        (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(path, {
           markerStart: marker('declarative-circle-start', fill, stroke),
           markerEnd: marker('declarative-arrow-end', fill, stroke)
         });
       }
 
       if (declarative === 'precedence') {
-        (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(path, {
+        (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(path, {
           markerEnd: marker('declarative-circle-arrow-end', fill, stroke)
         });
       }
 
       if (declarative === 'succession') {
-        (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(path, {
+        (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(path, {
           markerStart: marker('declarative-circle-start', fill, stroke),
           markerEnd: marker('declarative-circle-arrow-end', fill, stroke)
         });
       }
 
       return path;
-    } else if (!(0,min_dash__WEBPACK_IMPORTED_MODULE_4__.isNil)(temporal)) {
+    } else if (!(0,min_dash__WEBPACK_IMPORTED_MODULE_3__.isNil)(temporal)) {
+      // businessObject.name = 'label';
       let pathData = createPathFromConnection(element);
       let attrs;
 
       if (temporal.search(/:S|:E/) >= 0) {
-        di.set('bioc:stroke', COLOR_BLUE);
+        // di.set('bioc:stroke', COLOR_BLUE);
         let fill = COLOR_BLUE,
             stroke = COLOR_BLUE;
         attrs = {
@@ -3709,7 +3705,7 @@ class CustomRenderer extends diagram_js_lib_draw_BaseRenderer__WEBPACK_IMPORTED_
           strokeDasharray: [4, 4]
         };
       } else {
-        di.set('bioc:stroke', COLOR_GREEN);
+        // di.set('bioc:stroke', COLOR_GREEN);
         let fill = COLOR_BLACK,
             stroke = COLOR_BLACK;
         attrs = {
@@ -3728,7 +3724,7 @@ class CustomRenderer extends diagram_js_lib_draw_BaseRenderer__WEBPACK_IMPORTED_
     if (this.resultFunctionalDetail) {
       for (let state of this.resultFunctionalDetail) {
         if (state['state'].includes(id)) {
-          (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(path, {
+          (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(path, {
             stroke: COLOR_RED
           });
         }
@@ -3782,11 +3778,53 @@ class CustomRenderer extends diagram_js_lib_draw_BaseRenderer__WEBPACK_IMPORTED_
     return temporalColor;
   }
 
-  splitTemporal(temporal) {
+  renderTemporal(id, temporal) {
+    const text = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.create)('text');
+    (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.classes)(text).add('djs-label');
     temporal = temporal.replace(/S,/g, 'S&');
     temporal = temporal.replace(/E,/g, 'E&');
     temporal = temporal.replace(/],/g, ']&');
-    return temporal.split('&');
+    let slos = temporal.split('&');
+
+    for (let [i, slo] of slos.entries()) {
+      if (i > 0) {
+        const tspan = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.create)('tspan');
+        (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.append)(tspan, document.createTextNode(','));
+        (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.append)(text, tspan);
+      }
+
+      const tspan = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.create)('tspan');
+
+      if (this.resultNonFunctionalDetail && this.resultNonFunctionalDetail[id] && this.resultNonFunctionalDetail[id]['nonDC_sliList'] && this.resultNonFunctionalDetail[id]['nonDC_sliList'].includes(slo.split(':')[0])) {
+        (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(tspan, {
+          fill: COLOR_RED
+        });
+      }
+
+      (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.append)(tspan, document.createTextNode(slo));
+      (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.append)(text, tspan);
+    }
+
+    return text;
+  }
+
+  renderLabel(parentGfx, element) {
+    const id = element.labelTarget.id;
+    const temporal = this.getTemporal(element.labelTarget);
+    var text = this.renderTemporal(id, temporal);
+
+    if (temporal.search(/:S|:E/) >= 0) {
+      (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(text, {
+        fill: COLOR_BLUE
+      });
+    } else {
+      (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(text, {
+        fill: COLOR_GREEN
+      });
+    }
+
+    (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.append)(parentGfx, text);
+    return text;
   }
 
 }
@@ -3794,8 +3832,8 @@ CustomRenderer.$inject = ['eventBus', 'bpmnRenderer']; // helpers //////////
 // copied from https://github.com/bpmn-io/bpmn-js/blob/master/lib/draw/BpmnRenderer.js
 
 function drawRect(parentNode, width, height, borderRadius, color) {
-  const rect = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.create)('rect');
-  (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(rect, {
+  const rect = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.create)('rect');
+  (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(rect, {
     width: width,
     height: height,
     rx: borderRadius,
@@ -3804,20 +3842,20 @@ function drawRect(parentNode, width, height, borderRadius, color) {
     strokeWidth: 2,
     fill: COLOR_WHITE
   });
-  (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.append)(parentNode, rect);
+  (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.append)(parentNode, rect);
   return rect;
 }
 
 function drawPath(parentGfx, d, attrs) {
-  var path = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.create)('path');
-  (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(path, {
+  var path = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.create)('path');
+  (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(path, {
     d: d
   });
-  (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(path, attrs);
-  (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(path, {
+  (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(path, attrs);
+  (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(path, {
     strokeWidth: 2
   });
-  (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.append)(parentGfx, path);
+  (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.append)(parentGfx, path);
   return path;
 }
 
@@ -3833,7 +3871,7 @@ function createPathFromConnection(connection) {
 }
 
 function addMarker(id, options) {
-  var attrs = (0,min_dash__WEBPACK_IMPORTED_MODULE_4__.assign)({
+  var attrs = (0,min_dash__WEBPACK_IMPORTED_MODULE_3__.assign)({
     fill: 'black',
     strokeWidth: 1,
     strokeLinecap: 'round',
@@ -3850,10 +3888,10 @@ function addMarker(id, options) {
     attrs.strokeDasharray = [10000, 1];
   }
 
-  var marker = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.create)('marker');
-  (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(options.element, attrs);
-  (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.append)(marker, options.element);
-  (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(marker, {
+  var marker = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.create)('marker');
+  (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(options.element, attrs);
+  (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.append)(marker, options.element);
+  (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(marker, {
     id: id,
     viewBox: '0 0 20 20',
     refX: ref.x,
@@ -3865,11 +3903,11 @@ function addMarker(id, options) {
   var defs = (0,min_dom__WEBPACK_IMPORTED_MODULE_7__.query)('defs', canvas._svg);
 
   if (!defs) {
-    defs = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.create)('defs');
-    (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.append)(canvas._svg, defs);
+    defs = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.create)('defs');
+    (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.append)(canvas._svg, defs);
   }
 
-  (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.append)(defs, marker);
+  (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.append)(defs, marker);
   markers[id] = marker;
 }
 
@@ -3890,8 +3928,8 @@ function marker(type, fill, stroke) {
 
 function createMarker(id, type, fill, stroke) {
   if (type === 'declarative-circle-start') {
-    let declarativeCircle = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.create)('circle');
-    (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(declarativeCircle, {
+    let declarativeCircle = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.create)('circle');
+    (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(declarativeCircle, {
       cx: 6,
       cy: 6,
       r: 5
@@ -3911,8 +3949,8 @@ function createMarker(id, type, fill, stroke) {
   }
 
   if (type === 'declarative-circle-end') {
-    let declarativeCircle = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.create)('circle');
-    (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(declarativeCircle, {
+    let declarativeCircle = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.create)('circle');
+    (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(declarativeCircle, {
       cx: 6,
       cy: 6,
       r: 5
@@ -3932,8 +3970,8 @@ function createMarker(id, type, fill, stroke) {
   }
 
   if (type === 'declarative-arrow-end') {
-    let declarativeArrowEnd = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.create)('path');
-    (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(declarativeArrowEnd, {
+    let declarativeArrowEnd = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.create)('path');
+    (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(declarativeArrowEnd, {
       d: 'M 1 5 L 11 10 L 1 15 Z'
     });
     addMarker(id, {
@@ -3951,19 +3989,19 @@ function createMarker(id, type, fill, stroke) {
   }
 
   if (type === 'declarative-circle-arrow-end') {
-    let circleArrowEnd = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.create)('g');
-    let circle = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.create)('circle');
-    (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(circle, {
+    let circleArrowEnd = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.create)('g');
+    let circle = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.create)('circle');
+    (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(circle, {
       cx: 15,
       cy: 10,
       r: 5
     });
-    let arrowEnd = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.create)('path');
-    (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(arrowEnd, {
+    let arrowEnd = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.create)('path');
+    (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(arrowEnd, {
       d: 'M 1 5 L 11 10 L 1 15 Z'
     });
-    (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.append)(circleArrowEnd, circle);
-    (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.append)(circleArrowEnd, arrowEnd);
+    (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.append)(circleArrowEnd, circle);
+    (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.append)(circleArrowEnd, arrowEnd);
     addMarker(id, {
       element: circleArrowEnd,
       ref: {
@@ -3979,8 +4017,8 @@ function createMarker(id, type, fill, stroke) {
   }
 
   if (type === 'temporal-end') {
-    let temporalEnd = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.create)('path');
-    (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(temporalEnd, {
+    let temporalEnd = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.create)('path');
+    (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(temporalEnd, {
       d: 'M 1 5 L 11 10 L 1 15 Z'
     });
     addMarker(id, {
@@ -3998,8 +4036,8 @@ function createMarker(id, type, fill, stroke) {
   }
 
   if (type === 'counter-example-end') {
-    let temporalEnd = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.create)('path');
-    (0,tiny_svg__WEBPACK_IMPORTED_MODULE_3__.attr)(temporalEnd, {
+    let temporalEnd = (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.create)('path');
+    (0,tiny_svg__WEBPACK_IMPORTED_MODULE_4__.attr)(temporalEnd, {
       d: 'M 1 5 L 11 10 L 1 15 Z'
     });
     addMarker(id, {
@@ -109595,6 +109633,13 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()("#js-verify").click(async () => {
 });
 jquery__WEBPACK_IMPORTED_MODULE_0___default()("#js-verify-clear").click(async () => {
   localStorage.removeItem('resultFunctionalDetail');
+  localStorage.removeItem('resultNonFunctionalDetail');
+  const {
+    xml
+  } = await bpmnModeler.saveXML({
+    format: true
+  });
+  localStorage.setItem('file', xml);
   location.reload();
 });
 })();

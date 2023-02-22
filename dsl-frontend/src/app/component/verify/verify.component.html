@@ -1,6 +1,6 @@
 <div class="container">
   <h1>Verification Result</h1>
-  <h2>Functional</h2>
+  <h2>Functional constraint</h2>
   <div *ngIf="resultFunctional === 'waiting'">
     <h3>Waiting For Result</h3>
   </div>
@@ -20,7 +20,7 @@
       <button (click)="explainResultFunctional()">Show conflicts</button>
     </p>
   </div>
-  <h2>Non-functional (Temporal)</h2>
+  <h2>SLO</h2>
   <div *ngIf="resultNonFunctional === 'waiting'">
     <h3>Waiting For Result</h3>
   </div>
