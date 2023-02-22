@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:constraint="http://some-company/schema/bpmn/constraint" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0q4pldu" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.11.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:constraint="http://some-company/schema/bpmn/constraint" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0q4pldu" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.11.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
   <bpmn:collaboration id="Collaboration_0skvm35">
     <bpmn:participant id="Participant_18ri5a1" name="Customer" processRef="Process_1nyigqr" />
     <bpmn:participant id="Participant_1ee8jmu" name="Online grocery" processRef="Process_1izd960" />
@@ -73,11 +73,10 @@ S.sendMessage(execution, "Payment received");</bpmn:script>
       <bpmn:outgoing>Flow_08qvpkv</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0vhqg04" messageRef="Message_0fig6wj" />
     </bpmn:startEvent>
-    <bpmn:scriptTask id="Activity_17p63lp" name="Process inventory" scriptFormat="groovy" constraint:temporal="[[1,20]]">
+    <bpmn:scriptTask id="Activity_17p63lp" name="Process inventory" constraint:temporal="T:[[1,20]]" scriptFormat="groovy">
       <bpmn:incoming>Flow_08qvpkv</bpmn:incoming>
       <bpmn:outgoing>Flow_169a07k</bpmn:outgoing>
       <bpmn:outgoing>Flow_0vlu2tr</bpmn:outgoing>
-      <bpmn:outgoing>Flow_08pjbah</bpmn:outgoing>
       <bpmn:script>// S.info(execution, "Order received");
 if (order_status == "canceled") {
     S.info(execution, "Order canceled");
@@ -86,20 +85,16 @@ if (order_status == "canceled") {
     S.info(execution, "Process inventory");
 }</bpmn:script>
     </bpmn:scriptTask>
-    <bpmn:scriptTask id="Activity_0d00975" name="Deliver goods" scriptFormat="groovy" constraint:temporal="[0,25]">
+    <bpmn:scriptTask id="Activity_0d00975" name="Deliver goods" constraint:temporal="T:[0,25]" scriptFormat="groovy">
       <bpmn:incoming>Flow_169a07k</bpmn:incoming>
-      <bpmn:incoming>Flow_08pjbah</bpmn:incoming>
       <bpmn:outgoing>Flow_187e7sp</bpmn:outgoing>
-      <bpmn:outgoing>Flow_1s1ddeg</bpmn:outgoing>
       <bpmn:outgoing>Flow_1ansllb</bpmn:outgoing>
       <bpmn:script>S.info(execution, "Deliver goods (delivery_method = " + delivery_method + ")");
 S.sendMessage(execution, "Goods received");</bpmn:script>
     </bpmn:scriptTask>
-    <bpmn:scriptTask id="Activity_105x9s9" name="Confirm delivery" scriptFormat="groovy" constraint:temporal="[[1,30]]">
+    <bpmn:scriptTask id="Activity_105x9s9" name="Confirm delivery" constraint:temporal="T:[[1,30]]" scriptFormat="groovy">
       <bpmn:incoming>Flow_187e7sp</bpmn:incoming>
-      <bpmn:incoming>Flow_1s1ddeg</bpmn:incoming>
       <bpmn:outgoing>Flow_1iqyzuo</bpmn:outgoing>
-      <bpmn:outgoing>Flow_16wm8kn</bpmn:outgoing>
       <bpmn:script>S.info(execution, "Confirm delivery");</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:intermediateCatchEvent id="Event_1tne0jm" name="Payment received">
@@ -107,10 +102,9 @@ S.sendMessage(execution, "Goods received");</bpmn:script>
       <bpmn:outgoing>Flow_1fx9gvd</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0zp8ujk" messageRef="Message_0m4ocql" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:scriptTask id="Activity_06f2qgl" name="Process payment" scriptFormat="groovy" constraint:temporal="[0,10]">
+    <bpmn:scriptTask id="Activity_06f2qgl" name="Process payment" constraint:temporal="T:[0,10]" scriptFormat="groovy">
       <bpmn:incoming>Flow_1fx9gvd</bpmn:incoming>
       <bpmn:incoming>Flow_0vlu2tr</bpmn:incoming>
-      <bpmn:incoming>Flow_16wm8kn</bpmn:incoming>
       <bpmn:incoming>Flow_1ansllb</bpmn:incoming>
       <bpmn:outgoing>Flow_1xff9nj</bpmn:outgoing>
       <bpmn:script>S.info(execution, "Process payment (amount = " + amount + ")");</bpmn:script>
@@ -118,10 +112,7 @@ S.sendMessage(execution, "Goods received");</bpmn:script>
     <bpmn:endEvent id="Event_1jram7c" name="End">
       <bpmn:incoming>Flow_1xff9nj</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_0vlu2tr" name="[0,120]" sourceRef="Activity_17p63lp" targetRef="Activity_06f2qgl" constraint:temporal="[0,120]" constraint:temporalColor="#0080FF" />
-    <bpmn:sequenceFlow id="Flow_08pjbah" name="[0,0]" sourceRef="Activity_17p63lp" targetRef="Activity_0d00975" constraint:temporal="sequence" constraint:temporalColor="#008000" />
-    <bpmn:sequenceFlow id="Flow_1s1ddeg" name="[0,0]" sourceRef="Activity_0d00975" targetRef="Activity_105x9s9" constraint:temporal="sequence" constraint:temporalColor="#008000" />
-    <bpmn:sequenceFlow id="Flow_16wm8kn" name="[0,0]" sourceRef="Activity_105x9s9" targetRef="Activity_06f2qgl" constraint:temporal="sequence" constraint:temporalColor="#008000" />
+    <bpmn:sequenceFlow id="Flow_0vlu2tr" name="[0,120]" sourceRef="Activity_17p63lp" targetRef="Activity_06f2qgl" constraint:temporal="T:S[0,120]E" constraint:temporalColor="#0080FF" />
     <bpmn:sequenceFlow id="Flow_1ansllb" sourceRef="Activity_0d00975" targetRef="Activity_06f2qgl" constraint:declarative="response" />
     <bpmn:textAnnotation id="TextAnnotation_1m5jswt">
       <bpmn:text>WHEN risk_level == "high"
@@ -193,30 +184,7 @@ SET delivery_method = "contactless_locker"</bpmn:text>
         <di:waypoint x="549" y="625" />
         <di:waypoint x="702" y="535" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_16wm8kn_di" bpmnElement="Flow_16wm8kn" bioc:stroke="#008000">
-        <di:waypoint x="690" y="640" />
-        <di:waypoint x="730" y="640" />
-        <di:waypoint x="730" y="540" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="699" y="622" width="22" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1s1ddeg_di" bpmnElement="Flow_1s1ddeg" bioc:stroke="#008000">
-        <di:waypoint x="550" y="640" />
-        <di:waypoint x="590" y="640" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="559" y="623" width="22" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08pjbah_di" bpmnElement="Flow_08pjbah" bioc:stroke="#008000">
-        <di:waypoint x="380" y="540" />
-        <di:waypoint x="380" y="640" />
-        <di:waypoint x="450" y="640" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="384" y="623" width="22" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0vlu2tr_di" bpmnElement="Flow_0vlu2tr" bioc:stroke="#0080FF">
+      <bpmndi:BPMNEdge id="Flow_0vlu2tr_di" bpmnElement="Flow_0vlu2tr">
         <di:waypoint x="410" y="470" />
         <di:waypoint x="700" y="470" />
         <bpmndi:BPMNLabel>
