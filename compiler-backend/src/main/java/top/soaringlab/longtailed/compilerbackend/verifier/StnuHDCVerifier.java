@@ -300,7 +300,7 @@ public class StnuHDCVerifier {
                 else if (sli_inf[1].contains("<")){
                     sli_element = sli_inf[1].split("<");
                 }
-                
+
                 int j = 0;
                 for (int i = sli_element.length - 1; i >= 0; i--) {
                     BordaScore bds = new BordaScore();
@@ -360,8 +360,8 @@ public class StnuHDCVerifier {
         if (nonDcXmlIdMap.size() == 0) {
             //return true; //这个返回值是原版代码中需要的结果
             //所有SLI都满足，即默认logic="SLI1&&SLI2&&SLI3...."
-            nonFunctionalVerificationResult.setResult(true);            
-        } 
+            nonFunctionalVerificationResult.setResult(true);
+        }
         else{
             nonFunctionalVerificationResult.setResult(false);
         }
@@ -384,24 +384,24 @@ public class StnuHDCVerifier {
                     }
 
                 }
-                
+
                 String tmp_str = SLI_arrary[k];
                 if (SLI_arrary[k].contains("=")){
                     //处理定性
                     tmp_str = SLI_arrary[k].split("=")[0];
                 }
-               
+
                 engine.put(tmp_str, tmp);
             }
 
             if(Objects.equals(engine.eval(str) , true)){
-                nonFunctionalVerificationResult.setLogicResult(true);
+                nonFunctionalVerificationResult.getLogicResult().add(true);
             }
             else{
-                nonFunctionalVerificationResult.setLogicResult(false);
+                nonFunctionalVerificationResult.getLogicResult().add(false);
             }
         }
-        
+
         nonFunctionalVerificationResult.setDetail(nonDcXmlIdMap);
         return nonFunctionalVerificationResult;
 

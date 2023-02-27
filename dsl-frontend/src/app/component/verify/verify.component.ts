@@ -12,6 +12,8 @@ export class VerifyComponent implements OnInit {
   resultFunctionalDetail: object[] = [];
   resultNonFunctional = 'waiting';
   resultNonFunctionalDetail: object = {};
+  resultNonFunctionalLogic: boolean[] = [];
+  logicList: string[] = [];
 
   constructor(
     private verifyService: VerifyService
@@ -67,10 +69,13 @@ export class VerifyComponent implements OnInit {
   verifyNonFunctional() {
     let file = localStorage.getItem('file');
     let SLIs = localStorage.getItem('SLIs');
-    if (file && SLIs) {
-      this.verifyService.verifyNonFunctional(file, SLIs).subscribe(resultNonFunctional => {
+    let logic = localStorage.getItem('logic');
+    if (file && SLIs && logic) {
+      this.logicList = logic.split(',');
+      this.verifyService.verifyNonFunctional(file, SLIs, logic).subscribe(resultNonFunctional => {
         this.resultNonFunctional = resultNonFunctional.result + '';
         this.resultNonFunctionalDetail = resultNonFunctional.detail;
+        this.resultNonFunctionalLogic = resultNonFunctional.logicResult;
       });
     }
   }

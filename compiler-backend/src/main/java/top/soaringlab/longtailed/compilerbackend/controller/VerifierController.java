@@ -36,6 +36,6 @@ public class VerifierController {
 
     @PostMapping(value = "/verify-non-functional")
     public NonFunctionalVerificationResult verifyNonFunctional(@RequestBody Map<String, String> map) throws Exception {
-        return verifierService.verifyNonFunctional(map.get("file"), map.get("SLIs"));
+        return verifierService.verifyNonFunctional(map.get("file"), map.get("SLIs"), map.get("logic"));
     }
 }

@@ -239,9 +239,11 @@ $("#js-verify").click(async () => {
     const {xml} = await bpmnModeler.saveXML({format: true});
     const startNodeName = $("#start-node-name").val();
     const SLIs = $("#sli-list").val();
+    const logic = $("#logic-list").val();
     localStorage.setItem('file', xml);
     localStorage.setItem('start', startNodeName);
     localStorage.setItem('SLIs', SLIs);
+    localStorage.setItem('logic', logic);
     window.location.href = '/verify';
 });
 

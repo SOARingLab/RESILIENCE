@@ -4,6 +4,7 @@ import top.soaringlab.longtailed.compilerbackend.verifier.StnuHDCVerifier;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class NonFunctionalVerificationResult {
@@ -12,7 +13,7 @@ public class NonFunctionalVerificationResult {
 
     private Map<String, StnuHDCVerifier.nonDcXmlId> detail = new HashMap<>();
 
-    private ArrayList<Boolean> logicResult = new ArrayList<Boolean>();
+    private List<Boolean> logicResult = new ArrayList<>();
 
     public Boolean getResult() {
         return result;
@@ -30,12 +31,11 @@ public class NonFunctionalVerificationResult {
         this.detail = detail;
     }
 
-    public ArrayList<Boolean> getLogicResult() {
+    public List<Boolean> getLogicResult() {
         return logicResult;
     }
 
-    public void setLogicResult(Boolean value) {
-        this.logicResult.add(value);
+    public void setLogicResult(List<Boolean> logicResult) {
+        this.logicResult = logicResult;
     }
-
 }

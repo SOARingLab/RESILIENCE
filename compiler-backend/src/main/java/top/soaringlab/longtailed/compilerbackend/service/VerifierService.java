@@ -39,8 +39,8 @@ public class VerifierService {
 //        return nonFunctionalVerifier.nonFunctionalVerify(file);
 //    }
 
-    public NonFunctionalVerificationResult verifyNonFunctional(String file, String SLIs) throws Exception {
+    public NonFunctionalVerificationResult verifyNonFunctional(String file, String SLIs, String logic) throws Exception {
         StnuHDCVerifier stnuHDCVerifier = new StnuHDCVerifier();
-        return stnuHDCVerifier.nonFunctionalVerify(file,SLIs,"(T&&P)||P,P||T,T");
+        return stnuHDCVerifier.nonFunctionalVerify(file, SLIs, logic);
     }
 }

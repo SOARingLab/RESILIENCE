@@ -28,9 +28,9 @@ export class VerifyService {
     return this.httpClient.post<FunctionalVerificationResult>(url, map);
   }
 
-  verifyNonFunctional(file: string, SLIs: string) {
+  verifyNonFunctional(file: string, SLIs: string, logic: string) {
     let url = this.rootUrl + '/verify-non-functional';
-    let map = {'file': file, 'SLIs': SLIs};
+    let map = {'file': file, 'SLIs': SLIs, 'logic': logic};
     return this.httpClient.post<NonFunctionalVerificationResult>(url, map);
   }
 }

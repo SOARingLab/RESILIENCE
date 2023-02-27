@@ -109626,9 +109626,11 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()("#js-verify").click(async () => {
   });
   const startNodeName = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#start-node-name").val();
   const SLIs = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#sli-list").val();
+  const logic = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#logic-list").val();
   localStorage.setItem('file', xml);
   localStorage.setItem('start', startNodeName);
   localStorage.setItem('SLIs', SLIs);
+  localStorage.setItem('logic', logic);
   window.location.href = '/verify';
 });
 jquery__WEBPACK_IMPORTED_MODULE_0___default()("#js-verify-clear").click(async () => {

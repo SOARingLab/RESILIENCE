@@ -33,4 +33,10 @@
       <button (click)="explainResultNonFunctional()">Show conflicts</button>
     </p>
   </div>
+  <h2>Logic</h2>
+  <div>
+    <p *ngFor="let logicResult of resultNonFunctionalLogic; let i=index">
+      {{logicList[i]}}: {{logicResult}}
+    </p>
+  </div>
 </div>
