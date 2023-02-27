@@ -10,6 +10,7 @@ import org.springframework.core.io.ClassPathResource;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import javax.script.*;
 
 import top.soaringlab.longtailed.compilerbackend.dto.NonFunctionalVerificationResult;
 
@@ -281,17 +282,25 @@ public class StnuHDCVerifier {
     private ArrayList<String> excGatePID = new ArrayList<String>();
 
 
-    public NonFunctionalVerificationResult nonFunctionalVerify(String file, String SLIs) throws Exception {
+    public NonFunctionalVerificationResult nonFunctionalVerify(String file, String SLIs, String logic) throws Exception {
         //得到每个SLI，如果是定性SLI则还包含了它的全序关系。
         //例如：T,P,R=[AAA>AA>A>....]
         String[] SLI_arrary = SLIs.split(",");
+        String[] Logic_array = logic.split(",");
 
 
         //处理定性SLI,计算集合的Borda分数
         for (int k = 0; k < SLI_arrary.length; k += 2) {
             String[] sli_inf = SLI_arrary[k].split("=");
             if (sli_inf.length > 1) { //如果是定性sli
-                String[] sli_element = sli_inf[1].split(">");
+                String[] sli_element = {};
+                if (sli_inf[1].contains(">")){
+                    sli_element = sli_inf[1].split(">");
+                }
+                else if (sli_inf[1].contains("<")){
+                    sli_element = sli_inf[1].split("<");
+                }
+                
                 int j = 0;
                 for (int i = sli_element.length - 1; i >= 0; i--) {
                     BordaScore bds = new BordaScore();
@@ -336,6 +345,8 @@ public class StnuHDCVerifier {
             parGatePID.clear();
             excGatePID.clear();
 
+
+
         }
 
         //UI反例！！！
@@ -348,11 +359,50 @@ public class StnuHDCVerifier {
         NonFunctionalVerificationResult nonFunctionalVerificationResult = new NonFunctionalVerificationResult();
         if (nonDcXmlIdMap.size() == 0) {
             //return true; //这个返回值是原版代码中需要的结果
-            nonFunctionalVerificationResult.setResult(true);
-        } else {
+            //所有SLI都满足，即默认logic="SLI1&&SLI2&&SLI3...."
+            nonFunctionalVerificationResult.setResult(true);            
+        } 
+        else{
             nonFunctionalVerificationResult.setResult(false);
-            nonFunctionalVerificationResult.setDetail(nonDcXmlIdMap);
         }
+
+        ScriptEngineManager engineManager = new ScriptEngineManager();
+        ScriptEngine engine = engineManager.getEngineByName("JavaScript");
+
+        for (String str : Logic_array) {
+            for (int k = 0; k < SLI_arrary.length; k += 2) {
+                boolean tmp = false;
+                if (nonDcXmlIdMap.size() == 0){
+                    tmp = true;
+                }
+                else {
+                    if (nonDCDataMap.get(SLI_arrary[k]).bpmnIdList.size() == 0){
+                        tmp = true;
+                    }
+                    else {
+                        tmp = false;
+                    }
+
+                }
+                
+                String tmp_str = SLI_arrary[k];
+                if (SLI_arrary[k].contains("=")){
+                    //处理定性
+                    tmp_str = SLI_arrary[k].split("=")[0];
+                }
+               
+                engine.put(tmp_str, tmp);
+            }
+
+            if(Objects.equals(engine.eval(str) , true)){
+                nonFunctionalVerificationResult.setLogicResult(true);
+            }
+            else{
+                nonFunctionalVerificationResult.setLogicResult(false);
+            }
+        }
+        
+        nonFunctionalVerificationResult.setDetail(nonDcXmlIdMap);
         return nonFunctionalVerificationResult;
 
     }
