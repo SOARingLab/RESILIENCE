@@ -73,7 +73,7 @@ S.sendMessage(execution, "Payment received");</bpmn:script>
       <bpmn:outgoing>Flow_08qvpkv</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0vhqg04" messageRef="Message_0fig6wj" />
     </bpmn:startEvent>
-    <bpmn:scriptTask id="Activity_17p63lp" name="Process inventory" constraint:temporal="T:[[1,20]]" scriptFormat="groovy">
+    <bpmn:scriptTask id="Activity_17p63lp" name="Process inventory" constraint:temporal="T:[0,20]" scriptFormat="groovy">
       <bpmn:incoming>Flow_08qvpkv</bpmn:incoming>
       <bpmn:outgoing>Flow_169a07k</bpmn:outgoing>
       <bpmn:outgoing>Flow_0vlu2tr</bpmn:outgoing>
@@ -85,14 +85,14 @@ if (order_status == "canceled") {
     S.info(execution, "Process inventory");
 }</bpmn:script>
     </bpmn:scriptTask>
-    <bpmn:scriptTask id="Activity_0d00975" name="Deliver goods" constraint:temporal="T:[0,25]" scriptFormat="groovy">
+    <bpmn:scriptTask id="Activity_0d00975" name="Deliver goods" constraint:temporal="T:[[0,25]]" scriptFormat="groovy">
       <bpmn:incoming>Flow_169a07k</bpmn:incoming>
       <bpmn:outgoing>Flow_187e7sp</bpmn:outgoing>
       <bpmn:outgoing>Flow_1ansllb</bpmn:outgoing>
       <bpmn:script>S.info(execution, "Deliver goods (delivery_method = " + delivery_method + ")");
 S.sendMessage(execution, "Goods received");</bpmn:script>
     </bpmn:scriptTask>
-    <bpmn:scriptTask id="Activity_105x9s9" name="Confirm delivery" constraint:temporal="T:[[1,30]]" scriptFormat="groovy">
+    <bpmn:scriptTask id="Activity_105x9s9" name="Confirm delivery" constraint:temporal="T:[0,30]" scriptFormat="groovy">
       <bpmn:incoming>Flow_187e7sp</bpmn:incoming>
       <bpmn:outgoing>Flow_1iqyzuo</bpmn:outgoing>
       <bpmn:script>S.info(execution, "Confirm delivery");</bpmn:script>
@@ -102,7 +102,7 @@ S.sendMessage(execution, "Goods received");</bpmn:script>
       <bpmn:outgoing>Flow_1fx9gvd</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0zp8ujk" messageRef="Message_0m4ocql" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:scriptTask id="Activity_06f2qgl" name="Process payment" constraint:temporal="T:[0,10]" scriptFormat="groovy">
+    <bpmn:scriptTask id="Activity_06f2qgl" name="Process payment" constraint:temporal="T:[[0,10]]" scriptFormat="groovy">
       <bpmn:incoming>Flow_1fx9gvd</bpmn:incoming>
       <bpmn:incoming>Flow_0vlu2tr</bpmn:incoming>
       <bpmn:incoming>Flow_1ansllb</bpmn:incoming>
