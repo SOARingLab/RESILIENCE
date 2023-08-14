@@ -775,7 +775,7 @@ public class NusmvVerifier {
         bufferedWriter.write(inputFile);
         bufferedWriter.close();
 
-        String[] runCommand = new String[]{"NuSMV", inputFileName};
+        String[] runCommand = new String[]{toolFile.getAbsolutePath(), inputFileFile.getAbsolutePath()};
         Process process = Runtime.getRuntime().exec(runCommand, null, directoryFile);
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         StringBuilder stringBuilder = new StringBuilder();
