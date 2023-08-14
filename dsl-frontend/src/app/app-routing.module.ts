@@ -15,6 +15,8 @@ import {InstanceMigrationComponent} from "./component/instance-migration/instanc
 import {InstanceMigrationListComponent} from "./component/instance-migration-list/instance-migration-list.component";
 import {ProcessActivityListComponent} from "./component/process-activity-list/process-activity-list.component";
 import {ProcessActivityComponent} from "./component/process-activity/process-activity.component";
+import {ControllabilityModelComponent} from './component/controllability-model/controllability-model.component';
+import {ControllabilityVerifyComponent} from './component/controllability-verify/controllability-verify.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '/index', pathMatch: 'full'},
@@ -30,6 +32,8 @@ const routes: Routes = [
   {path: 'public-api/:id', component: PublicApiComponent},
   {path: 'deploy', component: DeployComponent},
   {path: 'verify', component: VerifyComponent},
+  {path: 'controllability-model', component: ControllabilityModelComponent},
+  {path: 'controllability-verify', component: ControllabilityVerifyComponent},
   {path: 'instance-migration-list', component: InstanceMigrationListComponent},
   {path: 'instance-migration/:id', component: InstanceMigrationComponent},
   {path: 'process-log', component: ProcessLogComponent},

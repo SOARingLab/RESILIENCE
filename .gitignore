@@ -33,5 +33,6 @@ build/
 .vscode/
 
 # temp
-/nusmv
-/stnu
+/nusmv/
+/stnu/
+/prism/

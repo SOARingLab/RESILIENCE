@@ -1,0 +1,10 @@
+[
+    {
+        "flowId": "Flow_078lh8w",
+        "condition": "delivery_temperature=0"
+    },
+    {
+        "flowId": "Flow_19dmqro",
+        "condition": "delivery_temperature=1"
+    }
+]

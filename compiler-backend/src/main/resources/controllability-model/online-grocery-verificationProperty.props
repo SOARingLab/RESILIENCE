@@ -1,0 +1,9 @@
+Pmax=? [
+    (G ((s0=2 & item_type=1) => (F (s0=8))))
+    & ((F (s0=10)) <=> (F (s0=11)))
+]
+
+multi(
+    Pmax=? [G ((s0=11) => (customer_satisfaction>=8))],
+    Pmax=? [G ((s0=11) => (cost_indicator<=12))]
+)

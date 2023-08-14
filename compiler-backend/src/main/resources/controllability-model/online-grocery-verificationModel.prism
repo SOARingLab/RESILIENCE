@@ -1,0 +1,210 @@
+mdp
+
+global s0 : [0..11] init 0;
+
+global amount_discount : [0..1000] init 0;
+global item_type : [0..1] init 0;
+global issue_priority : [0..5] init 0;
+global delivery_method : [0..1] init 0;
+global item_quality : [0..5] init 0;
+global delivery_time : [0..1000] init 0;
+
+module M0
+    [] s0=0 -> 1/2 : (s0'=1) & (item_type'=0)
+        + 1/2 : (s0'=1) & (item_type'=1)
+        ;
+    [] s0=1 -> 1/3 : (s0'=2) & (item_quality'=3)
+        + 1/3 : (s0'=2) & (item_quality'=4)
+        + 1/3 : (s0'=2) & (item_quality'=5)
+        ;
+    [] s0=2 -> (s0'=3) & (issue_priority'=3);
+    [] s0=2 -> (s0'=3) & (issue_priority'=4);
+    [] s0=2 -> (s0'=3) & (issue_priority'=5);
+    [] s0=3 -> (s0'=4) & (delivery_method'=0);
+    [] s0=3 -> (s0'=4) & (delivery_method'=1);
+    [] s0=4 & delivery_method=0 -> (s0'=5);
+    [] s0=4 & delivery_method=1 -> (s0'=7);
+    [] s0=5 -> (s0'=6);
+    [] s0=6 -> (s0'=9);
+    [] s0=7 -> (s0'=8);
+    [] s0=8 -> (s0'=9);
+    [] s0=9 -> 1/121 : (s0'=10) & (delivery_time'=0)
+        + 1/121 : (s0'=10) & (delivery_time'=1)
+        + 1/121 : (s0'=10) & (delivery_time'=2)
+        + 1/121 : (s0'=10) & (delivery_time'=3)
+        + 1/121 : (s0'=10) & (delivery_time'=4)
+        + 1/121 : (s0'=10) & (delivery_time'=5)
+        + 1/121 : (s0'=10) & (delivery_time'=6)
+        + 1/121 : (s0'=10) & (delivery_time'=7)
+        + 1/121 : (s0'=10) & (delivery_time'=8)
+        + 1/121 : (s0'=10) & (delivery_time'=9)
+        + 1/121 : (s0'=10) & (delivery_time'=10)
+        + 1/121 : (s0'=10) & (delivery_time'=11)
+        + 1/121 : (s0'=10) & (delivery_time'=12)
+        + 1/121 : (s0'=10) & (delivery_time'=13)
+        + 1/121 : (s0'=10) & (delivery_time'=14)
+        + 1/121 : (s0'=10) & (delivery_time'=15)
+        + 1/121 : (s0'=10) & (delivery_time'=16)
+        + 1/121 : (s0'=10) & (delivery_time'=17)
+        + 1/121 : (s0'=10) & (delivery_time'=18)
+        + 1/121 : (s0'=10) & (delivery_time'=19)
+        + 1/121 : (s0'=10) & (delivery_time'=20)
+        + 1/121 : (s0'=10) & (delivery_time'=21)
+        + 1/121 : (s0'=10) & (delivery_time'=22)
+        + 1/121 : (s0'=10) & (delivery_time'=23)
+        + 1/121 : (s0'=10) & (delivery_time'=24)
+        + 1/121 : (s0'=10) & (delivery_time'=25)
+        + 1/121 : (s0'=10) & (delivery_time'=26)
+        + 1/121 : (s0'=10) & (delivery_time'=27)
+        + 1/121 : (s0'=10) & (delivery_time'=28)
+        + 1/121 : (s0'=10) & (delivery_time'=29)
+        + 1/121 : (s0'=10) & (delivery_time'=30)
+        + 1/121 : (s0'=10) & (delivery_time'=31)
+        + 1/121 : (s0'=10) & (delivery_time'=32)
+        + 1/121 : (s0'=10) & (delivery_time'=33)
+        + 1/121 : (s0'=10) & (delivery_time'=34)
+        + 1/121 : (s0'=10) & (delivery_time'=35)
+        + 1/121 : (s0'=10) & (delivery_time'=36)
+        + 1/121 : (s0'=10) & (delivery_time'=37)
+        + 1/121 : (s0'=10) & (delivery_time'=38)
+        + 1/121 : (s0'=10) & (delivery_time'=39)
+        + 1/121 : (s0'=10) & (delivery_time'=40)
+        + 1/121 : (s0'=10) & (delivery_time'=41)
+        + 1/121 : (s0'=10) & (delivery_time'=42)
+        + 1/121 : (s0'=10) & (delivery_time'=43)
+        + 1/121 : (s0'=10) & (delivery_time'=44)
+        + 1/121 : (s0'=10) & (delivery_time'=45)
+        + 1/121 : (s0'=10) & (delivery_time'=46)
+        + 1/121 : (s0'=10) & (delivery_time'=47)
+        + 1/121 : (s0'=10) & (delivery_time'=48)
+        + 1/121 : (s0'=10) & (delivery_time'=49)
+        + 1/121 : (s0'=10) & (delivery_time'=50)
+        + 1/121 : (s0'=10) & (delivery_time'=51)
+        + 1/121 : (s0'=10) & (delivery_time'=52)
+        + 1/121 : (s0'=10) & (delivery_time'=53)
+        + 1/121 : (s0'=10) & (delivery_time'=54)
+        + 1/121 : (s0'=10) & (delivery_time'=55)
+        + 1/121 : (s0'=10) & (delivery_time'=56)
+        + 1/121 : (s0'=10) & (delivery_time'=57)
+        + 1/121 : (s0'=10) & (delivery_time'=58)
+        + 1/121 : (s0'=10) & (delivery_time'=59)
+        + 1/121 : (s0'=10) & (delivery_time'=60)
+        + 1/121 : (s0'=10) & (delivery_time'=61)
+        + 1/121 : (s0'=10) & (delivery_time'=62)
+        + 1/121 : (s0'=10) & (delivery_time'=63)
+        + 1/121 : (s0'=10) & (delivery_time'=64)
+        + 1/121 : (s0'=10) & (delivery_time'=65)
+        + 1/121 : (s0'=10) & (delivery_time'=66)
+        + 1/121 : (s0'=10) & (delivery_time'=67)
+        + 1/121 : (s0'=10) & (delivery_time'=68)
+        + 1/121 : (s0'=10) & (delivery_time'=69)
+        + 1/121 : (s0'=10) & (delivery_time'=70)
+        + 1/121 : (s0'=10) & (delivery_time'=71)
+        + 1/121 : (s0'=10) & (delivery_time'=72)
+        + 1/121 : (s0'=10) & (delivery_time'=73)
+        + 1/121 : (s0'=10) & (delivery_time'=74)
+        + 1/121 : (s0'=10) & (delivery_time'=75)
+        + 1/121 : (s0'=10) & (delivery_time'=76)
+        + 1/121 : (s0'=10) & (delivery_time'=77)
+        + 1/121 : (s0'=10) & (delivery_time'=78)
+        + 1/121 : (s0'=10) & (delivery_time'=79)
+        + 1/121 : (s0'=10) & (delivery_time'=80)
+        + 1/121 : (s0'=10) & (delivery_time'=81)
+        + 1/121 : (s0'=10) & (delivery_time'=82)
+        + 1/121 : (s0'=10) & (delivery_time'=83)
+        + 1/121 : (s0'=10) & (delivery_time'=84)
+        + 1/121 : (s0'=10) & (delivery_time'=85)
+        + 1/121 : (s0'=10) & (delivery_time'=86)
+        + 1/121 : (s0'=10) & (delivery_time'=87)
+        + 1/121 : (s0'=10) & (delivery_time'=88)
+        + 1/121 : (s0'=10) & (delivery_time'=89)
+        + 1/121 : (s0'=10) & (delivery_time'=90)
+        + 1/121 : (s0'=10) & (delivery_time'=91)
+        + 1/121 : (s0'=10) & (delivery_time'=92)
+        + 1/121 : (s0'=10) & (delivery_time'=93)
+        + 1/121 : (s0'=10) & (delivery_time'=94)
+        + 1/121 : (s0'=10) & (delivery_time'=95)
+        + 1/121 : (s0'=10) & (delivery_time'=96)
+        + 1/121 : (s0'=10) & (delivery_time'=97)
+        + 1/121 : (s0'=10) & (delivery_time'=98)
+        + 1/121 : (s0'=10) & (delivery_time'=99)
+        + 1/121 : (s0'=10) & (delivery_time'=100)
+        + 1/121 : (s0'=10) & (delivery_time'=101)
+        + 1/121 : (s0'=10) & (delivery_time'=102)
+        + 1/121 : (s0'=10) & (delivery_time'=103)
+        + 1/121 : (s0'=10) & (delivery_time'=104)
+        + 1/121 : (s0'=10) & (delivery_time'=105)
+        + 1/121 : (s0'=10) & (delivery_time'=106)
+        + 1/121 : (s0'=10) & (delivery_time'=107)
+        + 1/121 : (s0'=10) & (delivery_time'=108)
+        + 1/121 : (s0'=10) & (delivery_time'=109)
+        + 1/121 : (s0'=10) & (delivery_time'=110)
+        + 1/121 : (s0'=10) & (delivery_time'=111)
+        + 1/121 : (s0'=10) & (delivery_time'=112)
+        + 1/121 : (s0'=10) & (delivery_time'=113)
+        + 1/121 : (s0'=10) & (delivery_time'=114)
+        + 1/121 : (s0'=10) & (delivery_time'=115)
+        + 1/121 : (s0'=10) & (delivery_time'=116)
+        + 1/121 : (s0'=10) & (delivery_time'=117)
+        + 1/121 : (s0'=10) & (delivery_time'=118)
+        + 1/121 : (s0'=10) & (delivery_time'=119)
+        + 1/121 : (s0'=10) & (delivery_time'=120)
+        ;
+    [] s0=10 -> (s0'=11) & (amount_discount'=0);
+    [] s0=10 -> (s0'=11) & (amount_discount'=1);
+    [] s0=10 -> (s0'=11) & (amount_discount'=2);
+    [] s0=10 -> (s0'=11) & (amount_discount'=3);
+    [] s0=10 -> (s0'=11) & (amount_discount'=4);
+    [] s0=10 -> (s0'=11) & (amount_discount'=5);
+    [] s0=10 -> (s0'=11) & (amount_discount'=6);
+    [] s0=10 -> (s0'=11) & (amount_discount'=7);
+    [] s0=10 -> (s0'=11) & (amount_discount'=8);
+    [] s0=10 -> (s0'=11) & (amount_discount'=9);
+    [] s0=10 -> (s0'=11) & (amount_discount'=10);
+    [] s0=10 -> (s0'=11) & (amount_discount'=11);
+    [] s0=10 -> (s0'=11) & (amount_discount'=12);
+    [] s0=10 -> (s0'=11) & (amount_discount'=13);
+    [] s0=10 -> (s0'=11) & (amount_discount'=14);
+    [] s0=10 -> (s0'=11) & (amount_discount'=15);
+    [] s0=10 -> (s0'=11) & (amount_discount'=16);
+    [] s0=10 -> (s0'=11) & (amount_discount'=17);
+    [] s0=10 -> (s0'=11) & (amount_discount'=18);
+    [] s0=10 -> (s0'=11) & (amount_discount'=19);
+    [] s0=10 -> (s0'=11) & (amount_discount'=20);
+    [] s0=10 -> (s0'=11) & (amount_discount'=21);
+    [] s0=10 -> (s0'=11) & (amount_discount'=22);
+    [] s0=10 -> (s0'=11) & (amount_discount'=23);
+    [] s0=10 -> (s0'=11) & (amount_discount'=24);
+    [] s0=10 -> (s0'=11) & (amount_discount'=25);
+    [] s0=10 -> (s0'=11) & (amount_discount'=26);
+    [] s0=10 -> (s0'=11) & (amount_discount'=27);
+    [] s0=10 -> (s0'=11) & (amount_discount'=28);
+    [] s0=10 -> (s0'=11) & (amount_discount'=29);
+    [] s0=10 -> (s0'=11) & (amount_discount'=30);
+    [] s0=10 -> (s0'=11) & (amount_discount'=31);
+    [] s0=10 -> (s0'=11) & (amount_discount'=32);
+    [] s0=10 -> (s0'=11) & (amount_discount'=33);
+    [] s0=10 -> (s0'=11) & (amount_discount'=34);
+    [] s0=10 -> (s0'=11) & (amount_discount'=35);
+    [] s0=10 -> (s0'=11) & (amount_discount'=36);
+    [] s0=10 -> (s0'=11) & (amount_discount'=37);
+    [] s0=10 -> (s0'=11) & (amount_discount'=38);
+    [] s0=10 -> (s0'=11) & (amount_discount'=39);
+    [] s0=10 -> (s0'=11) & (amount_discount'=40);
+    [] s0=10 -> (s0'=11) & (amount_discount'=41);
+    [] s0=10 -> (s0'=11) & (amount_discount'=42);
+    [] s0=10 -> (s0'=11) & (amount_discount'=43);
+    [] s0=10 -> (s0'=11) & (amount_discount'=44);
+    [] s0=10 -> (s0'=11) & (amount_discount'=45);
+    [] s0=10 -> (s0'=11) & (amount_discount'=46);
+    [] s0=10 -> (s0'=11) & (amount_discount'=47);
+    [] s0=10 -> (s0'=11) & (amount_discount'=48);
+    [] s0=10 -> (s0'=11) & (amount_discount'=49);
+    [] s0=10 -> (s0'=11) & (amount_discount'=50);
+    [] s0=11 -> true;
+endmodule
+
+system
+    M0
+endsystem
+

@@ -1,0 +1,50 @@
+[
+    {
+        "nodeId": "Activity_06zlm8c",
+        "variableName": "item_type",
+        "type": "uncontrollable",
+        "value": "",
+        "minValue": "0",
+        "maxValue": "1"
+    },
+    {
+        "nodeId": "Activity_06zlm8c",
+        "variableName": "item_quality",
+        "type": "uncontrollable",
+        "value": "",
+        "minValue": "3",
+        "maxValue": "5"
+    },
+    {
+        "nodeId": "Activity_1x91s1w",
+        "variableName": "issue_priority",
+        "type": "controllable",
+        "value": "",
+        "minValue": "3",
+        "maxValue": "5"
+    },
+    {
+        "nodeId": "Activity_1x91s1w",
+        "variableName": "delivery_temperature",
+        "type": "controllable",
+        "value": "",
+        "minValue": "0",
+        "maxValue": "1"
+    },
+    {
+        "nodeId": "Activity_1fnbzn3",
+        "variableName": "delivery_time",
+        "type": "uncontrollable",
+        "value": "",
+        "minValue": "0",
+        "maxValue": "120"
+    },
+    {
+        "nodeId": "Activity_1r0drlg",
+        "variableName": "discount_amount",
+        "type": "controllable",
+        "value": "",
+        "minValue": "0",
+        "maxValue": "50"
+    }
+]

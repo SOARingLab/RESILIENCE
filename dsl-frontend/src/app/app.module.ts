@@ -56,6 +56,8 @@ import { InstanceMigrationComponent } from './component/instance-migration/insta
 import { InstanceMigrationListComponent } from './component/instance-migration-list/instance-migration-list.component';
 import { ProcessActivityListComponent } from './component/process-activity-list/process-activity-list.component';
 import { ProcessActivityComponent } from './component/process-activity/process-activity.component';
+import { ControllabilityModelComponent } from './component/controllability-model/controllability-model.component';
+import { ControllabilityVerifyComponent } from './component/controllability-verify/controllability-verify.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +77,8 @@ import { ProcessActivityComponent } from './component/process-activity/process-a
     InstanceMigrationListComponent,
     ProcessActivityListComponent,
     ProcessActivityComponent,
+    ControllabilityModelComponent,
+    ControllabilityVerifyComponent,
   ],
   imports: [
     BrowserModule,

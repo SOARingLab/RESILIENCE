@@ -1,0 +1,44 @@
+.label {
+    display: inline-block;
+    width: 100px;
+    font-weight: bold;
+}
+
+.value {
+    display: inline-block;
+    width: 100px;
+}
+
+.label-long {
+    display: inline-block;
+    width: 400px;
+    font-weight: bold;
+}
+
+.value-long {
+    display: inline-block;
+    width: 400px;
+}
+
+.label-area {
+    display: inline-block;
+    width: 400px;
+    font-weight: bold;
+}
+
+.value-area {
+    width: 400px;
+    height: 300px;
+}
+
+.plus {
+    width: 23px;
+}
+
+input {
+    box-sizing: border-box;
+}
+
+.message {
+    color: green;
+}

@@ -1,0 +1,44 @@
+[
+    {
+        "name": "item_type",
+        "type": "integer",
+        "defaultValue": "0",
+        "minValue": "0",
+        "maxValue": "1"
+    },
+    {
+        "name": "item_quality",
+        "type": "integer",
+        "defaultValue": "0",
+        "minValue": "0",
+        "maxValue": "5"
+    },
+    {
+        "name": "issue_priority",
+        "type": "integer",
+        "defaultValue": "0",
+        "minValue": "0",
+        "maxValue": "5"
+    },
+    {
+        "name": "delivery_temperature",
+        "type": "integer",
+        "defaultValue": "0",
+        "minValue": "0",
+        "maxValue": "1"
+    },
+    {
+        "name": "delivery_time",
+        "type": "integer",
+        "defaultValue": "0",
+        "minValue": "0",
+        "maxValue": "1000"
+    },
+    {
+        "name": "discount_amount",
+        "type": "integer",
+        "defaultValue": "0",
+        "minValue": "0",
+        "maxValue": "1000"
+    }
+]

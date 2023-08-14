@@ -1,0 +1,138 @@
+<div class="container">
+    <h1>Controllability Model</h1>
+    <p>
+        <button (click)="save()">Save</button>
+        <button (click)="buildControllability()">Build</button>
+        <button (click)="verifyControllability()">Verify</button>
+    </p>
+    <br>
+
+    <p>
+        <span class="label-area">BPMN start node name</span>
+    </p>
+    <p>
+        <input class="value" [(ngModel)]="controllabilityModel.bpmnStart">
+    </p>
+    <br>
+
+    <p>
+        <span class="label-area">BPMN model</span>
+    </p>
+    <p>
+        <textarea class="value-area" [(ngModel)]="controllabilityModel.bpmnModel"></textarea>
+    </p>
+    <br>
+
+    <p>
+        <span class="label-area">BPMN variable definition</span>
+        <button class="plus" (click)="addBpmnVariableDefinition()">+</button>
+    </p>
+    <!-- <p>
+        <textarea class="value-area" [(ngModel)]="controllabilityModel.bpmnVariableDefinitionList"></textarea>
+    </p> -->
+    <p>
+        <span class="label">name</span>
+        <span class="label">type</span>
+        <span class="label">default value</span>
+        <span class="label">min value</span>
+        <span class="label">max value</span>
+    </p>
+    <p *ngFor="let index of range(bpmnVariableDefinitionList.length)">
+        <input class="value" [(ngModel)]="bpmnVariableDefinitionList[index].name">
+        <input class="value" [(ngModel)]="bpmnVariableDefinitionList[index].type">
+        <input class="value" [(ngModel)]="bpmnVariableDefinitionList[index].defaultValue">
+        <input class="value" [(ngModel)]="bpmnVariableDefinitionList[index].minValue">
+        <input class="value" [(ngModel)]="bpmnVariableDefinitionList[index].maxValue">
+        <button class="plus" (click)="deleteBpmnVariableDefinition(index)">-</button>
+    </p>
+    <br>
+
+    <p>
+        <span class="label-area">BPMN variable condition</span>
+        <button class="plus" (click)="addBpmnVariableCondition()">+</button>
+    </p>
+    <!-- <p>
+        <textarea class="value-area" [(ngModel)]="controllabilityModel.bpmnVariableConditionList"></textarea>
+    </p> -->
+    <p>
+        <span class="label">flow id</span>
+        <span class="label">condition</span>
+    </p>
+    <p *ngFor="let index of range(bpmnVariableConditionList.length)">
+        <input class="value" [(ngModel)]="bpmnVariableConditionList[index].flowId">
+        <input class="value" [(ngModel)]="bpmnVariableConditionList[index].condition">
+        <button class="plus" (click)="deleteBpmnVariableCondition(index)">-</button>
+    </p>
+    <br>
+
+    <p>
+        <span class="label-area">BPMN variable modification</span>
+        <button class="plus" (click)="addBpmnVariableModification()">+</button>
+    </p>
+    <!-- <p>
+        <textarea class="value-area" [(ngModel)]="controllabilityModel.bpmnVariableModificationList"></textarea>
+    </p> -->
+    <p>
+        <span class="label">node id</span>
+        <span class="label">variable name</span>
+        <span class="label">type</span>
+        <span class="label">value</span>
+        <span class="label">min value</span>
+        <span class="label">max value</span>
+    </p>
+    <p *ngFor="let index of range(bpmnVariableModificationList.length)">
+        <input class="value" [(ngModel)]="bpmnVariableModificationList[index].nodeId">
+        <input class="value" [(ngModel)]="bpmnVariableModificationList[index].variableName">
+        <input class="value" [(ngModel)]="bpmnVariableModificationList[index].type">
+        <input class="value" [(ngModel)]="bpmnVariableModificationList[index].value">
+        <input class="value" [(ngModel)]="bpmnVariableModificationList[index].minValue">
+        <input class="value" [(ngModel)]="bpmnVariableModificationList[index].maxValue">
+        <button class="plus" (click)="deleteBpmnVariableModification(index)">-</button>
+    </p>
+    <br>
+
+    <p>
+        <span class="label-area">BPMN KPI formula</span>
+        <button class="plus" (click)="addBpmnKpi()">+</button>
+    </p>
+    <p>
+        <span class="label">name</span>
+        =
+        <span class="label-long">value</span>
+    </p>
+    <p *ngFor="let index of range(bpmnKpiList.length)">
+        <input class="value" [(ngModel)]="bpmnKpiList[index].name">
+        =
+        <input class="value-long" [(ngModel)]="bpmnKpiList[index].value">
+        <button class="plus" (click)="deleteBpmnKpi(index)">-</button>
+    </p>
+    <br>
+
+    <p>
+        <span class="label-area">Verification model</span>
+    </p>
+    <p>
+        <textarea class="value-area" [(ngModel)]="controllabilityModel.verificationModel"></textarea>
+    </p>
+    <br>
+
+    <p>
+        <span class="label-area">Verification property</span>
+    </p>
+    <p>
+        <textarea class="value-area" [(ngModel)]="controllabilityModel.verificationProperty"></textarea>
+    </p>
+    <br>
+
+    <p>
+        <span class="label-area">Verification Output</span>
+    </p>
+    <p>
+        <textarea class="value-area" [(ngModel)]="controllabilityModel.verificationOutput"></textarea>
+    </p>
+    <br>
+
+    <p *ngIf="message" class="message">
+        {{message}}
+    </p>
+</div>

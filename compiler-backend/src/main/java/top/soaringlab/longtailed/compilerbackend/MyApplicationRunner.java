@@ -6,10 +6,13 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
+
+import top.soaringlab.longtailed.compilerbackend.domain.ControllabilityModel;
 import top.soaringlab.longtailed.compilerbackend.domain.ProcessActivity;
 import top.soaringlab.longtailed.compilerbackend.domain.ProcessModel;
 import top.soaringlab.longtailed.compilerbackend.domain.ProcessVariable;
 import top.soaringlab.longtailed.compilerbackend.domain.PublicApi;
+import top.soaringlab.longtailed.compilerbackend.service.ControllabilityModelService;
 import top.soaringlab.longtailed.compilerbackend.service.ProcessActivityService;
 import top.soaringlab.longtailed.compilerbackend.service.ProcessModelService;
 import top.soaringlab.longtailed.compilerbackend.service.ProcessVariableService;
@@ -34,6 +37,9 @@ public class MyApplicationRunner implements ApplicationRunner {
     @Autowired
     private PublicApiService publicApiService;
 
+    @Autowired
+    private ControllabilityModelService controllabilityModelService;
+
     @Value("${compiler-backend-url}")
     private String compilerBackendUrl;
 
@@ -43,6 +49,7 @@ public class MyApplicationRunner implements ApplicationRunner {
         initProcessActivity();
         initProcessVariable();
         initPublicApi();
+        initControllabilityModel();
     }
 
     private void initProcessModel() throws Exception {
@@ -67,6 +74,12 @@ public class MyApplicationRunner implements ApplicationRunner {
         processModel.setData(readResourceFile("process-model/online-grocery-constraint.bpmn"));
         processModelService.save(processModel);
 
+        processModel = new ProcessModel();
+        processModel.setProcessId("online_grocery");
+        processModel.setFilename("online-grocery-controllability.bpmn");
+        processModel.setData(readResourceFile("process-model/online-grocery-controllability.bpmn"));
+        processModelService.save(processModel);
+
         // lng logistics
 
         processModel = new ProcessModel();
@@ -89,7 +102,8 @@ public class MyApplicationRunner implements ApplicationRunner {
     }
 
     private String readResourceFile(String filename) throws Exception {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new ClassPathResource(filename).getInputStream()));
+        BufferedReader bufferedReader = new BufferedReader(
+                new InputStreamReader(new ClassPathResource(filename).getInputStream()));
         StringBuilder stringBuilder = new StringBuilder();
         String line;
         while ((line = bufferedReader.readLine()) != null) {
@@ -309,5 +323,31 @@ public class MyApplicationRunner implements ApplicationRunner {
         publicApi.setOutputFroms(List.of("risk_level"));
         publicApi.setOutputTos(List.of("risk_level"));
         publicApiService.save(publicApi);
+    }
+
+    private void initControllabilityModel() throws Exception {
+
+        // online grocery
+
+        ControllabilityModel controllabilityModel = new ControllabilityModel();
+        controllabilityModel.setProcessId("online_grocery");
+        controllabilityModel.setBpmnStart("Start");
+        controllabilityModel.setBpmnModel(
+                readResourceFile("controllability-model/online-grocery-bpmnModel.bpmn"));
+        controllabilityModel.setBpmnVariableDefinitionList(
+                readResourceFile("controllability-model/online-grocery-bpmnVariableDefinitionList.json"));
+        controllabilityModel.setBpmnVariableConditionList(
+                readResourceFile("controllability-model/online-grocery-bpmnVariableConditionList.json"));
+        controllabilityModel.setBpmnVariableModificationList(
+                readResourceFile("controllability-model/online-grocery-bpmnVariableModificationList.json"));
+        controllabilityModel.setBpmnKpiList(
+                readResourceFile("controllability-model/online-grocery-bpmnKpiList.json"));
+        controllabilityModel.setVerificationModel(
+                readResourceFile("controllability-model/online-grocery-verificationModel.prism"));
+        controllabilityModel.setVerificationProperty(
+                readResourceFile("controllability-model/online-grocery-verificationProperty.props"));
+        controllabilityModel.setVerificationOutput(
+                readResourceFile("controllability-model/online-grocery-verificationOutput.txt"));
+        controllabilityModelService.save(controllabilityModel);
     }
 }

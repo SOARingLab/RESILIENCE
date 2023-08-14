@@ -1,0 +1,61 @@
+mdp
+
+global s0 : [0..3] init 0;
+global s1 : [0..2] init 0;
+global s2 : [0..2] init 0;
+global s3 : [0..3] init 0;
+global s4 : [0..2] init 0;
+global s5 : [0..2] init 0;
+
+
+module M0
+    [] s0=0 -> (s0'=1);
+    [] s0=1 -> (s0'=2)
+        & (s1'=1)
+        & (s2'=1)
+        & (s3'=1)
+        ;
+    [] s0=2
+        & (s1=2)
+        & (s2=2)
+        & (s3=3)
+        -> (s0'=3);
+    [] s0=3 -> true;
+endmodule
+
+module M1
+    [] s1=1 -> (s1'=2);
+    [] s1=2 -> true;
+endmodule
+
+module M2
+    [] s2=1 -> (s2'=2);
+    [] s2=2 -> true;
+endmodule
+
+module M3
+    [] s3=1 -> (s3'=2)
+        & (s4'=1)
+        & (s5'=1)
+        ;
+    [] s3=2
+        & (s4=2)
+        & (s5=2)
+        -> (s3'=3);
+    [] s3=3 -> true;
+endmodule
+
+module M4
+    [] s4=1 -> (s4'=2);
+    [] s4=2 -> true;
+endmodule
+
+module M5
+    [] s5=1 -> (s5'=2);
+    [] s5=2 -> true;
+endmodule
+
+system
+    M0 || M1 || M2 || M3 || M4 || M5
+endsystem
+

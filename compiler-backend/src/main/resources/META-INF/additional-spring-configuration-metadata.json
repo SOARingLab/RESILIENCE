@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "engine-backend-url",
+    "type": "java.lang.String",
+    "description": "A description for 'engine-backend-url'"
+  },
+  {
+    "name": "compiler-backend-url",
+    "type": "java.lang.String",
+    "description": "A description for 'compiler-backend-url'"
+  }
+]}

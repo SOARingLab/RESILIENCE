@@ -1,0 +1,10 @@
+[
+    {
+        "name": "customer_satisfaction",
+        "value": "item_quality+issue_priority-delivery_time/20+discount_amount/10"
+    },
+    {
+        "name": "cost_indicator",
+        "value": "item_quality+issue_priority+discount_amount/10"
+    }
+]

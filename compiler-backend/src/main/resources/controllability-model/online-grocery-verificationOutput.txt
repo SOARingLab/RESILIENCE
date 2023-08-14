@@ -1,0 +1,151 @@
+PRISM
+=====
+
+Version: 4.7
+Date: Mon Aug 14 14:57:07 CST 2023
+Hostname: LAPTOP-17AMR9GE
+Memory limits: cudd=1g, java(heap)=1g
+Command line: prism 'C:\zjw5962\fudan\long-tailed-3\prism\b3ecb218-ccc7-4a52-92f0-ac3bfe37a1b7.prism' 'C:\zjw5962\fudan\long-tailed-3\prism\b3ecb218-ccc7-4a52-92f0-ac3bfe37a1b7.props'
+
+Parsing model file "C:\zjw5962\fudan\long-tailed-3\prism\b3ecb218-ccc7-4a52-92f0-ac3bfe37a1b7.prism"...
+
+Type:        MDP
+Modules:     M0 
+Variables:   s0 item_type delivery_temperature discount_amount issue_priority item_quality delivery_time 
+
+Parsing properties file "C:\zjw5962\fudan\long-tailed-3\prism\b3ecb218-ccc7-4a52-92f0-ac3bfe37a1b7.props"...
+
+2 properties:
+(1) Pmax=? [ (G ((s0=2&item_type=1)=>(F (s0=8))))&((F (s0=10))<=>(F (s0=11))) ]
+(2) multi(Pmax=? [ G ((s0=11)=>(customer_satisfaction>=8)) ], Pmax=? [ G ((s0=11)=>(cost_indicator<=12)) ])
+
+---------------------------------------------------------------------
+
+Model checking: Pmax=? [ (G ((s0=2&item_type=1)=>(F (s0=8))))&((F (s0=10))<=>(F (s0=11))) ]
+
+Building model...
+
+Computing reachable states...
+
+Reachability (BFS): 10 iterations in 0.00 seconds (average 0.000000, setup 0.00)
+
+Time for model construction: 0.095 seconds.
+
+Type:        MDP
+States:      1647 (1 initial)
+Transitions: 2990
+Choices:     2779
+
+Transition matrix: 667 nodes (4 terminal), 2990 minterms, vars: 32r/32c/3nd
+
+Building deterministic automaton (for (G ("L0"=>(F "L1")))&((F "L2")<=>(F "L3")))...
+DRA has 17 states, 1 Rabin pairs.
+Time for deterministic automaton translation: 0.074 seconds.
+
+Constructing MDP-DRA product...
+
+Reachability (BFS): 12 iterations in 0.00 seconds (average 0.000000, setup 0.00)
+Time for product construction: 0.016 seconds.
+
+States:      3663 (1 initial)
+Transitions: 5006
+Choices:     4795
+
+Transition matrix: 1029 nodes (4 terminal), 5006 minterms, vars: 37r/37c/3nd
+
+Finding accepting end components...
+
+Computing reachability probabilities...
+
+Prob0A: 12 iterations in 0.00 seconds (average 0.000083, setup 0.00)
+
+Prob1E: 13 iterations in 0.00 seconds (average 0.000000, setup 0.00)
+
+yes = 3255, no = 408, maybe = 0
+
+Value in the initial state: 1.0
+
+Time for model checking: 0.539 seconds.
+
+Result: 1.0
+
+---------------------------------------------------------------------
+
+Model checking: multi(Pmax=? [ G ((s0=11)=>(customer_satisfaction>=8)) ], Pmax=? [ G ((s0=11)=>(cost_indicator<=12)) ])
+
+Building deterministic Rabin automaton (for G "L0")...
+Taking DRA from library...
+DRA has 2 states, 1 Rabin pairs.Time for Rabin translation: 0.016 seconds.
+
+Constructing MDP-DRA product...
+
+Reachability (BFS): 10 iterations in 0.00 seconds (average 0.000000, setup 0.00)
+States:      1647 (1 initial)
+Transitions: 2990
+Choices:     2779
+
+Transition matrix: 1333 nodes (4 terminal), 2990 minterms, vars: 33r/33c/3nd
+
+Building deterministic Rabin automaton (for G "L0")...
+Taking DRA from library...
+DRA has 2 states, 1 Rabin pairs.Time for Rabin translation: 0.0 seconds.
+
+Constructing MDP-DRA product...
+
+Reachability (BFS): 10 iterations in 0.02 seconds (average 0.001600, setup 0.00)
+States:      1647 (1 initial)
+Transitions: 2990
+Choices:     2779
+
+Transition matrix: 1677 nodes (4 terminal), 2990 minterms, vars: 34r/34c/3nd
+Total time for product construction: 0.033 seconds.
+
+States:      1647 (1 initial)
+Transitions: 2990
+Choices:     2779
+
+Transition matrix: 1677 nodes (4 terminal), 2990 minterms, vars: 34r/34c/3nd
+
+Finding accepting end components for G ((s0=11)=>(customer_satisfaction>=8))...
+Time for end component identification: 0.0 seconds.
+
+Finding accepting end components for G ((s0=11)=>(cost_indicator<=12))...
+Time for end component identification: 0.0 seconds.
+
+Prob0A: 10 iterations in 0.00 seconds (average 0.000000, setup 0.00)
+
+yes = 1304, no = 40, maybe = 303
+
+Computing remaining probabilities...
+Switching engine since only sparse engine currently supports this computation...
+Engine: Sparse
+Optimising weighted sum for probability objective 1/2: weights (1.0, 0.0)
+Iterative method: 11 iterations in 0.00 seconds (average 0.000000, setup 0.00)
+Optimal value for weights [1.000000,0.000000] from initial state: 0.892857
+Computed point: (0.8928571428571426, 0.6428571428571427)
+Optimising weighted sum for probability objective 2/2: weights (0.0, 1.0)
+Iterative method: 11 iterations in 0.00 seconds (average 0.000000, setup 0.00)
+Optimal value for weights [0.000000,1.000000] from initial state: 1.000000
+Computed point: (0.6428571428571427, 0.9999999999999997)
+Optimising weighted sum of objectives: weights (0.5882352941176471, 0.4117647058823529)
+Iterative method: 11 iterations in 0.00 seconds (average 0.000000, setup 0.00)
+Optimal value for weights [0.588235,0.411765] from initial state: 0.834034
+Computed point: (0.8928571428571426, 0.7499999999999998)
+Optimising weighted sum of objectives: weights (0.5, 0.5)
+Iterative method: 11 iterations in 0.00 seconds (average 0.000000, setup 0.00)
+Optimal value for weights [0.500000,0.500000] from initial state: 0.821429
+Computed point: (0.8928571428571426, 0.7499999999999998)
+Optimising weighted sum of objectives: weights (1.0, 0.0)
+Iterative method: 11 iterations in 0.00 seconds (average 0.000000, setup 0.00)
+Optimal value for weights [1.000000,0.000000] from initial state: 0.892857
+Computed point: (0.8928571428571426, 0.6428571428571427)
+The value iteration(s) took 0.017 seconds altogether.
+Number of weight vectors used: 3
+Multi-objective value iterations took 0.017 s.
+
+Value in the initial state: [(0.8928571428571426, 0.7499999999999998), (0.6428571428571427, 0.9999999999999997)]
+
+Time for model checking: 0.45 seconds.
+
+Result: [(0.8928571428571426, 0.7499999999999998), (0.6428571428571427, 0.9999999999999997)]
+
