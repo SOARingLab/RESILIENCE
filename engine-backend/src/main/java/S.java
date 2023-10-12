@@ -26,4 +26,12 @@ public class S {
     public static void deleteProcessInstance(ProcessInstance processInstance) {
         GroovyScript.deleteProcessInstance(processInstance);
     }
+
+    public static void experimentLog(ProcessInstance processInstance, String role, String message) {
+        GroovyScript.experimentLog(processInstance, role, message);
+    }
+
+    public static void experimentMessage(ProcessInstance processInstance, String name) {
+        GroovyScript.experimentMessage(processInstance, name);
+    }
 }

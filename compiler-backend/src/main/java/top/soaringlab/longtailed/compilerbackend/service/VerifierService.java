@@ -1,6 +1,7 @@
 package top.soaringlab.longtailed.compilerbackend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import top.soaringlab.longtailed.compilerbackend.domain.ControllabilityModel;
@@ -21,6 +22,12 @@ public class VerifierService {
 
     @Autowired
     private ProcessVariableService processVariableService;
+
+    @Value("${prism-directory}")
+    private String prismDirectoryName;
+
+    @Value("${prism-program}")
+    private String prismProgramName;
 
     // public Map<String, List<String>> verifyFunctional(String file, String start)
     // throws Exception {
@@ -51,17 +58,23 @@ public class VerifierService {
 
     public ControllabilityModel buildControllability(ControllabilityModel controllabilityModel) throws Exception {
         PrismVerifier prismVerifier = new PrismVerifier();
+        prismVerifier.prismDirectoryName = prismDirectoryName;
+        prismVerifier.prismProgramName = prismProgramName;
         return prismVerifier.build(controllabilityModel);
     }
 
     public ControllabilityModel verifyControllability(ControllabilityModel controllabilityModel) throws Exception {
         PrismVerifier prismVerifier = new PrismVerifier();
+        prismVerifier.prismDirectoryName = prismDirectoryName;
+        prismVerifier.prismProgramName = prismProgramName;
         prismVerifier.build(controllabilityModel);
         return prismVerifier.verify(controllabilityModel);
     }
 
     public void verifyTest(String name) throws Exception {
         PrismVerifier prismVerifier = new PrismVerifier();
+        prismVerifier.prismDirectoryName = prismDirectoryName;
+        prismVerifier.prismProgramName = prismProgramName;
         prismVerifier.verifyTest(name);
     }
 }

@@ -249,6 +249,9 @@ public class PrismVerifier {
         int variableModificationIndex = -1; // if node, bpmnNodeVariableModificationListMap
     }
 
+    public String prismDirectoryName;
+    public String prismProgramName;
+
     private int valueStep = 10;
 
     private String startBpmnNodeId = "";
@@ -935,12 +938,12 @@ public class PrismVerifier {
         propertyBufferedWriter.write(verificationProperty);
         propertyBufferedWriter.close();
 
-        String prismDirectoryName = "C:\\Program Files\\prism-4.7\\bin";
+        // String prismDirectoryName = "C:\\Program Files\\prism-4.7\\bin";
         File prismDirectoryFile = new File(prismDirectoryName);
-        String prismProgramName = "prism.bat";
-        File prismProgramFile = new File(prismDirectoryFile, prismProgramName);
+        // String prismProgramName = "prism.bat";
+        // File prismProgramFile = new File(prismDirectoryFile, prismProgramName);
 
-        String[] runCommand = new String[] { prismProgramFile.getAbsolutePath(),
+        String[] runCommand = new String[] { prismProgramName,
                 modelFile.getAbsolutePath(), propertyFile.getAbsolutePath() };
         Process process = Runtime.getRuntime().exec(runCommand, null, prismDirectoryFile);
 

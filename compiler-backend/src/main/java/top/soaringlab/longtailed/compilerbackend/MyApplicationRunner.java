@@ -142,7 +142,77 @@ public class MyApplicationRunner implements ApplicationRunner {
 
         processActivity = new ProcessActivity();
         processActivity.setProcessId("lng_logistics");
-        processActivity.setName("");
+        processActivity.setName("Disconnect pipes and leave dock");
+        processActivityService.save(processActivity);
+
+        processActivity = new ProcessActivity();
+        processActivity.setProcessId("lng_logistics");
+        processActivity.setName("Change course");
+        processActivityService.save(processActivity);
+
+        processActivity = new ProcessActivity();
+        processActivity.setProcessId("lng_logistics");
+        processActivity.setName("Contact relevant bureaus");
+        processActivityService.save(processActivity);
+
+        processActivity = new ProcessActivity();
+        processActivity.setProcessId("lng_logistics");
+        processActivity.setName("Notify nearby ships");
+        processActivityService.save(processActivity);
+
+        processActivity = new ProcessActivity();
+        processActivity.setProcessId("lng_logistics");
+        processActivity.setName("Give first aid");
+        processActivityService.save(processActivity);
+
+        processActivity = new ProcessActivity();
+        processActivity.setProcessId("lng_logistics");
+        processActivity.setName("Contact first-aid center");
+        processActivityService.save(processActivity);
+
+        processActivity = new ProcessActivity();
+        processActivity.setProcessId("lng_logistics");
+        processActivity.setName("Ventilate");
+        processActivityService.save(processActivity);
+
+        processActivity = new ProcessActivity();
+        processActivity.setProcessId("lng_logistics");
+        processActivity.setName("Close doors and block vents");
+        processActivityService.save(processActivity);
+
+        processActivity = new ProcessActivity();
+        processActivity.setProcessId("lng_logistics");
+        processActivity.setName("Disperse gas");
+        processActivityService.save(processActivity);
+
+        processActivity = new ProcessActivity();
+        processActivity.setProcessId("lng_logistics");
+        processActivity.setName("Put out fire");
+        processActivityService.save(processActivity);
+
+        processActivity = new ProcessActivity();
+        processActivity.setProcessId("lng_logistics");
+        processActivity.setName("Plug leak");
+        processActivityService.save(processActivity);
+
+        processActivity = new ProcessActivity();
+        processActivity.setProcessId("lng_logistics");
+        processActivity.setName("Discharge water");
+        processActivityService.save(processActivity);
+
+        processActivity = new ProcessActivity();
+        processActivity.setProcessId("lng_logistics");
+        processActivity.setName("Spray water curtain");
+        processActivityService.save(processActivity);
+
+        processActivity = new ProcessActivity();
+        processActivity.setProcessId("lng_logistics");
+        processActivity.setName("Transfer goods");
+        processActivityService.save(processActivity);
+
+        processActivity = new ProcessActivity();
+        processActivity.setProcessId("lng_logistics");
+        processActivity.setName("Eject goods");
         processActivityService.save(processActivity);
     }
 

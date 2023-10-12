@@ -755,19 +755,19 @@ public class NusmvVerifier {
             directoryFile.mkdirs();
         }
 
-        String toolName = "NuSMV.exe";
-        File toolFile = new File(directoryFile, toolName);
-        if (!toolFile.exists()) {
-            InputStream inputStream = new ClassPathResource(toolName).getInputStream();
-            FileOutputStream fileOutputStream = new FileOutputStream(toolFile);
-            int len;
-            byte[] b = new byte[1024];
-            while ((len = inputStream.read(b)) != -1) {
-                fileOutputStream.write(b, 0, len);
-            }
-            inputStream.close();
-            fileOutputStream.close();
-        }
+        // String toolName = "NuSMV.exe";
+        // File toolFile = new File(directoryFile, toolName);
+        // if (!toolFile.exists()) {
+        //     InputStream inputStream = new ClassPathResource(toolName).getInputStream();
+        //     FileOutputStream fileOutputStream = new FileOutputStream(toolFile);
+        //     int len;
+        //     byte[] b = new byte[1024];
+        //     while ((len = inputStream.read(b)) != -1) {
+        //         fileOutputStream.write(b, 0, len);
+        //     }
+        //     inputStream.close();
+        //     fileOutputStream.close();
+        // }
 
         String inputFileName = UUID.randomUUID() + ".smv";
         File inputFileFile = new File(directoryFile, inputFileName);
@@ -775,7 +775,12 @@ public class NusmvVerifier {
         bufferedWriter.write(inputFile);
         bufferedWriter.close();
 
-        String[] runCommand = new String[]{toolFile.getAbsolutePath(), inputFileFile.getAbsolutePath()};
+        // String nusmvDirectoryName = "";
+        // File nusmvDirectoryFile = new File(nusmvDirectoryName);
+        String nusmvProgramName = "NuSMV";
+        // File nusmvProgramFile = new File(nusmvDirectoryFile, nusmvProgramName);
+
+        String[] runCommand = new String[]{nusmvProgramName, inputFileFile.getAbsolutePath()};
         Process process = Runtime.getRuntime().exec(runCommand, null, directoryFile);
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         StringBuilder stringBuilder = new StringBuilder();
