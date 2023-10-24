@@ -26,13 +26,19 @@ Our tool can
 
 This project is developed using Java 11, Maven 3.6, Node.js 14.16, and Npm 6.14.
 
+Optional requirements:
+
+- Functional constraints are verified using NuSMV 2.6.0. Install NuSMV and add it to PATH.
+
+- Controllability is checked using PRISM 4.7. Install PRISM, and register the installation path in `compiler-backend\src\main\resources\application.properties`.
+
 ## Run
 
 First, run subproject `engine-backend` with command `mvn spring-boot:run`. It is a process engine powered by Camunda. The process engine can be accessed at http://localhost:8082/ . The default user is admin/admin.
 
 Then, run subproject `compiler-backend` with command `mvn spring-boot:run`. It is our tool to convert process models and verify functional and non-functional constraints.
 
-Next, run subproject `dsl-frontend` with command `npm run start`. It is our tool to annotate process models, bind third-party APIs, specify constraints, and specify value ranges of process variables. The tool can be accessed at http://localhost:8093/ .
+Next, run subproject `dsl-frontend` with command `npm run start` (on the first run, install packages with command `npm install`). It is our tool to annotate process models, bind third-party APIs, specify constraints, and specify value ranges of process variables. The tool can be accessed at http://localhost:8093/ .
 
 This is the homepage of our tool:
 
@@ -109,3 +115,13 @@ Click `Open` to open the process model in `Annotation` or `Constraint`.
 ## Case Study
 
 A case study of an e-commerce scenario is available in directory `case-study`.
+
+## Publications
+
+- Jingwei Zhu, Jun Peng, Liang Zhang, Hong-Linh Truong. Improving Business Process Resilience to Long-tailed Business Events via Low-code. 2022 IEEE International Conference on Web Services (ICWS 2022). IEEE, 2022: 343-348.
+
+- Jingwei Zhu. On Balancing Flexibility and Compliance of Business Processes: Functional Constraints Modeling and Verification. 20th International Conference on Service-Oriented Computing (ICSOC 2022) Workshops. Springer, 2023: 327-333.
+
+- Jun Peng, Jingwei Zhu, Liang Zhang. Generalizing STNU to Model Non-functional Constraints for Business Processes. 2022 CCF International Conference on Service Science (ICSS 2022). IEEE, 2022: 104-111.
+
+- Jingwei Zhu, Jun Peng, Liang Zhang, Hong-Linh Truong. Balancing Flexibility and Compliance in Response to Long-Tailed Business Process Changes. Available at SSRN 4460901, 2023.
