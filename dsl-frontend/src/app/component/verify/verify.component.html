@@ -20,7 +20,7 @@
       <button (click)="explainResultFunctional()">Show conflicts</button>
     </p>
   </div>
-  <h2>SLO</h2>
+  <h2>Non-functional constraint</h2>
   <div *ngIf="resultNonFunctional === 'waiting'">
     <h3>Waiting For Result</h3>
   </div>
@@ -31,12 +31,6 @@
     <h3>Not OK</h3>
     <p>
       <button (click)="explainResultNonFunctional()">Show conflicts</button>
-    </p>
-  </div>
-  <h2>Logic</h2>
-  <div>
-    <p *ngFor="let logicResult of resultNonFunctionalLogic; let i=index">
-      {{logicList[i]}}: {{logicResult}}
     </p>
   </div>
 </div>

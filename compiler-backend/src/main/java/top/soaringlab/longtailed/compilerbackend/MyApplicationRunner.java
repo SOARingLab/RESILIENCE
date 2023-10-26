@@ -99,6 +99,24 @@ public class MyApplicationRunner implements ApplicationRunner {
         processModel.setFilename("lng-logistics-emergency-constraint.bpmn");
         processModel.setData(readResourceFile("process-model/lng-logistics-emergency-constraint.bpmn"));
         processModelService.save(processModel);
+
+        processModel = new ProcessModel();
+        processModel.setProcessId("lng_logistics");
+        processModel.setFilename("lng-logistics-emergency-instance-1.bpmn");
+        processModel.setData(readResourceFile("process-model/lng-logistics-emergency-instance-1.bpmn"));
+        processModelService.save(processModel);
+
+        processModel = new ProcessModel();
+        processModel.setProcessId("lng_logistics");
+        processModel.setFilename("lng-logistics-emergency-instance-2.bpmn");
+        processModel.setData(readResourceFile("process-model/lng-logistics-emergency-instance-2.bpmn"));
+        processModelService.save(processModel);
+
+        processModel = new ProcessModel();
+        processModel.setProcessId("lng_logistics");
+        processModel.setFilename("lng-logistics-emergency-instance-3.bpmn");
+        processModel.setData(readResourceFile("process-model/lng-logistics-emergency-instance-3.bpmn"));
+        processModelService.save(processModel);
     }
 
     private String readResourceFile(String filename) throws Exception {
@@ -265,9 +283,17 @@ public class MyApplicationRunner implements ApplicationRunner {
 
         processVariable = new ProcessVariable();
         processVariable.setProcessId("lng_logistics");
+        processVariable.setName("action");
+        processVariable.setType("String");
+        processVariable.setDefaultValue("\"plug_leak\"");
+        processVariable.setValueRange(List.of("\"move_tanker\"", "\"rescue_the_injured\"", "\"plug_leak\""));
+        processVariableService.save(processVariable);
+
+        processVariable = new ProcessVariable();
+        processVariable.setProcessId("lng_logistics");
         processVariable.setName("tanker_location");
         processVariable.setType("String");
-        processVariable.setDefaultValue("\"in_dock\"");
+        processVariable.setDefaultValue("\"at_sea\"");
         processVariable.setValueRange(List.of("\"in_dock\"", "\"at_sea\""));
         processVariableService.save(processVariable);
 
@@ -311,18 +337,18 @@ public class MyApplicationRunner implements ApplicationRunner {
 
         processVariable = new ProcessVariable();
         processVariable.setProcessId("lng_logistics");
-        processVariable.setName("goods_disposal");
+        processVariable.setName("leak_type");
         processVariable.setType("String");
-        processVariable.setDefaultValue("\"transfer\"");
-        processVariable.setValueRange(List.of("\"transfer\"", "\"eject\""));
+        processVariable.setDefaultValue("\"pipe\"");
+        processVariable.setValueRange(List.of("\"pipe\"", "\"casing\"", "\"massive_leak\""));
         processVariableService.save(processVariable);
 
         processVariable = new ProcessVariable();
         processVariable.setProcessId("lng_logistics");
-        processVariable.setName("leak_type");
+        processVariable.setName("goods_disposal");
         processVariable.setType("String");
-        processVariable.setDefaultValue("\"massive_leak\"");
-        processVariable.setValueRange(List.of("\"pipe\"", "\"casing\"", "\"massive_leak\""));
+        processVariable.setDefaultValue("\"retain\"");
+        processVariable.setValueRange(List.of("\"retain\"", "\"transfer\"", "\"eject\""));
         processVariableService.save(processVariable);
 
         processVariable = new ProcessVariable();
