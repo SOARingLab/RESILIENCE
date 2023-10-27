@@ -1260,7 +1260,7 @@ public class StnuHDCVerifier {
                             }
                         }
 
-                    } else if (end_length - begin_length == 1 && excGatePID.contains(begin_point_id.split("&")[0]) && begin_point_id.split("&")[0].matches("(.*)end") && Objects.equals(begin_point_id, ExcGateTreePid.get(end_point_id).begin_tree_id)) {
+                    } else if (end_length - begin_length == 1 && excGatePID.contains(begin_point_id.split("&")[0]) && begin_point_id.split("&")[0].matches("(.*)end") && ExcGateTreePid.containsKey(end_point_id) && Objects.equals(begin_point_id, ExcGateTreePid.get(end_point_id).begin_tree_id)) {
                         //begin点为父排它网关的end点，另一点为与该end点在同一排它路径中控制流相连接元素的start点
                         threadMatrix[i][j].flow = flowAdjacentMatrix[oi][oj];
                         threadMatrix[i][j].flowType = flowConstraintTypeMatrix[oi][oj];
