@@ -109537,6 +109537,7 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()(function () {
         format: true
       });
       setEncoded(downloadLink, 'diagram.bpmn', xml);
+      localStorage.setItem('file', xml);
     } catch (err) {
       console.log('Error happened saving XML: ', err);
       setEncoded(downloadLink, 'diagram.bpmn', null);
@@ -109577,12 +109578,19 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()(function () {
   if (file) {
     const id = localStorage.getItem("id");
     const text = localStorage.getItem("text");
-    const stringBpmn = "<bpmn:textAnnotation id=\"" + id + "\" />";
-    const stringBpmn2 = "<bpmn2:textAnnotation id=\"" + id + "\" />";
-    const replaceBpmn = "<bpmn:textAnnotation id=\"" + id + "\">\n\t<bpmn:text>" + text + "</bpmn:text>\n</bpmn:textAnnotation>";
-    const replaceBpmn2 = "<bpmn2:textAnnotation id=\"" + id + "\">\n\t<bpmn2:text>" + text + "</bpmn2:text>\n</bpmn2:textAnnotation>";
-    file = file.replace(stringBpmn, replaceBpmn);
-    file = file.replace(stringBpmn2, replaceBpmn2);
+
+    if (id && text) {
+      const stringBpmn = "<bpmn:textAnnotation id=\"" + id + "\" />";
+      const stringBpmn2 = "<bpmn2:textAnnotation id=\"" + id + "\" />";
+      const replaceBpmn = "<bpmn:textAnnotation id=\"" + id + "\">\n\t<bpmn:text>" + text + "</bpmn:text>\n</bpmn:textAnnotation>";
+      const replaceBpmn2 = "<bpmn2:textAnnotation id=\"" + id + "\">\n\t<bpmn2:text>" + text + "</bpmn2:text>\n</bpmn2:textAnnotation>";
+      file = file.replace(stringBpmn, replaceBpmn);
+      file = file.replace(stringBpmn2, replaceBpmn2);
+      localStorage.setItem('file', file);
+      localStorage.removeItem('id');
+      localStorage.removeItem('text');
+    }
+
     openDiagram(file);
   } else {
     localStorage.setItem('filename', 'diagram.bpmn');
