@@ -1,4 +1,4 @@
-# Reaction to Long-tailed Change
+# Reaction to Long-tailed Changes
 
 ## Introduction
 
