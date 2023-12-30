@@ -24,7 +24,7 @@ Our tool can
 
 ## Requirements
 
-This project is developed using Java 11, Maven 3.6, Node.js 14.16, and Npm 6.14.
+This project is developed using Java 11, Maven 3, Node.js 20, and Npm 10.
 
 Optional requirements:
 
