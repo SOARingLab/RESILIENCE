@@ -93,7 +93,6 @@
     </bpmn:scriptTask>
     <bpmn:scriptTask id="Activity_1cxy7bu" name="Change course" constraint:temporal="R:[[5,10]]" scriptFormat="groovy">
       <bpmn:incoming>Flow_1nm241i</bpmn:incoming>
-      <bpmn:incoming>Flow_0fwwo6c</bpmn:incoming>
       <bpmn:outgoing>Flow_0xd5o50</bpmn:outgoing>
       <bpmn:outgoing>Flow_0svuqv5</bpmn:outgoing>
       <bpmn:script>S.info(execution, "Change course");</bpmn:script>
@@ -416,11 +415,9 @@ if (execution.getVariable("wind_direction") == null) {
     <bpmn:sequenceFlow id="Flow_1xfovu8" sourceRef="Activity_1b9uowj" targetRef="Gateway_1jr6bmm" />
     <bpmn:sequenceFlow id="Flow_0u0oyfh" sourceRef="Activity_189r8la" targetRef="Gateway_1jr6bmm" />
     <bpmn:sequenceFlow id="Flow_0fzfzvs" sourceRef="Gateway_058d2nk" targetRef="Activity_01anwbz" />
-    <bpmn:sequenceFlow id="Flow_0fwwo6c" sourceRef="Activity_1b9uowj" targetRef="Activity_1cxy7bu" constraint:declarative="responded existence" />
     <bpmn:scriptTask id="Activity_1b9uowj" name="Eject goods" constraint:temporal="R:[[10,15]]" scriptFormat="groovy">
       <bpmn:incoming>Flow_1pfqq1w</bpmn:incoming>
       <bpmn:outgoing>Flow_1xfovu8</bpmn:outgoing>
-      <bpmn:outgoing>Flow_0fwwo6c</bpmn:outgoing>
       <bpmn:script>S.info(execution, "Eject goods");</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:scriptTask id="Activity_189r8la" name="Transfer goods" constraint:temporal="R:[[5,10]]" scriptFormat="groovy">
@@ -437,7 +434,7 @@ if (execution.getVariable("wind_direction") == null) {
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${goods_disposal == "retain"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1py56kj" sourceRef="Activity_0wrjjvd" targetRef="Gateway_1jr6bmm" />
-    <bpmn:sequenceFlow id="Flow_00q84wm" name="R" sourceRef="Activity_1q9y7yp" targetRef="Gateway_1jr6bmm" constraint:temporal="R:S[20,50]S" />
+    <bpmn:sequenceFlow id="Flow_00q84wm" name="R" sourceRef="Activity_1q9y7yp" targetRef="Gateway_1jr6bmm" constraint:temporal="R:S[10,50]S" />
     <bpmn:textAnnotation id="TextAnnotation_0x6c3a8">
       <bpmn:text>WHEN catch_fire == false
 AND ship_nearby == false
@@ -508,12 +505,6 @@ SET goods_disposal = "eject"</bpmn:text>
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1373" y="1123" width="33" height="14" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0fwwo6c_di" bpmnElement="Flow_0fwwo6c">
-        <di:waypoint x="1530" y="1400" />
-        <di:waypoint x="1890" y="1400" />
-        <di:waypoint x="1890" y="530" />
-        <di:waypoint x="900" y="530" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0fzfzvs_di" bpmnElement="Flow_0fzfzvs">
         <di:waypoint x="1145" y="1260" />
