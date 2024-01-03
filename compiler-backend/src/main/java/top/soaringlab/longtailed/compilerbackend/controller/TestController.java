@@ -1,7 +1,10 @@
 package top.soaringlab.longtailed.compilerbackend.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import top.soaringlab.longtailed.compilerbackend.service.TestService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,16 +12,13 @@ import java.util.Map;
 @RestController
 public class TestController {
 
-    @RequestMapping(value = "/risk-level")
-    public Map<String, String> riskLevel(String region) {
+    @Autowired
+    private TestService testService;
+
+    @RequestMapping(value = "/fake-risk-level")
+    public Map<String, String> getRiskLevel(String region) {
         Map<String, String> result = new HashMap<>();
-        if (region.equals("region_3")) {
-            result.put("risk_level", "high");
-        } else if (region.equals("region_2")) {
-            result.put("risk_level", "medium");
-        } else {
-            result.put("risk_level", "low");
-        }
+        result.put("fake_risk_level", testService.getRiskLevel(region));
         return result;
     }
 }

@@ -459,11 +459,11 @@ SET goods_disposal = "eject"</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:association id="Association_1cdysov" sourceRef="Activity_1b9uowj" targetRef="TextAnnotation_0r82pi0" />
   </bpmn:process>
-  <bpmn:process id="Process_08xvsm9" isExecutable="false" />
-  <bpmn:process id="Process_16q00tx" isExecutable="false" />
-  <bpmn:process id="Process_1t0t4vs" isExecutable="false" />
-  <bpmn:process id="Process_0xz00o8" isExecutable="false" />
-  <bpmn:process id="Process_04s43re" isExecutable="false" />
+  <bpmn:process id="Process_08xvsm9" name="Public Security Emergency Bureau" isExecutable="false" />
+  <bpmn:process id="Process_16q00tx" name="Dalian Maritime Bureau " isExecutable="false" />
+  <bpmn:process id="Process_1t0t4vs" name="Yantai Maritime Bureau" isExecutable="false" />
+  <bpmn:process id="Process_0xz00o8" name="Nearby Ships" isExecutable="false" />
+  <bpmn:process id="Process_04s43re" name="First-aid Center" isExecutable="false" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1feuxod">
       <bpmndi:BPMNShape id="Participant_081xwck_di" bpmnElement="Participant_081xwck" isHorizontal="true">

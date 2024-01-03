@@ -17,6 +17,7 @@ import top.soaringlab.longtailed.compilerbackend.service.ProcessActivityService;
 import top.soaringlab.longtailed.compilerbackend.service.ProcessModelService;
 import top.soaringlab.longtailed.compilerbackend.service.ProcessVariableService;
 import top.soaringlab.longtailed.compilerbackend.service.PublicApiService;
+import top.soaringlab.longtailed.compilerbackend.service.TestService;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -40,6 +41,9 @@ public class MyApplicationRunner implements ApplicationRunner {
     @Autowired
     private ControllabilityModelService controllabilityModelService;
 
+    @Autowired
+    private TestService testService;
+
     @Value("${compiler-backend-url}")
     private String compilerBackendUrl;
 
@@ -50,6 +54,7 @@ public class MyApplicationRunner implements ApplicationRunner {
         initProcessVariable();
         initPublicApi();
         initControllabilityModel();
+        initTest();
     }
 
     private void initProcessModel() throws Exception {
@@ -256,7 +261,7 @@ public class MyApplicationRunner implements ApplicationRunner {
 
         processVariable = new ProcessVariable();
         processVariable.setProcessId("online_grocery");
-        processVariable.setName("risk_level");
+        processVariable.setName("fake_risk_level");
         processVariable.setType("String");
         processVariable.setDefaultValue("random");
         processVariable.setValueRange(List.of("\"low\"", "\"medium\"", "\"high\""));
@@ -411,13 +416,13 @@ public class MyApplicationRunner implements ApplicationRunner {
 
         PublicApi publicApi = new PublicApi();
         publicApi.setProcessId("online_grocery");
-        publicApi.setName("risk level of region");
+        publicApi.setName("fake risk level of region");
         publicApi.setMethod("GET");
-        publicApi.setUrl(compilerBackendUrl + "/risk-level");
+        publicApi.setUrl(compilerBackendUrl + "/fake-risk-level");
         publicApi.setInputFroms(List.of("region"));
         publicApi.setInputTos(List.of("region"));
-        publicApi.setOutputFroms(List.of("risk_level"));
-        publicApi.setOutputTos(List.of("risk_level"));
+        publicApi.setOutputFroms(List.of("fake_risk_level"));
+        publicApi.setOutputTos(List.of("fake_risk_level"));
         publicApiService.save(publicApi);
     }
 
@@ -445,5 +450,20 @@ public class MyApplicationRunner implements ApplicationRunner {
         controllabilityModel.setVerificationOutput(
                 readResourceFile("controllability-model/online-grocery-verificationOutput.txt"));
         controllabilityModelService.save(controllabilityModel);
+    }
+
+    private void initTest() {
+        testService.regionRiskLevel.put("DingHaiLuJieDao", "low");
+        testService.regionRiskLevel.put("PingLiangLuJieDao", "low");
+        testService.regionRiskLevel.put("JiangPuLuJieDao", "low");
+        testService.regionRiskLevel.put("SiPingLuJieDao", "low");
+        testService.regionRiskLevel.put("KongJiangLuJieDao", "medium");
+        testService.regionRiskLevel.put("ChangBaiXinCunJieDao", "medium");
+        testService.regionRiskLevel.put("YanJiXinCunJieDao", "medium");
+        testService.regionRiskLevel.put("YinHangJieDao", "medium");
+        testService.regionRiskLevel.put("DaQiaoJieDao", "high");
+        testService.regionRiskLevel.put("WuJiaoChangJieDao", "high");
+        testService.regionRiskLevel.put("XinJiangWanChengJieDao", "high");
+        testService.regionRiskLevel.put("ChangHaiLuJieDao", "high");
     }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:constraint="http://some-company/schema/bpmn/constraint" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0q4pldu" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.11.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:constraint="http://some-company/schema/bpmn/constraint" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0q4pldu" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.11.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
   <bpmn:collaboration id="Collaboration_0skvm35">
     <bpmn:participant id="Participant_18ri5a1" name="Customer" processRef="Process_1nyigqr" />
     <bpmn:participant id="Participant_1ee8jmu" name="Online grocery" processRef="Process_1izd960" />
@@ -8,7 +8,29 @@
     <bpmn:messageFlow id="Flow_0n0fh5x" name="Payment" sourceRef="Activity_1sxv7q6" targetRef="Event_1tne0jm" />
   </bpmn:collaboration>
   <bpmn:process id="Process_1nyigqr" name="Online grocery customer" isExecutable="true">
-    <bpmn:startEvent id="Event_1uks022" name="Start 1">
+    <bpmn:startEvent id="Event_1uks022" name="Start 1" camunda:formRef="" camunda:formRefBinding="latest">
+      <bpmn:extensionElements>
+        <camunda:formData businessKey="business_key">
+          <camunda:formField id="business_key" label="Business Key" type="string" />
+          <camunda:formField id="district" label="district" type="enum" defaultValue="YangPuQu">
+            <camunda:value id="YangPuQu" name="YangPuQu" />
+          </camunda:formField>
+          <camunda:formField id="region" label="region" type="enum" defaultValue="DingHaiLuJieDao">
+            <camunda:value id="DingHaiLuJieDao" name="DingHaiLuJieDao" />
+            <camunda:value id="PingLiangLuJieDao" name="PingLiangLuJieDao" />
+            <camunda:value id="JiangPuLuJieDao" name="JiangPuLuJieDao" />
+            <camunda:value id="SiPingLuJieDao" name="SiPingLuJieDao" />
+            <camunda:value id="KongJiangLuJieDao" name="KongJiangLuJieDao" />
+            <camunda:value id="ChangBaiXinCunJieDao" name="ChangBaiXinCunJieDao" />
+            <camunda:value id="YanJiXinCunJieDao" name="YanJiXinCunJieDao" />
+            <camunda:value id="YinHangJieDao" name="YinHangJieDao" />
+            <camunda:value id="DaQiaoJieDao" name="DaQiaoJieDao" />
+            <camunda:value id="WuJiaoChangJieDao" name="WuJiaoChangJieDao" />
+            <camunda:value id="XinJiangWanChengJieDao" name="XinJiangWanChengJieDao" />
+            <camunda:value id="ChangHaiLuJieDao" name="ChangHaiLuJieDao" />
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn:extensionElements>
       <bpmn:outgoing>Flow_1pa4vlj</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_1pa4vlj" sourceRef="Event_1uks022" targetRef="Activity_0yryb7d" />
@@ -28,7 +50,7 @@ if (execution.getVariable("delivery_method") == null) {
 if (execution.getVariable("amount") == null) {
     execution.setVariable("amount", 100.0);
 }
-execution.setVariable("risk_level", "low");
+execution.setVariable("fake_risk_level", "low");
 S.info(execution, "----------");
 S.info(execution, "Place order (region = " + region + ")");
 S.sendMessageToStart(execution, "Order received");</bpmn:script>
@@ -49,7 +71,7 @@ S.sendMessage(execution, "Payment received");</bpmn:script>
       <bpmn:incoming>Flow_1wv421j</bpmn:incoming>
     </bpmn:endEvent>
   </bpmn:process>
-  <bpmn:process id="Process_1izd960" isExecutable="true" camunda:isStartableInTasklist="false">
+  <bpmn:process id="Process_1izd960" name="Online grocery shop" isExecutable="true" camunda:isStartableInTasklist="false">
     <bpmn:laneSet id="LaneSet_0zy5dkd">
       <bpmn:lane id="Lane_1ev2hop" name="Shop">
         <bpmn:flowNodeRef>Event_19drawv</bpmn:flowNodeRef>
@@ -73,7 +95,7 @@ S.sendMessage(execution, "Payment received");</bpmn:script>
       <bpmn:outgoing>Flow_08qvpkv</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0vhqg04" messageRef="Message_0fig6wj" />
     </bpmn:startEvent>
-    <bpmn:scriptTask id="Activity_17p63lp" name="Process inventory" constraint:temporal="T:[0,20]" scriptFormat="groovy">
+    <bpmn:scriptTask id="Activity_17p63lp" name="Process inventory" scriptFormat="groovy" constraint:temporal="T:[0,20]">
       <bpmn:incoming>Flow_08qvpkv</bpmn:incoming>
       <bpmn:outgoing>Flow_169a07k</bpmn:outgoing>
       <bpmn:outgoing>Flow_0vlu2tr</bpmn:outgoing>
@@ -85,14 +107,14 @@ if (order_status == "canceled") {
     S.info(execution, "Process inventory");
 }</bpmn:script>
     </bpmn:scriptTask>
-    <bpmn:scriptTask id="Activity_0d00975" name="Deliver goods" constraint:temporal="T:[[0,25]]" scriptFormat="groovy">
+    <bpmn:scriptTask id="Activity_0d00975" name="Deliver goods" scriptFormat="groovy" constraint:temporal="T:[[0,25]]">
       <bpmn:incoming>Flow_169a07k</bpmn:incoming>
       <bpmn:outgoing>Flow_187e7sp</bpmn:outgoing>
       <bpmn:outgoing>Flow_1ansllb</bpmn:outgoing>
       <bpmn:script>S.info(execution, "Deliver goods (delivery_method = " + delivery_method + ")");
 S.sendMessage(execution, "Goods received");</bpmn:script>
     </bpmn:scriptTask>
-    <bpmn:scriptTask id="Activity_105x9s9" name="Confirm delivery" constraint:temporal="T:[0,30]" scriptFormat="groovy">
+    <bpmn:scriptTask id="Activity_105x9s9" name="Confirm delivery" scriptFormat="groovy" constraint:temporal="T:[0,30]">
       <bpmn:incoming>Flow_187e7sp</bpmn:incoming>
       <bpmn:outgoing>Flow_1iqyzuo</bpmn:outgoing>
       <bpmn:script>S.info(execution, "Confirm delivery");</bpmn:script>
@@ -102,7 +124,7 @@ S.sendMessage(execution, "Goods received");</bpmn:script>
       <bpmn:outgoing>Flow_1fx9gvd</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0zp8ujk" messageRef="Message_0m4ocql" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:scriptTask id="Activity_06f2qgl" name="Process payment" constraint:temporal="T:[[0,10]]" scriptFormat="groovy">
+    <bpmn:scriptTask id="Activity_06f2qgl" name="Process payment" scriptFormat="groovy" constraint:temporal="T:[[0,10]]">
       <bpmn:incoming>Flow_1fx9gvd</bpmn:incoming>
       <bpmn:incoming>Flow_0vlu2tr</bpmn:incoming>
       <bpmn:incoming>Flow_1ansllb</bpmn:incoming>
@@ -115,10 +137,10 @@ S.sendMessage(execution, "Goods received");</bpmn:script>
     <bpmn:sequenceFlow id="Flow_0vlu2tr" name="[0,120]" sourceRef="Activity_17p63lp" targetRef="Activity_06f2qgl" constraint:temporal="T:S[0,120]E" constraint:temporalColor="#0080FF" />
     <bpmn:sequenceFlow id="Flow_1ansllb" sourceRef="Activity_0d00975" targetRef="Activity_06f2qgl" constraint:declarative="response" />
     <bpmn:textAnnotation id="TextAnnotation_1m5jswt">
-      <bpmn:text>WHEN risk_level == "high"
+      <bpmn:text>WHEN fake_risk_level == "high"
 SET order_status = "canceled"
 ABORT
-WHEN risk_level == "medium"
+WHEN fake_risk_level == "medium"
 SET delivery_method = "contactless_locker"</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:association id="Association_1yh0pd9" sourceRef="Activity_17p63lp" targetRef="TextAnnotation_1m5jswt" />
