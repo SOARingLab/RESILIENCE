@@ -50,27 +50,40 @@ public class SimpleTranslatorVisitor extends SimpleBaseVisitor<String> {
     @Override
     public String visitSet(SimpleParser.SetContext ctx) {
         StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("S.info(execution, \"Annotation (SET ").append(ctx.operand1.getText()).append(" = ").append(removeQuotation(ctx.operand2.getText())).append(")\");\n");
         stringBuilder.append("execution.setVariable(\"").append(ctx.operand1.getText()).append("\", ").append(ctx.operand2.getText()).append(");");
         return stringBuilder.toString();
     }
 
     @Override
     public String visitInsert(SimpleParser.InsertContext ctx) {
-        return null;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("S.info(execution, \"Annotation (INSERT ").append(removeQuotation(ctx.operand.getText())).append(" ").append(ctx.operator.getText()).append(")\");");
+        return stringBuilder.toString();
     }
 
     @Override
     public String visitSkip(SimpleParser.SkipContext ctx) {
-        return null;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("S.info(execution, \"Annotation (SKIP)\");");
+        return stringBuilder.toString();
     }
 
     @Override
     public String visitReplace(SimpleParser.ReplaceContext ctx) {
-        return null;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("S.info(execution, \"Annotation (REPLACE ").append(removeQuotation(ctx.operand.getText())).append(")\");");
+        return stringBuilder.toString();
     }
 
     @Override
     public String visitAbort(SimpleParser.AbortContext ctx) {
-        return null;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("S.info(execution, \"Annotation (ABORT)\");");
+        return stringBuilder.toString();
+    }
+
+    private String removeQuotation(String s) {
+        return s.replace("\"", "");
     }
 }

@@ -756,6 +756,7 @@ public class Compiler {
         }
         result += "def result = slurper.parseText(connection.inputStream.getText());\n";
         for (int i = 0; i < publicApi.getOutputFroms().size(); i++) {
+            result += "S.info(" + scriptContext + ", \"Third-party API (" + publicApi.getOutputTos().get(i) + " = \" + result." + publicApi.getOutputFroms().get(i) + " + \")\");\n";
             result += scriptContext + ".setVariable(\"" + publicApi.getOutputTos().get(i) + "\", result." + publicApi.getOutputFroms().get(i) + ");\n";
         }
         return result;
