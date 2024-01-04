@@ -63,6 +63,18 @@ public class MyApplicationRunner implements ApplicationRunner {
 
         ProcessModel processModel = new ProcessModel();
         processModel.setProcessId("online_grocery");
+        processModel.setFilename("online-grocery-customer.bpmn");
+        processModel.setData(readResourceFile("process-model/online-grocery-customer.bpmn"));
+        processModelService.save(processModel);
+
+        processModel = new ProcessModel();
+        processModel.setProcessId("online_grocery");
+        processModel.setFilename("online-grocery-shop.bpmn");
+        processModel.setData(readResourceFile("process-model/online-grocery-shop.bpmn"));
+        processModelService.save(processModel);
+
+        processModel = new ProcessModel();
+        processModel.setProcessId("online_grocery");
         processModel.setFilename("online-grocery.bpmn");
         processModel.setData(readResourceFile("process-model/online-grocery.bpmn"));
         processModelService.save(processModel);
