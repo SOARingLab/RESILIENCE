@@ -44,9 +44,9 @@ This is the homepage of our tool:
 
 ![dsl-frontend-index.png](image/dsl-frontend.png)
 
-### Process ID
+### Scenarios
 
-`Process ID` determines the business process application to react to long-tailed changes. We have two example applications: `online_grocery` and `lng_logistics`.
+`Scenarios` is to store business process scenarios to react to long-tailed changes. We have two example scenarios: `online_grocery` and `lng_logistics`. Choose one in `Current scenario`.
 
 ### Annotation
 
@@ -74,9 +74,9 @@ Usage:
 
 - Open a process model. Click `Choose File` to choose a .bpmn file and click `Open` to open the process model. An example is `process-example/online-grocery-constraint.bpmn`.
 
-- Specify a functional constraint. Draw a link between two activities and set the relation in `Declarative` in the property panel.
+- Specify a functional constraint. Draw a link between two activities and set the relation in `Functional constraint` in the property panel.
 
-- Specify a non-functional constraint. Choose an activity and set the duration in `Temporal` in the property panel. Draw a link between two activities and set the constraint in `Temporal` in the property panel.
+- Specify a non-functional constraint. Choose an activity and set the duration in `SLO / proposition` in the property panel. Draw a link between two activities and set the constraint in `SLO / proposition` in the property panel.
 
 - Verify the constraints. Set the start node name and click `Verify`.
 

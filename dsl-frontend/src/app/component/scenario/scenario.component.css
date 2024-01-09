@@ -8,3 +8,11 @@
     display: inline-block;
     width: 200px;
 }
+
+.plus {
+    width: 23px;
+}
+
+.message {
+    color: green;
+}

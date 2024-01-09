@@ -1,0 +1,16 @@
+<div class="container">
+    <h1>Scenarios</h1>
+    <p>
+        <button (click)="save()">Save</button>
+    </p>
+    <p>
+        <button class="plus" (click)="addProcessId()">+</button>
+    </p>
+    <p *ngFor="let index of range(scenario.processIds.length)">
+        <input class="value" [(ngModel)]="scenario.processIds[index]">
+        <button class="plus" (click)="deleteProcessId(index)">-</button>
+    </p>
+    <p *ngIf="message" class="message">
+        {{message}}
+    </p>
+</div>

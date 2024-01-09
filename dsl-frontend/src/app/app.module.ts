@@ -58,6 +58,7 @@ import { ProcessActivityListComponent } from './component/process-activity-list/
 import { ProcessActivityComponent } from './component/process-activity/process-activity.component';
 import { ControllabilityModelComponent } from './component/controllability-model/controllability-model.component';
 import { ControllabilityVerifyComponent } from './component/controllability-verify/controllability-verify.component';
+import { ScenarioComponent } from './component/scenario/scenario.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +80,7 @@ import { ControllabilityVerifyComponent } from './component/controllability-veri
     ProcessActivityComponent,
     ControllabilityModelComponent,
     ControllabilityVerifyComponent,
+    ScenarioComponent,
   ],
   imports: [
     BrowserModule,

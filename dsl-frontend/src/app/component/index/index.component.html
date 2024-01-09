@@ -1,8 +1,11 @@
 <div class="container">
-  <h1>Reaction to Long-tailed Change</h1>
+  <h1>Reaction to Long-tailed Changes</h1>
+  <p><a routerLink="/scenario">Scenarios</a></p>
   <p>
-    Process ID: <input [(ngModel)]="processId">
-    <button (click)="setProcessId()">Save</button>
+    Current scenario:
+    <select [(ngModel)]="processId" (ngModelChange)="setProcessId()">
+      <option *ngFor="let p of scenario.processIds">{{p}}</option>
+    </select>
   </p>
   <p><a href="/assets/public-2/index.html">Annotation & Constraint</a></p>
   <!--  <p><a href="/assets/public/index.html">Annotation</a></p>-->

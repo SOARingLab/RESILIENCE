@@ -17,11 +17,13 @@ import {ProcessActivityListComponent} from "./component/process-activity-list/pr
 import {ProcessActivityComponent} from "./component/process-activity/process-activity.component";
 import {ControllabilityModelComponent} from './component/controllability-model/controllability-model.component';
 import {ControllabilityVerifyComponent} from './component/controllability-verify/controllability-verify.component';
+import { ScenarioComponent } from './component/scenario/scenario.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '/index', pathMatch: 'full'},
   {path: 'index', component: IndexComponent},
   {path: 'editor', component: EditorComponent},
+  {path: 'scenario', component: ScenarioComponent},
   {path: 'process-model-list', component: ProcessModelListComponent},
   {path: 'process-model/:id', component: ProcessModelComponent},
   {path: 'process-activity-list', component: ProcessActivityListComponent},

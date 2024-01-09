@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Scenario } from 'src/app/model/scenario';
+import { ScenarioService } from 'src/app/service/scenario.service';
 
 @Component({
   selector: 'app-index',
@@ -8,15 +10,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class IndexComponent implements OnInit {
 
+  scenario: Scenario = new Scenario();
   processId = '';
 
   constructor(
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private scenarioService: ScenarioService
   ) {
   }
 
   ngOnInit(): void {
-    this.getProcessId();
+    this.getScenario();
+    // this.getProcessId();
+  }
+
+  getScenario() {
+    this.scenarioService.findAll().subscribe(scenarios => {
+      this.scenario = scenarios[0];
+      this.getProcessId();
+    });
   }
 
   getProcessId() {

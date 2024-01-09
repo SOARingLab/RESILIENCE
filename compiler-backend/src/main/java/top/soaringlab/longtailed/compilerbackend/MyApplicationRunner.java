@@ -12,11 +12,13 @@ import top.soaringlab.longtailed.compilerbackend.domain.ProcessActivity;
 import top.soaringlab.longtailed.compilerbackend.domain.ProcessModel;
 import top.soaringlab.longtailed.compilerbackend.domain.ProcessVariable;
 import top.soaringlab.longtailed.compilerbackend.domain.PublicApi;
+import top.soaringlab.longtailed.compilerbackend.domain.Scenario;
 import top.soaringlab.longtailed.compilerbackend.service.ControllabilityModelService;
 import top.soaringlab.longtailed.compilerbackend.service.ProcessActivityService;
 import top.soaringlab.longtailed.compilerbackend.service.ProcessModelService;
 import top.soaringlab.longtailed.compilerbackend.service.ProcessVariableService;
 import top.soaringlab.longtailed.compilerbackend.service.PublicApiService;
+import top.soaringlab.longtailed.compilerbackend.service.ScenarioService;
 import top.soaringlab.longtailed.compilerbackend.service.TestService;
 
 import java.io.BufferedReader;
@@ -25,6 +27,9 @@ import java.util.List;
 
 @Component
 public class MyApplicationRunner implements ApplicationRunner {
+
+    @Autowired
+    private ScenarioService scenarioService;
 
     @Autowired
     private ProcessModelService processModelService;
@@ -49,12 +54,19 @@ public class MyApplicationRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        initScenario();
         initProcessModel();
         initProcessActivity();
         initProcessVariable();
         initPublicApi();
         initControllabilityModel();
         initTest();
+    }
+
+    private void initScenario() {
+        Scenario scenario = new Scenario();
+        scenario.setProcessIds(List.of("online_grocery", "lng_logistics"));
+        scenarioService.save(scenario);
     }
 
     private void initProcessModel() throws Exception {
