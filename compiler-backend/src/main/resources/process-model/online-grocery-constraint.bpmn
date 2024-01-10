@@ -70,7 +70,7 @@ S.sendMessageToStart(execution, "Order received");</bpmn:script>
 S.info(execution, "Pay for goods");
 S.sendMessage(execution, "Payment received");</bpmn:script>
     </bpmn:scriptTask>
-    <bpmn:userTask id="Activity_11o5kaa" name="Pay for goods" camunda:assignee="admin">
+    <bpmn:userTask id="Activity_11o5kaa" name="Confirm goods" camunda:assignee="admin">
       <bpmn:incoming>Flow_0ianl30</bpmn:incoming>
       <bpmn:outgoing>Flow_1ls4e6g</bpmn:outgoing>
     </bpmn:userTask>
@@ -158,6 +158,10 @@ SET delivery_method = "contactless_locker"</bpmn:text>
       <bpmndi:BPMNShape id="Participant_18ri5a1_di" bpmnElement="Participant_18ri5a1" isHorizontal="true">
         <dc:Bounds x="160" y="110" width="760" height="160" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0nkun43_di" bpmnElement="Flow_1ls4e6g">
+        <di:waypoint x="680" y="190" />
+        <di:waypoint x="700" y="190" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1wv421j_di" bpmnElement="Flow_1wv421j">
         <di:waypoint x="800" y="190" />
         <di:waypoint x="842" y="190" />
@@ -173,10 +177,6 @@ SET delivery_method = "contactless_locker"</bpmn:text>
       <bpmndi:BPMNEdge id="Flow_1pa4vlj_di" bpmnElement="Flow_1pa4vlj">
         <di:waypoint x="268" y="190" />
         <di:waypoint x="310" y="190" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0nkun43_di" bpmnElement="Flow_1ls4e6g">
-        <di:waypoint x="680" y="190" />
-        <di:waypoint x="700" y="190" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_1uks022_di" bpmnElement="Event_1uks022">
         <dc:Bounds x="232" y="172" width="36" height="36" />

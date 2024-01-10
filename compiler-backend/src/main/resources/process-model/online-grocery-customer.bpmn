@@ -71,7 +71,7 @@ S.info(execution, "Pay for goods");
 S.sendMessage(execution, "Payment received");</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:sequenceFlow id="Flow_1ls4e6g" sourceRef="Activity_11o5kaa" targetRef="Activity_1sxv7q6" />
-    <bpmn:userTask id="Activity_11o5kaa" name="Pay for goods" camunda:assignee="admin">
+    <bpmn:userTask id="Activity_11o5kaa" name="Confirm goods" camunda:assignee="admin">
       <bpmn:incoming>Flow_0ianl30</bpmn:incoming>
       <bpmn:outgoing>Flow_1ls4e6g</bpmn:outgoing>
     </bpmn:userTask>
@@ -137,11 +137,11 @@ S.sendMessage(execution, "Payment received");</bpmn:script>
       <bpmndi:BPMNShape id="Participant_1ee8jmu_di" bpmnElement="Participant_1ee8jmu" isHorizontal="true">
         <dc:Bounds x="160" y="350" width="760" height="60" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_0nz8wsl_di" bpmnElement="Flow_0nz8wsl">
-        <di:waypoint x="360" y="230" />
-        <di:waypoint x="360" y="350" />
+      <bpmndi:BPMNEdge id="Flow_0n0fh5x_di" bpmnElement="Flow_0n0fh5x">
+        <di:waypoint x="750" y="230" />
+        <di:waypoint x="750" y="350" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="325" y="292" width="30" height="14" />
+          <dc:Bounds x="697" y="292" width="45" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1fj9hpi_di" bpmnElement="Flow_1fj9hpi">
@@ -151,11 +151,11 @@ S.sendMessage(execution, "Payment received");</bpmn:script>
           <dc:Bounds x="463" y="292" width="33" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0n0fh5x_di" bpmnElement="Flow_0n0fh5x">
-        <di:waypoint x="750" y="230" />
-        <di:waypoint x="750" y="350" />
+      <bpmndi:BPMNEdge id="Flow_0nz8wsl_di" bpmnElement="Flow_0nz8wsl">
+        <di:waypoint x="360" y="230" />
+        <di:waypoint x="360" y="350" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="697" y="292" width="45" height="14" />
+          <dc:Bounds x="325" y="292" width="30" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
