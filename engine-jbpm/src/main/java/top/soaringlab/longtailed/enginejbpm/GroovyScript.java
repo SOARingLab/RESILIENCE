@@ -39,7 +39,7 @@ public class GroovyScript {
     public void sendMessageToStart(ProcessContext processContext, String name) {
         String startProcessId = (String) processContext.getVariable("startProcessId");
 
-        List<String> variableNames = Arrays.asList("S", "order_status", "region", "delivery_method", "amount", "risk_level");
+        List<String> variableNames = Arrays.asList("S", "order_status", "region", "delivery_method", "amount", "fake_risk_level");
         Map<String, Object> processVariables = getProcessVariables(processContext, variableNames);
 
         KieRuntime kieRuntime = processContext.getKieRuntime();

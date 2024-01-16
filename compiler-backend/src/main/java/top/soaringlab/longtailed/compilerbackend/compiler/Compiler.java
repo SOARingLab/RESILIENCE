@@ -227,14 +227,14 @@ public class Compiler {
 
                     List<String> sequenceFlowInIdList = insertBeforeNode(document, task, splitGatewayId, endFlowId);
 
-                    Element splitGateway = createExclusiveGateway(document, splitGatewayId, sequenceFlowInIdList, List.of(defaultFlowId));
+                    Element splitGateway = createSplitGateway(document, splitGatewayId, sequenceFlowInIdList, List.of(defaultFlowId));
                     splitGateway.setAttribute("default", defaultFlowId);
                     process.insertBefore(splitGateway, task);
 
                     Element defaultFlow = createSequenceFlow(document, defaultFlowId, splitGatewayId, mergeGatewayId);
                     process.insertBefore(defaultFlow, task);
 
-                    Element mergeGateway = createExclusiveGateway(document, mergeGatewayId, List.of(defaultFlowId), List.of(endFlowId));
+                    Element mergeGateway = createMergeGateway(document, mergeGatewayId, List.of(defaultFlowId), List.of(endFlowId));
                     process.insertBefore(mergeGateway, task);
 
                     Element endFlow = createSequenceFlow(document, endFlowId, mergeGatewayId, taskId);
@@ -264,14 +264,14 @@ public class Compiler {
                     Element beginFlow = createSequenceFlow(document, beginFlowId, taskId, splitGatewayId);
                     process.insertBefore(beginFlow, task);
 
-                    Element splitGateway = createExclusiveGateway(document, splitGatewayId, List.of(beginFlowId), List.of(defaultFlowId));
+                    Element splitGateway = createSplitGateway(document, splitGatewayId, List.of(beginFlowId), List.of(defaultFlowId));
                     splitGateway.setAttribute("default", defaultFlowId);
                     process.insertBefore(splitGateway, task);
 
                     Element defaultFlow = createSequenceFlow(document, defaultFlowId, splitGatewayId, mergeGatewayId);
                     process.insertBefore(defaultFlow, task);
 
-                    Element mergeGateway = createExclusiveGateway(document, mergeGatewayId, List.of(defaultFlowId), sequenceFlowOutIdList);
+                    Element mergeGateway = createMergeGateway(document, mergeGatewayId, List.of(defaultFlowId), sequenceFlowOutIdList);
                     process.insertBefore(mergeGateway, task);
 
                     edgeReference(document, beginFlowId, taskId);
@@ -296,7 +296,7 @@ public class Compiler {
                     List<String> sequenceFlowInIdList = insertBeforeNode(document, task, splitGatewayId, inFlowId);
                     List<String> sequenceFlowOutIdList = insertAfterNode(document, task, outFlowId, mergeGatewayId);
 
-                    Element splitGateway = createExclusiveGateway(document, splitGatewayId, sequenceFlowInIdList, List.of(inFlowId));
+                    Element splitGateway = createSplitGateway(document, splitGatewayId, sequenceFlowInIdList, List.of(inFlowId));
                     splitGateway.setAttribute("default", inFlowId);
                     process.insertBefore(splitGateway, task);
 
@@ -306,7 +306,7 @@ public class Compiler {
                     Element outFlow = createSequenceFlow(document, outFlowId, taskId, mergeGatewayId);
                     process.insertBefore(outFlow, task);
 
-                    Element mergeGateway = createExclusiveGateway(document, mergeGatewayId, List.of(outFlowId), sequenceFlowOutIdList);
+                    Element mergeGateway = createMergeGateway(document, mergeGatewayId, List.of(outFlowId), sequenceFlowOutIdList);
                     process.insertBefore(mergeGateway, task);
 
                     shapeReference(document, splitGatewayId, taskId);
@@ -447,20 +447,28 @@ public class Compiler {
             if (i++ == 0) {
                 Element conditionExpression = document.createElement(xmlnsBpmn + "conditionExpression");
                 conditionExpression.setAttribute("xsi:type", xmlnsBpmn + "tFormalExpression");
-                conditionExpression.setTextContent(condition);
+                if (processEngine.equals("jbpm")) {
+                    conditionExpression.setTextContent(condition);
+                } else {
+                    conditionExpression.setTextContent("${" + condition + "}");
+                }
                 currentFlow.appendChild(conditionExpression);
             }
             process.insertBefore(currentFlow, mergeGateway);
             edgeReference(document, currentFlowId, mergeGatewayId);
 
+            Element newTask;
             if (taskName.equals("compiler_ABORT")) {
-                Element endEvent = createEndEvent(document, newTaskId, currentFlowId);
-                process.insertBefore(endEvent, mergeGateway);
-                shapeReference(document, newTaskId, mergeGatewayId);
-                return;
-            }
+                String scirpt = "S.deleteProcessInstance(" + scriptContext + ");";
+                newTask = createScriptTask(document, newTaskId, List.of(currentFlowId), List.of(newFlowId), scirpt);
 
-            Element newTask = cloneTask(document, taskId, currentFlowId, newFlowId);
+                // Element endEvent = createEndEvent(document, newTaskId, currentFlowId);
+                // process.insertBefore(endEvent, mergeGateway);
+                // shapeReference(document, newTaskId, mergeGatewayId);
+                // return;
+            } else {
+                newTask = cloneTask(document, taskId, currentFlowId, newFlowId);
+            }
             newTask.setAttribute("id", newTaskId);
             process.insertBefore(newTask, mergeGateway);
             shapeReference(document, newTaskId, mergeGatewayId);
@@ -550,6 +558,22 @@ public class Compiler {
         scriptTask.appendChild(script);
 
         return scriptTask;
+    }
+
+    private Element createSplitGateway(Document document, String id, List<String> sequenceFlowInIdList, List<String> sequenceFlowOutIdList) {
+        Element splitGateway = createExclusiveGateway(document, id, sequenceFlowInIdList, sequenceFlowOutIdList);
+        if (processEngine.equals("jbpm")) {
+            splitGateway.setAttribute("gatewayDirection", "Diverging");
+        }
+        return splitGateway;
+    }
+
+    private Element createMergeGateway(Document document, String id, List<String> sequenceFlowInIdList, List<String> sequenceFlowOutIdList) {
+        Element mergeGateway = createExclusiveGateway(document, id, sequenceFlowInIdList, sequenceFlowOutIdList);
+        if (processEngine.equals("jbpm")) {
+            mergeGateway.setAttribute("gatewayDirection", "Converging");
+        }
+        return mergeGateway;
     }
 
     private Element createExclusiveGateway(Document document, String id, List<String> sequenceFlowInIdList, List<String> sequenceFlowOutIdList) {
@@ -723,6 +747,7 @@ public class Compiler {
         String result = "S.callPublicApi(" + scriptContext + ", " + publicApi.getId() + ");\n";
         for (String variable : publicApi.getOutputFroms()) {
             result += variable + " = " + scriptContext + ".getVariable(\"" + variable + "\");\n";
+            result += "S.info(" + scriptContext + ", \"Third-party API (" + variable + " = \" + " + variable + " + \")\");\n";
         }
         return result;
     }

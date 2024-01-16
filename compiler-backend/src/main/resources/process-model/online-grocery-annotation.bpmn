@@ -35,7 +35,7 @@
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_1pa4vlj" sourceRef="Event_1uks022" targetRef="Activity_0yryb7d" />
     <bpmn:sequenceFlow id="Flow_17hy1ta" sourceRef="Activity_0yryb7d" targetRef="Event_0z5mkyq" />
-    <bpmn:sequenceFlow id="Flow_0ianl30" sourceRef="Event_0z5mkyq" targetRef="Activity_11o5kaa" />
+    <bpmn:sequenceFlow id="Flow_0ianl30" sourceRef="Event_0z5mkyq" targetRef="Activity_1sxv7q6" />
     <bpmn:sequenceFlow id="Flow_1wv421j" sourceRef="Activity_1sxv7q6" targetRef="Event_04iot6i" />
     <bpmn:scriptTask id="Activity_0yryb7d" name="Place order" scriptFormat="groovy">
       <bpmn:incoming>Flow_1pa4vlj</bpmn:incoming>
@@ -60,21 +60,16 @@ S.sendMessageToStart(execution, "Order received");</bpmn:script>
       <bpmn:outgoing>Flow_0ianl30</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_10sip0p" messageRef="Message_1wdhdkr" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:endEvent id="Event_04iot6i" name="End">
-      <bpmn:incoming>Flow_1wv421j</bpmn:incoming>
-    </bpmn:endEvent>
     <bpmn:scriptTask id="Activity_1sxv7q6" name="Pay for goods" scriptFormat="groovy">
-      <bpmn:incoming>Flow_1ls4e6g</bpmn:incoming>
+      <bpmn:incoming>Flow_0ianl30</bpmn:incoming>
       <bpmn:outgoing>Flow_1wv421j</bpmn:outgoing>
       <bpmn:script>// S.info(execution, "Goods received");
 S.info(execution, "Pay for goods");
 S.sendMessage(execution, "Payment received");</bpmn:script>
     </bpmn:scriptTask>
-    <bpmn:userTask id="Activity_11o5kaa" name="Confirm goods" camunda:assignee="admin">
-      <bpmn:incoming>Flow_0ianl30</bpmn:incoming>
-      <bpmn:outgoing>Flow_1ls4e6g</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:sequenceFlow id="Flow_1ls4e6g" sourceRef="Activity_11o5kaa" targetRef="Activity_1sxv7q6" />
+    <bpmn:endEvent id="Event_04iot6i" name="End">
+      <bpmn:incoming>Flow_1wv421j</bpmn:incoming>
+    </bpmn:endEvent>
   </bpmn:process>
   <bpmn:process id="Process_1izd960" name="Online grocery shop" isExecutable="true" camunda:isStartableInTasklist="false">
     <bpmn:laneSet id="LaneSet_0zy5dkd">
@@ -152,17 +147,13 @@ SET delivery_method = "contactless_locker"</bpmn:text>
       <bpmndi:BPMNShape id="Participant_18ri5a1_di" bpmnElement="Participant_18ri5a1" isHorizontal="true">
         <dc:Bounds x="160" y="110" width="760" height="160" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_02bgwe3_di" bpmnElement="Flow_1ls4e6g">
-        <di:waypoint x="680" y="190" />
-        <di:waypoint x="700" y="190" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1wv421j_di" bpmnElement="Flow_1wv421j">
-        <di:waypoint x="800" y="190" />
-        <di:waypoint x="842" y="190" />
+        <di:waypoint x="690" y="190" />
+        <di:waypoint x="762" y="190" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0ianl30_di" bpmnElement="Flow_0ianl30">
         <di:waypoint x="518" y="190" />
-        <di:waypoint x="580" y="190" />
+        <di:waypoint x="590" y="190" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_17hy1ta_di" bpmnElement="Flow_17hy1ta">
         <di:waypoint x="410" y="190" />
@@ -187,17 +178,14 @@ SET delivery_method = "contactless_locker"</bpmn:text>
           <dc:Bounds x="461" y="148" width="78" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_04iot6i_di" bpmnElement="Event_04iot6i">
-        <dc:Bounds x="842" y="172" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="850" y="215" width="20" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0pnl4th_di" bpmnElement="Activity_1sxv7q6">
-        <dc:Bounds x="700" y="150" width="100" height="80" />
+        <dc:Bounds x="590" y="150" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0wvts59_di" bpmnElement="Activity_11o5kaa">
-        <dc:Bounds x="580" y="150" width="100" height="80" />
+      <bpmndi:BPMNShape id="Event_04iot6i_di" bpmnElement="Event_04iot6i">
+        <dc:Bounds x="762" y="172" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="770" y="215" width="20" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Participant_1ee8jmu_di" bpmnElement="Participant_1ee8jmu" isHorizontal="true">
         <dc:Bounds x="160" y="350" width="760" height="390" />
@@ -287,12 +275,10 @@ SET delivery_method = "contactless_locker"</bpmn:text>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0n0fh5x_di" bpmnElement="Flow_0n0fh5x">
-        <di:waypoint x="750" y="230" />
-        <di:waypoint x="750" y="310" />
-        <di:waypoint x="640" y="310" />
+        <di:waypoint x="640" y="230" />
         <di:waypoint x="640" y="482" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="677" y="292" width="45" height="14" />
+          <dc:Bounds x="647" y="292" width="45" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

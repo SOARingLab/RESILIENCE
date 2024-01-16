@@ -19,7 +19,7 @@ public class SimpleTransformerVisitor extends SimpleBaseVisitor<List<String>> {
     public List<String> visitInput(SimpleParser.InputContext ctx) {
         List<String> result = new ArrayList<>();
         StringBuilder conditionBuilder = new StringBuilder();
-        conditionBuilder.append("${");
+        // conditionBuilder.append("${");
         int i = 0;
         for (SimpleParser.ConditionContext conditionContext : ctx.condition()) {
             if (i++ > 0) {
@@ -27,7 +27,7 @@ public class SimpleTransformerVisitor extends SimpleBaseVisitor<List<String>> {
             }
             conditionBuilder.append(visit(conditionContext).get(0));
         }
-        conditionBuilder.append("}");
+        // conditionBuilder.append("}");
         if (i > 0) {
             result.add("condition");
             result.add(conditionBuilder.toString());

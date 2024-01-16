@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns="http://www.omg.org/bpmn20" xmlns:bpsim="http://www.bpsim.org/schemas/1.0" xmlns:drools="http://www.jboss.org/drools" id="_KLqfYMqgEeyV9YI63Bl-Rw" targetNamespace="http://www.omg.org/bpmn20" exporter="jBPM Process Modeler" exporterVersion="2.0" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd http://www.jboss.org/drools drools.xsd http://www.bpsim.org/schemas/1.0 bpsim.xsd http://www.omg.org/spec/DD/20100524/DC DC.xsd http://www.omg.org/spec/DD/20100524/DI DI.xsd ">
+  <bpmn2:itemDefinition id="_SItem" structureRef="top.soaringlab.longtailed.enginejbpm.GroovyScript" />
+  <bpmn2:itemDefinition id="_order_statusItem" structureRef="String" />
+  <bpmn2:itemDefinition id="_regionItem" structureRef="String" />
+  <bpmn2:itemDefinition id="_delivery_methodItem" structureRef="String" />
+  <bpmn2:itemDefinition id="_amountItem" structureRef="Float" />
+  <bpmn2:itemDefinition id="_fake_risk_levelItem" structureRef="String" />
+  <bpmn2:itemDefinition id="_messageItem" structureRef="String" />
+  <bpmn2:itemDefinition id="_startProcessIdItem" structureRef="String" />
+  <bpmn2:itemDefinition id="__B2C532C7-33E0-47A6-83BE-ED34BE46595D_messageOutputXItem" structureRef="String" />
+  <bpmn2:itemDefinition id="GoodsReceivedType" structureRef="String" />
+  <bpmn2:message id="_KLqfZMqgEeyV9YI63Bl-Rw" name="GoodsReceived" itemRef="GoodsReceivedType" />
+  <bpmn2:process id="engine-jbpm.online-grocery-customer-jbpm" name="online-grocery-customer-jbpm" processType="Public" isExecutable="true" drools:packageName="top.soaringlab.longtailed.enginejbpm" drools:version="1.0" drools:adHoc="false">
+    <bpmn2:property id="S" itemSubjectRef="_SItem" name="S" />
+    <bpmn2:property id="order_status" itemSubjectRef="_order_statusItem" name="order_status" />
+    <bpmn2:property id="region" itemSubjectRef="_regionItem" name="region" />
+    <bpmn2:property id="delivery_method" itemSubjectRef="_delivery_methodItem" name="delivery_method" />
+    <bpmn2:property id="amount" itemSubjectRef="_amountItem" name="amount" />
+    <bpmn2:property id="fake_risk_level" itemSubjectRef="_fake_risk_levelItem" name="fake_risk_level" />
+    <bpmn2:property id="message" itemSubjectRef="_messageItem" name="message" />
+    <bpmn2:property id="startProcessId" itemSubjectRef="_startProcessIdItem" name="startProcessId" />
+    <bpmn2:sequenceFlow id="_69B1E89F-2479-41CF-B0D6-CAB0BC1453C7" sourceRef="_57DC38C6-D7F5-4A95-9B79-0137C969621E" targetRef="_F39F3699-2AE4-472F-A02E-109ED49F828F">
+      <bpmn2:extensionElements>
+        <drools:metaData name="isAutoConnection.source">
+          <drools:metaValue>true</drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="isAutoConnection.target">
+          <drools:metaValue>true</drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="_3F2EAD09-7982-437E-9510-41ECF2BA12DF" sourceRef="_B2C532C7-33E0-47A6-83BE-ED34BE46595D" targetRef="_57DC38C6-D7F5-4A95-9B79-0137C969621E">
+      <bpmn2:extensionElements>
+        <drools:metaData name="isAutoConnection.source">
+          <drools:metaValue>true</drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="isAutoConnection.target">
+          <drools:metaValue>true</drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="_623A785B-E04E-4EED-9BB7-C9D5769A559B" sourceRef="_496526DB-73B3-41E8-8B52-1E7027C099A2" targetRef="_B2C532C7-33E0-47A6-83BE-ED34BE46595D">
+      <bpmn2:extensionElements>
+        <drools:metaData name="isAutoConnection.source">
+          <drools:metaValue>true</drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="isAutoConnection.target">
+          <drools:metaValue>true</drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="_EAB2EAA3-7ADE-4D70-B2B0-55FF05AED13E" sourceRef="_A360DB05-6DC7-4169-B3B8-DFD910BA546C" targetRef="_496526DB-73B3-41E8-8B52-1E7027C099A2">
+      <bpmn2:extensionElements>
+        <drools:metaData name="isAutoConnection.source">
+          <drools:metaValue>true</drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="isAutoConnection.target">
+          <drools:metaValue>true</drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+    </bpmn2:sequenceFlow>
+    <bpmn2:endEvent id="_F39F3699-2AE4-472F-A02E-109ED49F828F" name="End">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue>End</drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_69B1E89F-2479-41CF-B0D6-CAB0BC1453C7</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:scriptTask id="_57DC38C6-D7F5-4A95-9B79-0137C969621E" name="Pay for goods" scriptFormat="http://www.javascript.com/javascript">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue>Pay for goods</drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_3F2EAD09-7982-437E-9510-41ECF2BA12DF</bpmn2:incoming>
+      <bpmn2:outgoing>_69B1E89F-2479-41CF-B0D6-CAB0BC1453C7</bpmn2:outgoing>
+      <bpmn2:script>// S.info(kcontext, "Goods received");
+S.info(kcontext, "Pay for goods");
+S.sendMessage(kcontext, "PaymentReceived");
+</bpmn2:script>
+    </bpmn2:scriptTask>
+    <bpmn2:scriptTask id="_496526DB-73B3-41E8-8B52-1E7027C099A2" name="Place order" scriptFormat="http://www.javascript.com/javascript">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue>Place order</drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_EAB2EAA3-7ADE-4D70-B2B0-55FF05AED13E</bpmn2:incoming>
+      <bpmn2:outgoing>_623A785B-E04E-4EED-9BB7-C9D5769A559B</bpmn2:outgoing>
+      <bpmn2:script>kcontext.setVariable("order_status", "running");
+if (kcontext.getVariable("region") == null) {
+    kcontext.setVariable("region", "region_1");
+}
+if (kcontext.getVariable("delivery_method") == null) {
+    kcontext.setVariable("delivery_method", "home_delivery");
+}
+if (kcontext.getVariable("amount") == null) {
+    kcontext.setVariable("amount", 100.0);
+}
+kcontext.setVariable("fake_risk_level", "low");
+S.info(kcontext, "----------");
+S.info(kcontext, "Place order (region = " + region + ")");
+kcontext.setVariable("startProcessId", "engine-jbpm.online-grocery-shop-jbpm");
+S.sendMessageToStart(kcontext, "OrderReceived");
+</bpmn2:script>
+    </bpmn2:scriptTask>
+    <bpmn2:intermediateCatchEvent id="_B2C532C7-33E0-47A6-83BE-ED34BE46595D" name="Goods received">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue>Goods received</drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_623A785B-E04E-4EED-9BB7-C9D5769A559B</bpmn2:incoming>
+      <bpmn2:outgoing>_3F2EAD09-7982-437E-9510-41ECF2BA12DF</bpmn2:outgoing>
+      <bpmn2:dataOutput id="_B2C532C7-33E0-47A6-83BE-ED34BE46595D_messageOutputX" itemSubjectRef="__B2C532C7-33E0-47A6-83BE-ED34BE46595D_messageOutputXItem" name="message" drools:dtype="String" />
+      <bpmn2:dataOutputAssociation id="_KLqfYsqgEeyV9YI63Bl-Rw">
+        <bpmn2:sourceRef>_B2C532C7-33E0-47A6-83BE-ED34BE46595D_messageOutputX</bpmn2:sourceRef>
+        <bpmn2:targetRef>message</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+      <bpmn2:outputSet id="_KLqfYcqgEeyV9YI63Bl-Rw">
+        <bpmn2:dataOutputRefs>_B2C532C7-33E0-47A6-83BE-ED34BE46595D_messageOutputX</bpmn2:dataOutputRefs>
+      </bpmn2:outputSet>
+      <bpmn2:messageEventDefinition id="_KLqfY8qgEeyV9YI63Bl-Rw" messageRef="_KLqfZMqgEeyV9YI63Bl-Rw" drools:msgref="GoodsReceived" />
+    </bpmn2:intermediateCatchEvent>
+    <bpmn2:startEvent id="_A360DB05-6DC7-4169-B3B8-DFD910BA546C" name="Start">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue>Start</drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:outgoing>_EAB2EAA3-7ADE-4D70-B2B0-55FF05AED13E</bpmn2:outgoing>
+    </bpmn2:startEvent>
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram id="_KLqfZcqgEeyV9YI63Bl-Rw">
+    <bpmndi:BPMNPlane id="_KLqfZsqgEeyV9YI63Bl-Rw" bpmnElement="engine-jbpm.online-grocery-customer-jbpm">
+      <bpmndi:BPMNEdge id="edge_shape__A360DB05-6DC7-4169-B3B8-DFD910BA546C_to_shape__496526DB-73B3-41E8-8B52-1E7027C099A2" bpmnElement="_EAB2EAA3-7ADE-4D70-B2B0-55FF05AED13E">
+        <di:waypoint x="361" y="231" />
+        <di:waypoint x="441" y="231" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_shape__496526DB-73B3-41E8-8B52-1E7027C099A2_to_shape__B2C532C7-33E0-47A6-83BE-ED34BE46595D" bpmnElement="_623A785B-E04E-4EED-9BB7-C9D5769A559B">
+        <di:waypoint x="595" y="231" />
+        <di:waypoint x="675" y="231" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_shape__B2C532C7-33E0-47A6-83BE-ED34BE46595D_to_shape__57DC38C6-D7F5-4A95-9B79-0137C969621E" bpmnElement="_3F2EAD09-7982-437E-9510-41ECF2BA12DF">
+        <di:waypoint x="731" y="231" />
+        <di:waypoint x="811" y="231" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_shape__57DC38C6-D7F5-4A95-9B79-0137C969621E_to_shape__F39F3699-2AE4-472F-A02E-109ED49F828F" bpmnElement="_69B1E89F-2479-41CF-B0D6-CAB0BC1453C7">
+        <di:waypoint x="965" y="231" />
+        <di:waypoint x="1045" y="231" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="shape__F39F3699-2AE4-472F-A02E-109ED49F828F" bpmnElement="_F39F3699-2AE4-472F-A02E-109ED49F828F">
+        <dc:Bounds x="1045" y="203" width="56" height="56" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__57DC38C6-D7F5-4A95-9B79-0137C969621E" bpmnElement="_57DC38C6-D7F5-4A95-9B79-0137C969621E">
+        <dc:Bounds x="811" y="180" width="154" height="102" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__496526DB-73B3-41E8-8B52-1E7027C099A2" bpmnElement="_496526DB-73B3-41E8-8B52-1E7027C099A2">
+        <dc:Bounds x="441" y="180" width="154" height="102" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__B2C532C7-33E0-47A6-83BE-ED34BE46595D" bpmnElement="_B2C532C7-33E0-47A6-83BE-ED34BE46595D">
+        <dc:Bounds x="675" y="203" width="56" height="56" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__A360DB05-6DC7-4169-B3B8-DFD910BA546C" bpmnElement="_A360DB05-6DC7-4169-B3B8-DFD910BA546C">
+        <dc:Bounds x="305" y="203" width="56" height="56" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="321" y="259" width="25" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmn2:relationship id="_KLqfZ8qgEeyV9YI63Bl-Rw" type="BPSimData">
+    <bpmn2:extensionElements>
+      <bpsim:BPSimData>
+        <bpsim:Scenario id="default" name="Simulationscenario">
+          <bpsim:ScenarioParameters />
+          <bpsim:ElementParameters elementRef="_A360DB05-6DC7-4169-B3B8-DFD910BA546C" id="_KLqfaMqgEeyV9YI63Bl-Rw">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NormalDistribution mean="0.0" standardDeviation="0.0" />
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="_496526DB-73B3-41E8-8B52-1E7027C099A2" id="_KLqfacqgEeyV9YI63Bl-Rw">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NormalDistribution mean="0.0" standardDeviation="0.0" />
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Availability>
+                <bpsim:FloatingParameter value="0.0" />
+              </bpsim:Availability>
+              <bpsim:Quantity>
+                <bpsim:FloatingParameter value="0.0" />
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+            <bpsim:CostParameters>
+              <bpsim:UnitCost>
+                <bpsim:FloatingParameter value="0.0" />
+              </bpsim:UnitCost>
+            </bpsim:CostParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="_57DC38C6-D7F5-4A95-9B79-0137C969621E" id="_KLqfasqgEeyV9YI63Bl-Rw">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NormalDistribution mean="0.0" standardDeviation="0.0" />
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Availability>
+                <bpsim:FloatingParameter value="0.0" />
+              </bpsim:Availability>
+              <bpsim:Quantity>
+                <bpsim:FloatingParameter value="0.0" />
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+            <bpsim:CostParameters>
+              <bpsim:UnitCost>
+                <bpsim:FloatingParameter value="0.0" />
+              </bpsim:UnitCost>
+            </bpsim:CostParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>
+    </bpmn2:extensionElements>
+    <bpmn2:source>_KLqfYMqgEeyV9YI63Bl-Rw</bpmn2:source>
+    <bpmn2:target>_KLqfYMqgEeyV9YI63Bl-Rw</bpmn2:target>
+  </bpmn2:relationship>
+</bpmn2:definitions>

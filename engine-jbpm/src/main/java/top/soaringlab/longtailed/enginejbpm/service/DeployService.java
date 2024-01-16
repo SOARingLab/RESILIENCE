@@ -24,13 +24,11 @@ public class DeployService {
     private KieBase kieBase;
 
     public void create(String filename, String file) {
-        Resource customerProcess = ResourceFactory.newClassPathResource("customer.bpmn");
-        Resource onlineGroceryProcess = ResourceFactory.newByteArrayResource(file.getBytes(StandardCharsets.UTF_8));
-        onlineGroceryProcess.setSourcePath(filename);
+        Resource processModel = ResourceFactory.newByteArrayResource(file.getBytes(StandardCharsets.UTF_8));
+        processModel.setSourcePath(filename);
 
         kieBase = kieHelper
-                .addResource(customerProcess)
-                .addResource(onlineGroceryProcess)
+                .addResource(processModel)
                 .build();
     }
 
