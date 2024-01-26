@@ -740,7 +740,13 @@ public class NusmvVerifier {
         if (condition == null || condition.isEmpty()) {
             return "TRUE";
         } else {
-            return ExpressionLanguageTranslator.translate(condition);
+            String result;
+            try {
+                result = ExpressionLanguageTranslator.translate(condition);
+            } catch (Exception e) {
+                result = ExpressionLanguageTranslator.translate("${" + condition + "}");
+            }
+            return result;
         }
     }
 
