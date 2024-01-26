@@ -481,7 +481,11 @@ public class Compiler {
         if (i++ == 0) {
             Element conditionExpression = document.createElement(xmlnsBpmn + "conditionExpression");
             conditionExpression.setAttribute("xsi:type", xmlnsBpmn + "tFormalExpression");
-            conditionExpression.setTextContent(condition);
+            if (processEngine.equals("jbpm")) {
+                conditionExpression.setTextContent(condition);
+            } else {
+                conditionExpression.setTextContent("${" + condition + "}");
+            }
             currentFlow.appendChild(conditionExpression);
         }
         process.insertBefore(currentFlow, mergeGateway);
