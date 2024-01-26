@@ -18,4 +18,4 @@ TRACE_TYPE : 'Trace Type:' ~[\r\n]*;
 
 STATE : '->' ~[\r\n]*;
 
-ID : [_a-zA-Z0-9]+;
+ID : [\-_a-zA-Z0-9]+;
