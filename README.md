@@ -112,9 +112,11 @@ Click `Open` to open the process model in `Annotation` or `Constraint`.
 
 ![dsl-frontend-process-log.png](image/dsl-frontend-process-log.png)
 
-## Case Study
+## Case Study and Experiment
 
 A case study of an e-commerce scenario is available in directory `case-study`.
+
+An experiment on the efficiency of DSL-annotation is available in directory `experiment`.
 
 ## Publications
 
