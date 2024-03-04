@@ -63,14 +63,14 @@ For each LTC, the comparison of time consumption (seconds) between direct modifi
 | ---- | ---- | ---- |
 | LTC1 | 132 | 35 |
 | LTC2 | 144 | 40 |
-| Average | 138 | 37.5 |
+| Average | 138.0 | 37.5 |
 
 The overall comparison of time consumption, correctness, and usability rating between direct modification and DSL-annotation is:
 
 | Process adaptation method | Time consumption (seconds) | Correctness | Usability rating (10-point scale) |
 | ---- | ---- | ---- | ---- |
-| Direct modification | 138 | 100% | 6 |
-| DSL-annotation | 37.5 | 100% | 9 |
+| Direct modification | 138.0 | 100.0% | 6.0 |
+| DSL-annotation | 37.5 | 100.0% | 9.0 |
 
 ## Scenario 3: Insurance Claim
 
@@ -94,14 +94,14 @@ For each LTC, the comparison of time consumption (seconds) between direct modifi
 | ---- | ---- | ---- |
 | LTC1 | 128 | 24 |
 | LTC2 | 98 | 26 |
-| Average | 113 | 25 |
+| Average | 113.0 | 25.0 |
 
 The overall comparison of time consumption, correctness, and usability rating between direct modification and DSL-annotation is:
 
 | Process adaptation method | Time consumption (seconds) | Correctness | Usability rating (10-point scale) |
 | ---- | ---- | ---- | ---- |
-| Direct modification | 113 | 100% | 7 |
-| DSL-annotation | 25 | 100% | 10 |
+| Direct modification | 113.0 | 100.0% | 7.0 |
+| DSL-annotation | 25.0 | 100.0% | 10.0 |
 
 ## Scenario 4: Paper Review
 
@@ -135,7 +135,7 @@ The overall comparison of time consumption, correctness, and usability rating be
 | Process adaptation method | Time consumption (seconds) | Correctness | Usability rating (10-point scale) |
 | ---- | ---- | ---- | ---- |
 | Direct modification | 216.7 | 66.7% | 7.5 |
-| DSL-annotation | 113.3 | 100% | 9 |
+| DSL-annotation | 113.3 | 100.0% | 9.0 |
 
 ## Scenario 5: Emergency Call
 
@@ -159,14 +159,14 @@ For each LTC, the comparison of time consumption (seconds) between direct modifi
 | ---- | ---- | ---- |
 | LTC1 | 83 | 23 |
 | LTC2 | 61 | 20 |
-| Average | 72 | 21.5 |
+| Average | 72.0 | 21.5 |
 
 The overall comparison of time consumption, correctness, and usability rating between direct modification and DSL-annotation is:
 
 | Process adaptation method | Time consumption (seconds) | Correctness | Usability rating (10-point scale) |
 | ---- | ---- | ---- | ---- |
-| Direct modification | 72 | 50% | 4 |
-| DSL-annotation | 21.5 | 100% | 9 |
+| Direct modification | 72.0 | 50.0% | 4.0 |
+| DSL-annotation | 21.5 | 100.0% | 9.0 |
 
 ## Scenario 6: Outpatient
 
@@ -190,14 +190,14 @@ For each LTC, the comparison of time consumption (seconds) between direct modifi
 | ---- | ---- | ---- |
 | LTC1 | 64 | 12 |
 | LTC2 | 56 | 11 |
-| Average | 60 | 11.5 |
+| Average | 60.0 | 11.5 |
 
 The overall comparison of time consumption, correctness, and usability rating between direct modification and DSL-annotation is:
 
 | Process adaptation method | Time consumption (seconds) | Correctness | Usability rating (10-point scale) |
 | ---- | ---- | ---- | ---- |
-| Direct modification | 60 | 100% | 4 |
-| DSL-annotation | 11.5 | 100% | 9 |
+| Direct modification | 60.0 | 100.0% | 4.0 |
+| DSL-annotation | 11.5 | 100.0% | 9.0 |
 
 ## Overall Result
 
