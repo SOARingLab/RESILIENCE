@@ -39,8 +39,6 @@ The overall comparison of time consumption, correctness, and usability rating be
 | Direct modification | 143.5 | 81.3% | 5.9 |
 | DSL-annotation | 59.4 | 93.8% | 9.3 |
 
-(This scenario undergoes four times of experiments and takes the average results, while the following scenarios undergo only one time of experimet.)
-
 ## Scenario 2: Travel Agency
 
 The business process of a travel agency is:
@@ -100,8 +98,8 @@ The overall comparison of time consumption, correctness, and usability rating be
 
 | Process adaptation method | Time consumption (seconds) | Correctness | Usability rating (10-point scale) |
 | ---- | ---- | ---- | ---- |
-| Direct modification | 113.0 | 100.0% | 7.0 |
-| DSL-annotation | 25.0 | 100.0% | 10.0 |
+| Direct modification | 113.0 | 50.0% | 7.0 |
+| DSL-annotation | 25.0 | 50.0% | 10.0 |
 
 ## Scenario 4: Paper Review
 
@@ -201,12 +199,10 @@ The overall comparison of time consumption, correctness, and usability rating be
 
 ## Overall Result
 
-We calculate the weighted average result. Since the LNG Logistics scenario undergoes four times of experiments, it has four times weight.
-
-The overall comparison of time consumption, correctness, and usability rating between direct modification and DSL-annotation is:
+We calculate the average result of all the 15 LTCs in 6 scenarios. The overall comparison of time consumption, correctness, and usability rating between direct modification and DSL-annotation is:
 
 | Process adaptation method | Time consumption (seconds) | Correctness | Usability rating (10-point scale) |
 | ---- | ---- | ---- | ---- |
-| Direct modification | 137.5 | 81.5% | 5.9 |
-| DSL-annotation | 54.9 | 96.3% | 9.3 |
+| Direct modification | 132.7 | 75.0% | 5.9 |
+| DSL-annotation | 51.2 | 91.7% | 9.2 |
 
