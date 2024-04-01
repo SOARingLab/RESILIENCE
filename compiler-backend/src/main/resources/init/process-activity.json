@@ -1,0 +1,272 @@
+[
+    {
+        "processId": "online_grocery",
+        "name": "Process inventory",
+        "data": ""
+    },
+    {
+        "processId": "online_grocery",
+        "name": "Deliver goods",
+        "data": ""
+    },
+    {
+        "processId": "online_grocery",
+        "name": "Confirm delivery",
+        "data": ""
+    },
+    {
+        "processId": "online_grocery",
+        "name": "Process payment",
+        "data": ""
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "Disconnect pipes and leave dock",
+        "data": ""
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "Change course",
+        "data": ""
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "Contact relevant bureaus",
+        "data": ""
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "Notify nearby ships",
+        "data": ""
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "Give first aid",
+        "data": ""
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "Contact first-aid center",
+        "data": ""
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "Ventilate",
+        "data": ""
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "Close doors and block vents",
+        "data": ""
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "Disperse gas",
+        "data": ""
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "Put out fire",
+        "data": ""
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "Plug leak",
+        "data": ""
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "Discharge water",
+        "data": ""
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "Spray water curtain",
+        "data": ""
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "Transfer goods",
+        "data": ""
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "Eject goods",
+        "data": ""
+    },
+    {
+        "processId": "review-paper",
+        "name": "Receive Papers",
+        "data": ""
+    },
+    {
+        "processId": "review-paper",
+        "name": "Wait for Submission Deadline",
+        "data": ""
+    },
+    {
+        "processId": "review-paper",
+        "name": "Wait for Review Deadline",
+        "data": ""
+    },
+    {
+        "processId": "review-paper",
+        "name": "Prompt Submission",
+        "data": ""
+    },
+    {
+        "processId": "review-paper",
+        "name": "Re-assign Paper",
+        "data": ""
+    },
+    {
+        "processId": "review-paper",
+        "name": "Determine Need of Rebuttal",
+        "data": ""
+    },
+    {
+        "processId": "review-paper",
+        "name": "Determine  Deadline of Rebuttal",
+        "data": ""
+    },
+    {
+        "processId": "review-paper",
+        "name": "Wait for Review Deadline",
+        "data": ""
+    },
+    {
+        "processId": "review-paper",
+        "name": "Review Rebuttal and Re-make Descision",
+        "data": ""
+    },
+    {
+        "processId": "review-paper",
+        "name": "Notify Related Reviewers to Terminate",
+        "data": ""
+    },
+    {
+        "processId": "review-paper",
+        "name": "register paper data",
+        "data": ""
+    },
+    {
+        "processId": "review-paper",
+        "name": "Determine Whether to Withdraw Paper",
+        "data": ""
+    },
+    {
+        "processId": "review-paper",
+        "name": "Notification Received",
+        "data": ""
+    },
+    {
+        "processId": "review-paper",
+        "name": "Send Rebuttal",
+        "data": ""
+    },
+    {
+        "processId": "review-paper",
+        "name": "Receive Author Withdraw Message",
+        "data": ""
+    },
+    {
+        "processId": "review-paper",
+        "name": "Receive Withdraw Message",
+        "data": ""
+    },
+    {
+        "processId": "review-paper",
+        "name": "Review Discrepancy Meeting",
+        "data": ""
+    },
+    {
+        "processId": "review-paper",
+        "name": "Re-decide Result",
+        "data": ""
+    },
+    {
+        "processId": "review-paper",
+        "name": "",
+        "data": ""
+    },
+    {
+        "processId": "review-paper",
+        "name": "Rebuttal",
+        "data": ""
+    },
+    {
+        "processId": "review-paper",
+        "name": "Decide Final Result",
+        "data": ""
+    },
+    {
+        "processId": "review-paper",
+        "name": "Handle Reviewer Recusal",
+        "data": ""
+    },
+    {
+        "processId": "handle-insurance-claim",
+        "name": "repudiation of claims",
+        "data": ""
+    },
+    {
+        "processId": "handle-insurance-claim",
+        "name": "Emergency treatment",
+        "data": ""
+    },
+    {
+        "processId": "emergency-call",
+        "name": "Perform CPR",
+        "data": ""
+    },
+    {
+        "processId": "emergency-call",
+        "name": "Use AED",
+        "data": ""
+    },
+    {
+        "processId": "emergency-call",
+        "name": "Reserve matching blood type",
+        "data": ""
+    },
+    {
+        "processId": "emergency-call",
+        "name": "Acquire reserved blood units",
+        "data": ""
+    },
+    {
+        "processId": "outpatient",
+        "name": "Arrange special lounge",
+        "data": ""
+    },
+    {
+        "processId": "outpatient",
+        "name": "Use Medical Insurance",
+        "data": ""
+    },
+    {
+        "processId": "set-up-project",
+        "name": "",
+        "data": ""
+    },
+    {
+        "processId": "set-up-project",
+        "name": "test",
+        "data": "test123"
+    },
+    {
+        "processId": "travel-agency",
+        "name": "Notify Customer",
+        "data": ""
+    },
+    {
+        "processId": "travel-agency",
+        "name": "Make Travel Offer",
+        "data": ""
+    },
+    {
+        "processId": "travel-agency",
+        "name": "Modify Destination",
+        "data": ""
+    }
+]

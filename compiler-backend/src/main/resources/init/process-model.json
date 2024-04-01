@@ -1,0 +1,90 @@
+[
+    {
+        "processId": "online_grocery",
+        "filename": "online-grocery-customer.bpmn"
+    },
+    {
+        "processId": "online_grocery",
+        "filename": "online-grocery-shop.bpmn"
+    },
+    {
+        "processId": "online_grocery",
+        "filename": "online-grocery.bpmn"
+    },
+    {
+        "processId": "online_grocery",
+        "filename": "online-grocery-annotation.bpmn"
+    },
+    {
+        "processId": "online_grocery",
+        "filename": "online-grocery-constraint.bpmn"
+    },
+    {
+        "processId": "online_grocery",
+        "filename": "online-grocery-customer-jbpm.bpmn"
+    },
+    {
+        "processId": "online_grocery",
+        "filename": "online-grocery-shop-jbpm.bpmn"
+    },
+    {
+        "processId": "online_grocery",
+        "filename": "online-grocery-controllability.bpmn"
+    },
+    {
+        "processId": "lng_logistics",
+        "filename": "lng-logistics-emergency.bpmn"
+    },
+    {
+        "processId": "lng_logistics",
+        "filename": "lng-logistics-emergency-annotation.bpmn"
+    },
+    {
+        "processId": "lng_logistics",
+        "filename": "lng-logistics-emergency-constraint.bpmn"
+    },
+    {
+        "processId": "lng_logistics",
+        "filename": "lng-logistics-emergency-instance-1.bpmn"
+    },
+    {
+        "processId": "lng_logistics",
+        "filename": "lng-logistics-emergency-instance-2.bpmn"
+    },
+    {
+        "processId": "lng_logistics",
+        "filename": "lng-logistics-emergency-instance-3.bpmn"
+    },
+    {
+        "processId": "review-paper",
+        "filename": "review-paper-author.bpmn"
+    },
+    {
+        "processId": "review-paper",
+        "filename": "review-paper-reviewer.bpmn"
+    },
+    {
+        "processId": "review-paper",
+        "filename": "review-paper-pc-chair.bpmn"
+    },
+    {
+        "processId": "handle-insurance-claim",
+        "filename": "handle-insurance-claim.bpmn"
+    },
+    {
+        "processId": "emergency-call",
+        "filename": "emergency-call.bpmn"
+    },
+    {
+        "processId": "outpatient",
+        "filename": "outpatient.bpmn"
+    },
+    {
+        "processId": "set-up-project",
+        "filename": "set-up-project.bpmn"
+    },
+    {
+        "processId": "travel-agency",
+        "filename": "travel-agency.bpmn"
+    }
+]

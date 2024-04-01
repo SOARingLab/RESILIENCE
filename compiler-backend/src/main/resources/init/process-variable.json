@@ -1,0 +1,412 @@
+[
+    {
+        "processId": "online_grocery",
+        "name": "order_status",
+        "type": "String",
+        "defaultValue": "\"pending\"",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": [
+            "\"pending\"",
+            "\"finished\"",
+            "\"canceled\""
+        ]
+    },
+    {
+        "processId": "online_grocery",
+        "name": "region",
+        "type": "String",
+        "defaultValue": "random",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": [
+            "\"region_1\"",
+            "\"region_2\"",
+            "\"region_3\""
+        ]
+    },
+    {
+        "processId": "online_grocery",
+        "name": "fake_risk_level",
+        "type": "String",
+        "defaultValue": "random",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": [
+            "\"low\"",
+            "\"medium\"",
+            "\"high\""
+        ]
+    },
+    {
+        "processId": "online_grocery",
+        "name": "delivery_method",
+        "type": "String",
+        "defaultValue": "random",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": [
+            "\"home_delivery\"",
+            "\"contactless_locker\"",
+            "\"at_store\""
+        ]
+    },
+    {
+        "processId": "online_grocery",
+        "name": "amount",
+        "type": "Number",
+        "defaultValue": "0",
+        "minimumValue": "0",
+        "maximumValue": "1000",
+        "valueRange": []
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "action",
+        "type": "String",
+        "defaultValue": "\"plug_leak\"",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": [
+            "\"move_tanker\"",
+            "\"rescue_the_injured\"",
+            "\"plug_leak\""
+        ]
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "tanker_location",
+        "type": "String",
+        "defaultValue": "\"at_sea\"",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": [
+            "\"in_dock\"",
+            "\"at_sea\""
+        ]
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "need_contact",
+        "type": "Boolean",
+        "defaultValue": "true",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": []
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "injury",
+        "type": "String",
+        "defaultValue": "\"frostbite\"",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": [
+            "\"frostbite\"",
+            "\"asphyxia\""
+        ]
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "need_ambulance",
+        "type": "Boolean",
+        "defaultValue": "true",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": []
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "area_opening",
+        "type": "String",
+        "defaultValue": "\"open\"",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": [
+            "\"open\"",
+            "\"close\""
+        ]
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "danger_control",
+        "type": "String",
+        "defaultValue": "\"leak\"",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": [
+            "\"leak\"",
+            "\"fire\""
+        ]
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "leak_type",
+        "type": "String",
+        "defaultValue": "\"pipe\"",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": [
+            "\"pipe\"",
+            "\"casing\"",
+            "\"massive_leak\""
+        ]
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "goods_disposal",
+        "type": "String",
+        "defaultValue": "\"retain\"",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": [
+            "\"retain\"",
+            "\"transfer\"",
+            "\"eject\""
+        ]
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "leak_location",
+        "type": "String",
+        "defaultValue": "random",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": [
+            "\"above_water\"",
+            "\"under_water\""
+        ]
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "leak_amount",
+        "type": "String",
+        "defaultValue": "random",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": [
+            "\"little\"",
+            "\"medium\"",
+            "\"massive\""
+        ]
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "catch_fire",
+        "type": "Boolean",
+        "defaultValue": "random",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": []
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "tanker_condition",
+        "type": "String",
+        "defaultValue": "random",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": [
+            "\"stable\"",
+            "\"unstable\""
+        ]
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "ship_nearby",
+        "type": "Boolean",
+        "defaultValue": "random",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": []
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "fishery_nearby",
+        "type": "Boolean",
+        "defaultValue": "random",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": []
+    },
+    {
+        "processId": "lng_logistics",
+        "name": "wind_direction",
+        "type": "String",
+        "defaultValue": "random",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": [
+            "\"windward\"",
+            "\"leeward\""
+        ]
+    },
+    {
+        "processId": "review-paper",
+        "name": "Need_Rebuttal",
+        "type": "Boolean",
+        "defaultValue": "false",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": []
+    },
+    {
+        "processId": "review-paper",
+        "name": "withdraw",
+        "type": "Boolean",
+        "defaultValue": "false",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": []
+    },
+    {
+        "processId": "review-paper",
+        "name": "Need_Rebuttal",
+        "type": "Boolean",
+        "defaultValue": "true",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": []
+    },
+    {
+        "processId": "review-paper",
+        "name": "enough",
+        "type": "Boolean",
+        "defaultValue": "true",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": []
+    },
+    {
+        "processId": "review-paper",
+        "name": "receive_review",
+        "type": "Boolean",
+        "defaultValue": "true",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": []
+    },
+    {
+        "processId": "review-paper",
+        "name": "decision",
+        "type": "String",
+        "defaultValue": "",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": []
+    },
+    {
+        "processId": "review-paper",
+        "name": "Result_Dsicrepancy",
+        "type": "Boolean",
+        "defaultValue": "false",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": []
+    },
+    {
+        "processId": "review-paper",
+        "name": "Complaint",
+        "type": "Boolean",
+        "defaultValue": "false",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": []
+    },
+    {
+        "processId": "review-paper",
+        "name": "Review_Recusal",
+        "type": "Boolean",
+        "defaultValue": "false",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": []
+    },
+    {
+        "processId": "handle-insurance-claim",
+        "name": "ClaimantFraudulentInsurance",
+        "type": "Boolean",
+        "defaultValue": "false",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": []
+    },
+    {
+        "processId": "handle-insurance-claim",
+        "name": "Deception",
+        "type": "Boolean",
+        "defaultValue": "false",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": []
+    },
+    {
+        "processId": "emergency-call",
+        "name": "bloodSupply",
+        "type": "String",
+        "defaultValue": "",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": [
+            "sufficient",
+            "insufficient"
+        ]
+    },
+    {
+        "processId": "emergency-call",
+        "name": "needCPR",
+        "type": "Boolean",
+        "defaultValue": "",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": []
+    },
+    {
+        "processId": "outpatient",
+        "name": "patientType",
+        "type": "String",
+        "defaultValue": "",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": [
+            "disadvantagedMinority",
+            "normal"
+        ]
+    },
+    {
+        "processId": "outpatient",
+        "name": "useMedicalInsurance",
+        "type": "Boolean",
+        "defaultValue": "",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": []
+    },
+    {
+        "processId": "travel-agency",
+        "name": "",
+        "type": "",
+        "defaultValue": "",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": []
+    },
+    {
+        "processId": "travel-agency",
+        "name": "policy",
+        "type": "String",
+        "defaultValue": "updated",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": []
+    },
+    {
+        "processId": "travel-agency",
+        "name": "destination",
+        "type": "String",
+        "defaultValue": "",
+        "minimumValue": "",
+        "maximumValue": "",
+        "valueRange": []
+    }
+]
