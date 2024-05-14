@@ -34,6 +34,8 @@ Optional requirements:
 
 ## Run
 
+`user-manual.md` contains a detailed user manual.
+
 First, run subproject `engine-backend` with command `mvn spring-boot:run`. It is a process engine powered by Camunda. The process engine can be accessed at http://localhost:8082/ . The default user is admin/admin.
 
 Then, run subproject `compiler-backend` with command `mvn spring-boot:run`. It is our tool to convert process models and verify functional and non-functional constraints.
