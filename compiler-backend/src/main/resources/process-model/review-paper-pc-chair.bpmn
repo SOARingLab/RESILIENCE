@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_046po17" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.18.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.17.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_046po17" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.20.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.17.0">
   <bpmn:collaboration id="Collaboration_1e78zc8">
     <bpmn:participant id="Participant_044r31t" name="Environment" processRef="Process_0y0spgr" />
     <bpmn:participant id="Participant_0ccs7io" name="Pc Chair" processRef="Process_1" />
     <bpmn:messageFlow id="Flow_0g3u1zw" name="Send Paper" sourceRef="Participant_044r31t" targetRef="StartEvent_1" />
     <bpmn:messageFlow id="Flow_1tksue0" name="Assign Paper" sourceRef="Activity_1i8t2rr" targetRef="Participant_044r31t" />
     <bpmn:messageFlow id="Flow_0tyz35s" name="Re-Assign Paper" sourceRef="Activity_1bxn01u" targetRef="Participant_044r31t" />
-    <bpmn:messageFlow id="Flow_02mr57s" name="Receive Review" sourceRef="Participant_044r31t" targetRef="Activity_1u7b3ih" />
+    <bpmn:messageFlow id="Flow_02mr57s" name="Receive Review" sourceRef="Participant_044r31t" targetRef="Event_1puhmht" />
     <bpmn:messageFlow id="Flow_0l0qu95" name="Remind Submission" sourceRef="Activity_11s3omj" targetRef="Participant_044r31t" />
     <bpmn:messageFlow id="Flow_00xhg61" name="Send Reviewer Feedback" sourceRef="Activity_1jd3g7b" targetRef="Participant_044r31t" />
     <bpmn:messageFlow id="Flow_1pfon7s" name="Send Author Result" sourceRef="Activity_177p8lf" targetRef="Participant_044r31t" />
     <bpmn:messageFlow id="Flow_0jes6ya" name="Receive Author Withdraw Message" sourceRef="Participant_044r31t" targetRef="Event_1hs5dzl" />
     <bpmn:messageFlow id="Flow_0n4y4cv" name="Notify Related Reviewers to Terminate" sourceRef="Activity_1pi2l5d" targetRef="Participant_044r31t" />
   </bpmn:collaboration>
-  <bpmn:process id="Process_1" isExecutable="true" camunda:historyTimeToLive="10000000">
+  <bpmn:process id="Process_1" isExecutable="true" camunda:historyTimeToLive="10000000" camunda:isStartableInTasklist="false">
     <bpmn:startEvent id="StartEvent_1" name="Review Management Start">
       <bpmn:outgoing>SequenceFlow_0nnxgd0</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_03ue8i8" messageRef="Message_1k3cgl8" />
@@ -21,16 +21,6 @@
     <bpmn:subProcess id="Activity_1ulbi16">
       <bpmn:incoming>SequenceFlow_0nnxgd0</bpmn:incoming>
       <bpmn:outgoing>Flow_0icoho0</bpmn:outgoing>
-      <bpmn:sendTask id="Activity_11s3omj" name="Remind Submission" camunda:type="external" camunda:topic="Remind Submission">
-        <bpmn:incoming>Flow_1fz2orq</bpmn:incoming>
-        <bpmn:outgoing>Flow_0mj0ha0</bpmn:outgoing>
-        <bpmn:property id="Property_18vzqam" name="__targetRef_placeholder" />
-      </bpmn:sendTask>
-      <bpmn:sendTask id="Activity_1bxn01u" name="Re-assign Paper" camunda:type="external" camunda:topic="Assign Paper">
-        <bpmn:incoming>Flow_1f2vqlr</bpmn:incoming>
-        <bpmn:outgoing>Flow_1az8onr</bpmn:outgoing>
-        <bpmn:property id="Property_19hp6uf" name="__targetRef_placeholder" />
-      </bpmn:sendTask>
       <bpmn:exclusiveGateway id="Gateway_0s2yzyi" name="Enough Reviews?">
         <bpmn:incoming>Flow_0iw8zcm</bpmn:incoming>
         <bpmn:outgoing>Flow_1fz2orq</bpmn:outgoing>
@@ -53,7 +43,7 @@
         </bpmn:timerEventDefinition>
       </bpmn:intermediateCatchEvent>
       <bpmn:intermediateCatchEvent id="Event_1tbk80d" name="Until Review Deadline">
-        <bpmn:incoming>Flow_1dvsvn3</bpmn:incoming>
+        <bpmn:incoming>Flow_007xtik</bpmn:incoming>
         <bpmn:outgoing>Flow_1h2tgew</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_101cnfd">
           <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1S</bpmn:timeDuration>
@@ -69,54 +59,8 @@
         <bpmn:outgoing>Flow_0e0lq33</bpmn:outgoing>
         <bpmn:outgoing>Flow_0bxg6w5</bpmn:outgoing>
       </bpmn:exclusiveGateway>
-      <bpmn:receiveTask id="Activity_1u7b3ih" name="Receive Reviews" messageRef="Message_32fgp4q">
-        <bpmn:incoming>Flow_07xujrs</bpmn:incoming>
-        <bpmn:outgoing>Flow_1dvsvn3</bpmn:outgoing>
-        <bpmn:dataOutputAssociation id="DataOutputAssociation_18wzkzo">
-          <bpmn:targetRef>DataObjectReference_1qtjr4m</bpmn:targetRef>
-        </bpmn:dataOutputAssociation>
-        <bpmn:multiInstanceLoopCharacteristics isSequential="true">
-          <bpmn:loopCardinality xsi:type="bpmn:tFormalExpression">3</bpmn:loopCardinality>
-        </bpmn:multiInstanceLoopCharacteristics>
-      </bpmn:receiveTask>
-      <bpmn:sendTask id="Activity_1i8t2rr" name="Assign Paper" camunda:type="external" camunda:topic="Assign Paper">
-        <bpmn:incoming>Flow_0cuad89</bpmn:incoming>
-        <bpmn:outgoing>Flow_1c3jerf</bpmn:outgoing>
-        <bpmn:multiInstanceLoopCharacteristics isSequential="true">
-          <bpmn:loopCardinality xsi:type="bpmn:tFormalExpression">3</bpmn:loopCardinality>
-        </bpmn:multiInstanceLoopCharacteristics>
-      </bpmn:sendTask>
       <bpmn:dataObjectReference id="DataObjectReference_01d8g85" name="Letter" dataObjectRef="DataObject_1i7cdt4" />
       <bpmn:dataObject id="DataObject_1i7cdt4" />
-      <bpmn:sendTask id="Activity_177p8lf" name="Send Author Result" camunda:type="external" camunda:topic="Send Author Result">
-        <bpmn:incoming>Flow_0p27d3p</bpmn:incoming>
-        <bpmn:outgoing>Flow_13stzo3</bpmn:outgoing>
-        <bpmn:property id="Property_1ta9cer" name="__targetRef_placeholder" />
-        <bpmn:dataInputAssociation id="DataInputAssociation_15vyu94">
-          <bpmn:sourceRef>DataObjectReference_1qtjr4m</bpmn:sourceRef>
-          <bpmn:targetRef>Property_1ta9cer</bpmn:targetRef>
-        </bpmn:dataInputAssociation>
-        <bpmn:dataInputAssociation id="DataInputAssociation_1xkbeai">
-          <bpmn:sourceRef>DataObjectReference_01d8g85</bpmn:sourceRef>
-          <bpmn:targetRef>Property_1ta9cer</bpmn:targetRef>
-        </bpmn:dataInputAssociation>
-      </bpmn:sendTask>
-      <bpmn:sendTask id="Activity_1jd3g7b" name="Send Reviewer Feedback" camunda:type="external" camunda:topic="Send Reviewer Feedback">
-        <bpmn:incoming>Flow_11hl8yt</bpmn:incoming>
-        <bpmn:outgoing>Flow_0p27d3p</bpmn:outgoing>
-        <bpmn:property id="Property_1aq0nwd" name="__targetRef_placeholder" />
-        <bpmn:dataInputAssociation id="DataInputAssociation_1dhjb9j">
-          <bpmn:sourceRef>DataObjectReference_1poerfb</bpmn:sourceRef>
-          <bpmn:targetRef>Property_1aq0nwd</bpmn:targetRef>
-        </bpmn:dataInputAssociation>
-        <bpmn:dataInputAssociation id="DataInputAssociation_0cwhis2">
-          <bpmn:sourceRef>DataObjectReference_1qtjr4m</bpmn:sourceRef>
-          <bpmn:targetRef>Property_1aq0nwd</bpmn:targetRef>
-        </bpmn:dataInputAssociation>
-        <bpmn:multiInstanceLoopCharacteristics isSequential="true" camunda:asyncBefore="true" camunda:asyncAfter="true">
-          <bpmn:loopCardinality xsi:type="bpmn:tFormalExpression">3</bpmn:loopCardinality>
-        </bpmn:multiInstanceLoopCharacteristics>
-      </bpmn:sendTask>
       <bpmn:intermediateCatchEvent id="Event_1dey46i" name="Wait a While">
         <bpmn:incoming>Flow_0mj0ha0</bpmn:incoming>
         <bpmn:outgoing>Flow_178mgci</bpmn:outgoing>
@@ -134,87 +78,148 @@
         <bpmn:incoming>Flow_1uxsb0e</bpmn:incoming>
         <bpmn:outgoing>Flow_0aeapst</bpmn:outgoing>
       </bpmn:exclusiveGateway>
-      <bpmn:serviceTask id="Activity_1nf3vbl" name="Prepare Rejection Letter" camunda:type="external" camunda:topic="Prepare Rejection Letter">
-        <bpmn:incoming>Flow_0bxg6w5</bpmn:incoming>
-        <bpmn:outgoing>Flow_0e8m08c</bpmn:outgoing>
-        <bpmn:dataOutputAssociation id="DataOutputAssociation_0qrrc6l">
-          <bpmn:targetRef>DataObjectReference_01d8g85</bpmn:targetRef>
-        </bpmn:dataOutputAssociation>
-      </bpmn:serviceTask>
-      <bpmn:serviceTask id="Activity_1uc2125" name="Prepare Acceptance Letter" camunda:type="external" camunda:topic="Prepare Acceptance Letter">
-        <bpmn:incoming>Flow_0e0lq33</bpmn:incoming>
-        <bpmn:outgoing>Flow_1i02oc7</bpmn:outgoing>
-        <bpmn:dataOutputAssociation id="DataOutputAssociation_0i2vlte">
-          <bpmn:targetRef>DataObjectReference_01d8g85</bpmn:targetRef>
-        </bpmn:dataOutputAssociation>
-      </bpmn:serviceTask>
       <bpmn:endEvent id="Event_1ybug52">
         <bpmn:incoming>Flow_13stzo3</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:startEvent id="Event_1fxjyoc">
         <bpmn:outgoing>Flow_0ty78hj</bpmn:outgoing>
       </bpmn:startEvent>
-      <bpmn:userTask id="Activity_0srryhc" name="Review Evaluation">
-        <bpmn:extensionElements>
-          <camunda:formData>
-            <camunda:formField id="decision" label="decision" type="string" />
-          </camunda:formData>
-        </bpmn:extensionElements>
-        <bpmn:incoming>Flow_0aeapst</bpmn:incoming>
-        <bpmn:outgoing>Flow_0lx7te5</bpmn:outgoing>
-        <bpmn:property id="Property_16ewrt6" name="__targetRef_placeholder" />
-        <bpmn:dataInputAssociation id="DataInputAssociation_0oqa20k">
-          <bpmn:sourceRef>DataObjectReference_1qtjr4m</bpmn:sourceRef>
-          <bpmn:targetRef>Property_16ewrt6</bpmn:targetRef>
-        </bpmn:dataInputAssociation>
-        <bpmn:dataOutputAssociation id="DataOutputAssociation_18xitef">
-          <bpmn:targetRef>DataObjectReference_1poerfb</bpmn:targetRef>
-        </bpmn:dataOutputAssociation>
-      </bpmn:userTask>
-      <bpmn:userTask id="Activity_0uqift3" name="Count Received Reviews">
-        <bpmn:extensionElements>
-          <camunda:formData>
-            <camunda:formField id="enough" label="enough" type="boolean" />
-          </camunda:formData>
-        </bpmn:extensionElements>
-        <bpmn:incoming>Flow_1h2tgew</bpmn:incoming>
-        <bpmn:outgoing>Flow_0iw8zcm</bpmn:outgoing>
-      </bpmn:userTask>
       <bpmn:sequenceFlow id="Flow_1fz2orq" name="False" sourceRef="Gateway_0s2yzyi" targetRef="Activity_11s3omj">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${enough == false} </bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${enough_reviews == false}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_0mj0ha0" sourceRef="Activity_11s3omj" targetRef="Event_1dey46i" />
       <bpmn:sequenceFlow id="Flow_1f2vqlr" name="False" sourceRef="Gateway_1snchah" targetRef="Activity_1bxn01u">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=False</bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${receive_review == false}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_1az8onr" sourceRef="Activity_1bxn01u" targetRef="Gateway_1hhs8v2" />
       <bpmn:sequenceFlow id="Flow_0iw8zcm" sourceRef="Activity_0uqift3" targetRef="Gateway_0s2yzyi" />
       <bpmn:sequenceFlow id="Flow_0rbl3yh" name="True" sourceRef="Gateway_0s2yzyi" targetRef="Gateway_0advmbm">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${enough != false} </bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${enough_reviews == true}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_1c3jerf" sourceRef="Activity_1i8t2rr" targetRef="Gateway_1hhs8v2" />
-      <bpmn:sequenceFlow id="Flow_07xujrs" sourceRef="Gateway_1hhs8v2" targetRef="Activity_1u7b3ih" />
+      <bpmn:sequenceFlow id="Flow_07xujrs" sourceRef="Gateway_1hhs8v2" targetRef="Event_1puhmht" />
       <bpmn:sequenceFlow id="Flow_0ty78hj" sourceRef="Event_1fxjyoc" targetRef="Event_0d1867g" />
       <bpmn:sequenceFlow id="Flow_0cuad89" sourceRef="Event_0d1867g" targetRef="Activity_1i8t2rr" />
-      <bpmn:sequenceFlow id="Flow_1dvsvn3" sourceRef="Activity_1u7b3ih" targetRef="Event_1tbk80d" />
       <bpmn:sequenceFlow id="Flow_1h2tgew" sourceRef="Event_1tbk80d" targetRef="Activity_0uqift3" />
       <bpmn:sequenceFlow id="Flow_1i02oc7" sourceRef="Activity_1uc2125" targetRef="Gateway_0aa4cxk" />
       <bpmn:sequenceFlow id="Flow_0e8m08c" sourceRef="Activity_1nf3vbl" targetRef="Gateway_0aa4cxk" />
       <bpmn:sequenceFlow id="Flow_11hl8yt" sourceRef="Gateway_0aa4cxk" targetRef="Activity_1jd3g7b" />
       <bpmn:sequenceFlow id="Flow_0e0lq33" name="Accept" sourceRef="Gateway_1vmcpql" targetRef="Activity_1uc2125">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${decision== "Accept"} </bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${decision == "accept"} </bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_0bxg6w5" name="Reject" sourceRef="Gateway_1vmcpql" targetRef="Activity_1nf3vbl">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${decision== "Reject"} </bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${decision == "reject"} </bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_0p27d3p" sourceRef="Activity_1jd3g7b" targetRef="Activity_177p8lf" />
       <bpmn:sequenceFlow id="Flow_13stzo3" sourceRef="Activity_177p8lf" targetRef="Event_1ybug52" />
       <bpmn:sequenceFlow id="Flow_178mgci" sourceRef="Event_1dey46i" targetRef="Gateway_1snchah" />
       <bpmn:sequenceFlow id="Flow_1uxsb0e" name="True" sourceRef="Gateway_1snchah" targetRef="Gateway_0advmbm">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=True</bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${receive_review == true}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_0aeapst" sourceRef="Gateway_0advmbm" targetRef="Activity_0srryhc" />
       <bpmn:sequenceFlow id="Flow_0lx7te5" sourceRef="Activity_0srryhc" targetRef="Gateway_1vmcpql" />
+      <bpmn:scriptTask id="Activity_1i8t2rr" name="Assign Paper" scriptFormat="groovy">
+        <bpmn:incoming>Flow_0cuad89</bpmn:incoming>
+        <bpmn:outgoing>Flow_1c3jerf</bpmn:outgoing>
+        <bpmn:script>if (execution.getVariable("enough_reviews") == null) {
+    execution.setVariable("enough_reviews", true);
+}
+if (execution.getVariable("receive_review") == null) {
+    execution.setVariable("receive_review", true);
+}
+if (execution.getVariable("decision") == null) {
+    execution.setVariable("decision", "accept");
+}
+S.info(execution, "Assign Paper");
+S.sendMessageToStart(execution, "Assign Paper");</bpmn:script>
+      </bpmn:scriptTask>
+      <bpmn:scriptTask id="Activity_1bxn01u" name="Re-assign Paper" scriptFormat="groovy">
+        <bpmn:incoming>Flow_1f2vqlr</bpmn:incoming>
+        <bpmn:outgoing>Flow_1az8onr</bpmn:outgoing>
+        <bpmn:property id="Property_1fkmx9e" name="__targetRef_placeholder" />
+        <bpmn:script>S.info(execution, "Re-assign Paper");
+S.sendMessageToStart(execution, "Assign Paper");</bpmn:script>
+      </bpmn:scriptTask>
+      <bpmn:scriptTask id="Activity_11s3omj" name="Remind Submission" scriptFormat="groovy">
+        <bpmn:incoming>Flow_1fz2orq</bpmn:incoming>
+        <bpmn:outgoing>Flow_0mj0ha0</bpmn:outgoing>
+        <bpmn:property id="Property_0o4pews" name="__targetRef_placeholder" />
+        <bpmn:script>S.info(execution, "Remind Submission");
+S.sendMessage(execution, "Receive Remind message");</bpmn:script>
+      </bpmn:scriptTask>
+      <bpmn:scriptTask id="Activity_0uqift3" name="Count Received Reviews" scriptFormat="groovy">
+        <bpmn:incoming>Flow_1h2tgew</bpmn:incoming>
+        <bpmn:outgoing>Flow_0iw8zcm</bpmn:outgoing>
+        <bpmn:script>S.info(execution, "Count Received Reviews");</bpmn:script>
+      </bpmn:scriptTask>
+      <bpmn:scriptTask id="Activity_0srryhc" name="Review Evaluation" scriptFormat="groovy">
+        <bpmn:incoming>Flow_0aeapst</bpmn:incoming>
+        <bpmn:outgoing>Flow_0lx7te5</bpmn:outgoing>
+        <bpmn:property id="Property_1nxhh6e" name="__targetRef_placeholder" />
+        <bpmn:dataInputAssociation id="DataInputAssociation_0oqa20k">
+          <bpmn:sourceRef>DataObjectReference_1qtjr4m</bpmn:sourceRef>
+          <bpmn:targetRef>Property_1nxhh6e</bpmn:targetRef>
+        </bpmn:dataInputAssociation>
+        <bpmn:dataOutputAssociation id="DataOutputAssociation_18xitef">
+          <bpmn:targetRef>DataObjectReference_1poerfb</bpmn:targetRef>
+        </bpmn:dataOutputAssociation>
+        <bpmn:script>S.info(execution, "Review Evaluation");</bpmn:script>
+      </bpmn:scriptTask>
+      <bpmn:scriptTask id="Activity_1uc2125" name="Prepare Acceptance Letter" scriptFormat="groovy">
+        <bpmn:incoming>Flow_0e0lq33</bpmn:incoming>
+        <bpmn:outgoing>Flow_1i02oc7</bpmn:outgoing>
+        <bpmn:dataOutputAssociation id="DataOutputAssociation_0i2vlte">
+          <bpmn:targetRef>DataObjectReference_01d8g85</bpmn:targetRef>
+        </bpmn:dataOutputAssociation>
+        <bpmn:script>S.info(execution, "Prepare Acceptance Letter");</bpmn:script>
+      </bpmn:scriptTask>
+      <bpmn:scriptTask id="Activity_1nf3vbl" name="Prepare Rejection Letter" scriptFormat="groovy">
+        <bpmn:incoming>Flow_0bxg6w5</bpmn:incoming>
+        <bpmn:outgoing>Flow_0e8m08c</bpmn:outgoing>
+        <bpmn:dataOutputAssociation id="DataOutputAssociation_0qrrc6l">
+          <bpmn:targetRef>DataObjectReference_01d8g85</bpmn:targetRef>
+        </bpmn:dataOutputAssociation>
+        <bpmn:script>S.info(execution, "Prepare Rejection Letter");</bpmn:script>
+      </bpmn:scriptTask>
+      <bpmn:scriptTask id="Activity_1jd3g7b" name="Send Reviewer Feedback" scriptFormat="groovy">
+        <bpmn:incoming>Flow_11hl8yt</bpmn:incoming>
+        <bpmn:outgoing>Flow_0p27d3p</bpmn:outgoing>
+        <bpmn:property id="Property_0ur6fvm" name="__targetRef_placeholder" />
+        <bpmn:dataInputAssociation id="DataInputAssociation_1dhjb9j">
+          <bpmn:sourceRef>DataObjectReference_1poerfb</bpmn:sourceRef>
+          <bpmn:targetRef>Property_0ur6fvm</bpmn:targetRef>
+        </bpmn:dataInputAssociation>
+        <bpmn:dataInputAssociation id="DataInputAssociation_0cwhis2">
+          <bpmn:sourceRef>DataObjectReference_1qtjr4m</bpmn:sourceRef>
+          <bpmn:targetRef>Property_0ur6fvm</bpmn:targetRef>
+        </bpmn:dataInputAssociation>
+        <bpmn:script>S.info(execution, "Send Reviewer Feedback");
+S.sendMessage(execution, "Receive Feedback");</bpmn:script>
+      </bpmn:scriptTask>
+      <bpmn:scriptTask id="Activity_177p8lf" name="Send Author Result" scriptFormat="groovy">
+        <bpmn:incoming>Flow_0p27d3p</bpmn:incoming>
+        <bpmn:outgoing>Flow_13stzo3</bpmn:outgoing>
+        <bpmn:property id="Property_08dame2" name="__targetRef_placeholder" />
+        <bpmn:dataInputAssociation id="DataInputAssociation_15vyu94">
+          <bpmn:sourceRef>DataObjectReference_1qtjr4m</bpmn:sourceRef>
+          <bpmn:targetRef>Property_08dame2</bpmn:targetRef>
+        </bpmn:dataInputAssociation>
+        <bpmn:dataInputAssociation id="DataInputAssociation_1xkbeai">
+          <bpmn:sourceRef>DataObjectReference_01d8g85</bpmn:sourceRef>
+          <bpmn:targetRef>Property_08dame2</bpmn:targetRef>
+        </bpmn:dataInputAssociation>
+        <bpmn:script>S.info(execution, "Send Author Result");
+S.sendMessage(execution, "Notification Received");</bpmn:script>
+      </bpmn:scriptTask>
+      <bpmn:intermediateCatchEvent id="Event_1puhmht" name="Receive Reviews">
+        <bpmn:incoming>Flow_07xujrs</bpmn:incoming>
+        <bpmn:outgoing>Flow_007xtik</bpmn:outgoing>
+        <bpmn:dataOutputAssociation id="DataOutputAssociation_18wzkzo">
+          <bpmn:targetRef>DataObjectReference_1qtjr4m</bpmn:targetRef>
+        </bpmn:dataOutputAssociation>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_194o8sg" messageRef="Message_32fgp4q" />
+      </bpmn:intermediateCatchEvent>
+      <bpmn:sequenceFlow id="Flow_007xtik" sourceRef="Event_1puhmht" targetRef="Event_1tbk80d" />
       <bpmn:textAnnotation id="TextAnnotation_0rqa5ow">
         <bpmn:text>decision</bpmn:text>
       </bpmn:textAnnotation>
@@ -236,15 +241,17 @@
       <bpmn:incoming>Flow_0icoho0</bpmn:incoming>
       <bpmn:incoming>Flow_1ju1o4k</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sendTask id="Activity_1pi2l5d" name="Notify Related Reviewers to Terminate" camunda:type="external" camunda:topic="Notify Related Reviewers to Terminate">
+    <bpmn:scriptTask id="Activity_1pi2l5d" name="Notify Related Reviewers to Terminate" scriptFormat="groovy">
       <bpmn:incoming>Flow_1uq2t9d</bpmn:incoming>
       <bpmn:outgoing>Flow_1ju1o4k</bpmn:outgoing>
-    </bpmn:sendTask>
+      <bpmn:script>S.info(execution, "Notify Related Reviewers to Terminate");
+S.sendMessage(execution, "Receive Withdraw Message");</bpmn:script>
+    </bpmn:scriptTask>
   </bpmn:process>
-  <bpmn:process id="Process_0y0spgr" isExecutable="false" camunda:historyTimeToLive="180" />
-  <bpmn:message id="Message_1k3cgl8" name="Send Paper" />
-  <bpmn:message id="Message_09rp3sk" name="Withdraw Paper" />
-  <bpmn:message id="Message_32fgp4q" name="Submit Review" />
+  <bpmn:process id="Process_0y0spgr" isExecutable="false" camunda:historyTimeToLive="180" camunda:isStartableInTasklist="false" />
+  <bpmn:message id="Message_1k3cgl8" name="Review Management Start" />
+  <bpmn:message id="Message_09rp3sk" name="Receive Author Withdraw Message" />
+  <bpmn:message id="Message_32fgp4q" name="Receive Reviews" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1e78zc8">
       <bpmndi:BPMNShape id="Participant_044r31t_di" bpmnElement="Participant_044r31t" isHorizontal="true">
@@ -261,20 +268,11 @@
           <dc:Bounds x="267" y="818" width="66" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0o6mim8_di" bpmnElement="Activity_1pi2l5d">
+        <dc:Bounds x="2740" y="1140" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1ulbi16_di" bpmnElement="Activity_1ulbi16" isExpanded="true">
         <dc:Bounds x="450" y="480" width="2190" height="700" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_0rqa5ow_di" bpmnElement="TextAnnotation_0rqa5ow">
-        <dc:Bounds x="1400" y="730" width="100" height="30" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1krtm24" bpmnElement="Activity_11s3omj">
-        <dc:Bounds x="1160" y="920" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_18m7ra8" bpmnElement="Activity_1bxn01u">
-        <dc:Bounds x="850" y="920" width="100" height="80" />
-        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1tzewhz" bpmnElement="Gateway_0s2yzyi" isMarkerVisible="true">
         <dc:Bounds x="1255" y="774" width="50" height="50" />
@@ -321,26 +319,11 @@
           <dc:Bounds x="1742" y="752" width="55" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_09iyteo" bpmnElement="Activity_1u7b3ih">
-        <dc:Bounds x="940" y="759" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_00ofzog" bpmnElement="Activity_1i8t2rr">
-        <dc:Bounds x="660" y="759" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1c4hxh6" bpmnElement="DataObjectReference_01d8g85">
         <dc:Bounds x="2248" y="675" width="36" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="2235" y="723" width="30" height="14" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1yqpjmu" bpmnElement="Activity_177p8lf">
-        <dc:Bounds x="2250" y="759" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_10nm308" bpmnElement="Activity_1jd3g7b">
-        <dc:Bounds x="2065" y="759" width="100" height="80" />
-        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0y255qd" bpmnElement="Event_1dey46i">
         <dc:Bounds x="1082" y="942" width="36" height="36" />
@@ -354,11 +337,8 @@
           <dc:Bounds x="978" y="923" width="85" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1rxw7jn_di" bpmnElement="Activity_1nf3vbl">
-        <dc:Bounds x="1840" y="759" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1httdi0_di" bpmnElement="Activity_1uc2125">
-        <dc:Bounds x="1840" y="641" width="100" height="80" />
+      <bpmndi:BPMNShape id="Gateway_0advmbm_di" bpmnElement="Gateway_0advmbm" isMarkerVisible="true">
+        <dc:Bounds x="1365" y="774" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1ybug52_di" bpmnElement="Event_1ybug52">
         <dc:Bounds x="2502" y="781" width="36" height="36" />
@@ -366,31 +346,53 @@
       <bpmndi:BPMNShape id="Event_1fxjyoc_di" bpmnElement="Event_1fxjyoc">
         <dc:Bounds x="492" y="781" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1s5y2t3_di" bpmnElement="Activity_0uqift3">
+      <bpmndi:BPMNShape id="Activity_1csi0ux_di" bpmnElement="Activity_1i8t2rr">
+        <dc:Bounds x="660" y="759" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1fazoem_di" bpmnElement="Activity_1bxn01u">
+        <dc:Bounds x="850" y="920" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1q9vwbf_di" bpmnElement="Activity_11s3omj">
+        <dc:Bounds x="1160" y="920" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1rt4t1z_di" bpmnElement="Activity_0uqift3">
         <dc:Bounds x="1130" y="759" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_19g2eps_di" bpmnElement="Activity_0srryhc">
+        <dc:Bounds x="1510" y="759" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0i84m4p_di" bpmnElement="Activity_1uc2125">
+        <dc:Bounds x="1840" y="641" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_13nwvt7_di" bpmnElement="Activity_1nf3vbl">
+        <dc:Bounds x="1840" y="759" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0n6x3ba_di" bpmnElement="Activity_1jd3g7b">
+        <dc:Bounds x="2065" y="759" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0eo6imb_di" bpmnElement="Activity_177p8lf">
+        <dc:Bounds x="2250" y="759" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1nf1473_di" bpmnElement="Event_1puhmht">
+        <dc:Bounds x="962" y="781" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="938" y="824" width="85" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0rqa5ow_di" bpmnElement="TextAnnotation_0rqa5ow">
+        <dc:Bounds x="1400" y="730" width="100" height="30" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_1r23xew_di" bpmnElement="TextAnnotation_1r23xew">
         <dc:Bounds x="1130" y="700" width="100" height="30" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_13bqcgq_di" bpmnElement="Activity_0srryhc">
-        <dc:Bounds x="1510" y="759" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0advmbm_di" bpmnElement="Gateway_0advmbm" isMarkerVisible="true">
-        <dc:Bounds x="1365" y="774" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_0x6qin7_di" bpmnElement="Association_0x6qin7">
-        <di:waypoint x="1510" y="774" />
-        <di:waypoint x="1481" y="760" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_1quba9p" bpmnElement="Flow_1fz2orq">
         <di:waypoint x="1280" y="824" />
         <di:waypoint x="1280" y="960" />
         <di:waypoint x="1260" y="960" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1288" y="843" width="27" height="14" />
+          <dc:Bounds x="1288" y="843" width="28" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_1qtwpfc" bpmnElement="Flow_0mj0ha0">
@@ -401,7 +403,7 @@
         <di:waypoint x="995" y="960" />
         <di:waypoint x="950" y="960" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="982" y="973" width="27" height="14" />
+          <dc:Bounds x="982" y="973" width="28" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_0fvg9bs" bpmnElement="Flow_1az8onr">
@@ -419,7 +421,7 @@
         <di:waypoint x="1335" y="798" />
         <di:waypoint x="1366" y="798" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1341" y="772" width="22" height="14" />
+          <dc:Bounds x="1341" y="772" width="23" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_1o1qml4" bpmnElement="Flow_1c3jerf">
@@ -431,7 +433,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_0jrf9t9" bpmnElement="Flow_07xujrs">
         <di:waypoint x="865" y="799" />
-        <di:waypoint x="940" y="799" />
+        <di:waypoint x="962" y="799" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0ty78hj_di" bpmnElement="Flow_0ty78hj">
         <di:waypoint x="528" y="799" />
@@ -440,10 +442,6 @@
       <bpmndi:BPMNEdge id="BPMNEdge_15iifja" bpmnElement="Flow_0cuad89">
         <di:waypoint x="618" y="799" />
         <di:waypoint x="660" y="799" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_0jn6t48" bpmnElement="Flow_1dvsvn3">
-        <di:waypoint x="1040" y="799" />
-        <di:waypoint x="1062" y="799" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_0kgdlxi" bpmnElement="Flow_1h2tgew">
         <di:waypoint x="1098" y="799" />
@@ -507,30 +505,34 @@
         <di:waypoint x="1390" y="1040" />
         <di:waypoint x="1390" y="824" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1055" y="1024" width="22" height="14" />
+          <dc:Bounds x="1055" y="1024" width="23" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0aeapst_di" bpmnElement="Flow_0aeapst">
         <di:waypoint x="1415" y="799" />
         <di:waypoint x="1510" y="799" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0lx7te5_di" bpmnElement="Flow_0lx7te5">
+        <di:waypoint x="1610" y="799" />
+        <di:waypoint x="1711" y="799" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_0x6qin7_di" bpmnElement="Association_0x6qin7">
+        <di:waypoint x="1510" y="774" />
+        <di:waypoint x="1481" y="760" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Association_02c5cgs_di" bpmnElement="Association_02c5cgs">
         <di:waypoint x="1180" y="759" />
         <di:waypoint x="1180" y="730" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0lx7te5_di" bpmnElement="Flow_0lx7te5">
-        <di:waypoint x="1610" y="799" />
-        <di:waypoint x="1711" y="799" />
+      <bpmndi:BPMNEdge id="Flow_007xtik_di" bpmnElement="Flow_007xtik">
+        <di:waypoint x="998" y="799" />
+        <di:waypoint x="1062" y="799" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="BPMNShape_1p1mqba" bpmnElement="Event_1qf075f">
         <dc:Bounds x="2732" y="772" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="2707" y="742" width="86" height="27" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0dpy0ca" bpmnElement="Activity_1pi2l5d">
-        <dc:Bounds x="2740" y="1140" width="100" height="80" />
-        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0co01hp_di" bpmnElement="Event_1hs5dzl">
         <dc:Bounds x="2622" y="1162" width="36" height="36" />
@@ -558,8 +560,8 @@
         <di:waypoint x="2732" y="790" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_1sf8rqm" bpmnElement="DataOutputAssociation_18wzkzo">
-        <di:waypoint x="1040" y="817" />
-        <di:waypoint x="1452" y="1016" />
+        <di:waypoint x="996" y="806" />
+        <di:waypoint x="1452" y="1017" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_06pnbjk" bpmnElement="DataInputAssociation_15vyu94">
         <di:waypoint x="1488" y="1032" />
@@ -625,16 +627,16 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_02mr57s_di" bpmnElement="Flow_02mr57s">
         <di:waypoint x="980" y="280" />
-        <di:waypoint x="980" y="759" />
+        <di:waypoint x="980" y="781" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="990" y="353" width="80" height="14" />
+          <dc:Bounds x="990" y="357" width="80" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0l0qu95_di" bpmnElement="Flow_0l0qu95">
         <di:waypoint x="1210" y="920" />
         <di:waypoint x="1210" y="280" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1151" y="358" width="57" height="27" />
+          <dc:Bounds x="1151" y="358" width="58" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_00xhg61_di" bpmnElement="Flow_00xhg61">

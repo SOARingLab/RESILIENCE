@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0xh6spn" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.17.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0xh6spn" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.20.0">
   <bpmn:collaboration id="Collaboration_1vagyjj">
     <bpmn:participant id="Participant_0a9m08n" name="Paramedics" processRef="Paramedics-001" />
     <bpmn:participant id="Participant_0fhpmj1" name="Operator" processRef="Operator-001" />
@@ -7,12 +7,12 @@
     <bpmn:messageFlow id="MessageFlow_1k6hmuj" sourceRef="Task_0scytpf" targetRef="StartEvent_0ye84n5" />
     <bpmn:messageFlow id="MessageFlow_17xd298" sourceRef="Task_00nltgu" targetRef="StartEvent_1k46ael" />
     <bpmn:messageFlow id="MessageFlow_0um9m8t" sourceRef="Task_0c4i6wu" targetRef="IntermediateCatchEvent_0pyy0mp" />
-    <bpmn:messageFlow id="MessageFlow_140o4mt" sourceRef="IntermediateThrowEvent_0ypcaax" targetRef="IntermediateCatchEvent_0icntie" />
-    <bpmn:messageFlow id="MessageFlow_0m9yipt" sourceRef="EndEvent_0vdkm0y" targetRef="IntermediateCatchEvent_1xzn3s5" />
-    <bpmn:messageFlow id="MessageFlow_0bi28yb" sourceRef="IntermediateThrowEvent_1dui1lu" targetRef="IntermediateCatchEvent_13junj7" />
-    <bpmn:messageFlow id="MessageFlow_1npxp2v" sourceRef="IntermediateThrowEvent_0pnwg7c" targetRef="IntermediateCatchEvent_0bll4al" />
+    <bpmn:messageFlow id="MessageFlow_0m9yipt" sourceRef="Activity_1f76yde" targetRef="IntermediateCatchEvent_1xzn3s5" />
+    <bpmn:messageFlow id="MessageFlow_0bi28yb" sourceRef="Activity_1wh2ssq" targetRef="IntermediateCatchEvent_13junj7" />
+    <bpmn:messageFlow id="MessageFlow_1npxp2v" sourceRef="Activity_1a7nmvv" targetRef="IntermediateCatchEvent_0bll4al" />
+    <bpmn:messageFlow id="MessageFlow_140o4mt" sourceRef="Activity_0t0r3kj" targetRef="IntermediateCatchEvent_0icntie" />
   </bpmn:collaboration>
-  <bpmn:process id="Paramedics-001" isExecutable="true" camunda:historyTimeToLive="180">
+  <bpmn:process id="Paramedics-001" isExecutable="true" camunda:historyTimeToLive="180" camunda:isStartableInTasklist="false">
     <bpmn:startEvent id="StartEvent_0ye84n5" name="Request paramedics intervention">
       <bpmn:outgoing>SequenceFlow_05j33ri</bpmn:outgoing>
       <bpmn:messageEventDefinition messageRef="Message_1hahq9r" />
@@ -23,19 +23,10 @@
       <bpmn:outgoing>SequenceFlow_0totb1k</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:exclusiveGateway id="ExclusiveGateway_191zc17">
-      <bpmn:incoming>SequenceFlow_0mbbzo7</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_0totb1k</bpmn:incoming>
+      <bpmn:incoming>Flow_05hmngx</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0ua07i4</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:endEvent id="EndEvent_0vdkm0y" name="Patient arrives at the hospital">
-      <bpmn:incoming>SequenceFlow_1257dnj</bpmn:incoming>
-      <bpmn:messageEventDefinition camunda:type="external" camunda:topic="Patient arrives at the hospital" />
-    </bpmn:endEvent>
-    <bpmn:intermediateThrowEvent id="IntermediateThrowEvent_0ypcaax" name="Blood collected by paramedics">
-      <bpmn:incoming>SequenceFlow_1583e4h</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_0mbbzo7</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_02nd0x8" camunda:type="external" camunda:topic="Blood collected by paramedics" />
-    </bpmn:intermediateThrowEvent>
     <bpmn:sequenceFlow id="SequenceFlow_05j33ri" sourceRef="StartEvent_0ye84n5" targetRef="Task_0rm9uco" />
     <bpmn:sequenceFlow id="SequenceFlow_1a637xv" sourceRef="Task_0rm9uco" targetRef="Task_1thnijf" />
     <bpmn:sequenceFlow id="SequenceFlow_04ba82u" sourceRef="Task_1thnijf" targetRef="ExclusiveGateway_0k8jeon" />
@@ -45,50 +36,56 @@
     <bpmn:sequenceFlow id="SequenceFlow_0totb1k" name="NO" sourceRef="ExclusiveGateway_0k8jeon" targetRef="ExclusiveGateway_191zc17">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${feasible != true} </bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_1583e4h" sourceRef="Task_0nhsbx3" targetRef="IntermediateThrowEvent_0ypcaax" />
-    <bpmn:sequenceFlow id="SequenceFlow_0mbbzo7" sourceRef="IntermediateThrowEvent_0ypcaax" targetRef="ExclusiveGateway_191zc17" />
     <bpmn:sequenceFlow id="SequenceFlow_0ua07i4" sourceRef="ExclusiveGateway_191zc17" targetRef="Task_1syxqrx" />
-    <bpmn:sequenceFlow id="SequenceFlow_1257dnj" sourceRef="Task_1syxqrx" targetRef="EndEvent_0vdkm0y" />
-    <bpmn:serviceTask id="Task_0rm9uco" name="Reach patient" camunda:type="external" camunda:topic="Reach patient">
+    <bpmn:sequenceFlow id="SequenceFlow_1257dnj" sourceRef="Task_1syxqrx" targetRef="Activity_1f76yde" />
+    <bpmn:scriptTask id="Task_0rm9uco" name="Reach patient" scriptFormat="groovy">
       <bpmn:incoming>SequenceFlow_05j33ri</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1a637xv</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="Task_0nhsbx3" name="Blood collection" camunda:type="external" camunda:topic="Blood collection By Paramedics">
-      <bpmn:incoming>SequenceFlow_1f4esvb</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1583e4h</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="Task_1syxqrx" name="Reach hospital" camunda:type="external" camunda:topic="Reach hospital">
-      <bpmn:incoming>SequenceFlow_0ua07i4</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1257dnj</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:userTask id="Task_1thnijf" name="Evaluate patient conditions">
-      <bpmn:extensionElements>
-        <camunda:formData>
-          <camunda:formField id="feasible" label="feasible" type="boolean" />
-        </camunda:formData>
-      </bpmn:extensionElements>
+      <bpmn:script>if (execution.getVariable("feasible") == null) {
+    execution.setVariable("feasible", true);
+}
+S.info(execution, "Reach patient");</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Task_1thnijf" name="Evaluate patient conditions" scriptFormat="groovy">
       <bpmn:incoming>SequenceFlow_1a637xv</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_04ba82u</bpmn:outgoing>
-    </bpmn:userTask>
+      <bpmn:script>S.info(execution, "Evaluate patient conditions");</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Task_0nhsbx3" name="Blood collection" scriptFormat="groovy">
+      <bpmn:incoming>SequenceFlow_1f4esvb</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1583e4h</bpmn:outgoing>
+      <bpmn:script>S.info(execution, "Blood collection");</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Task_1syxqrx" name="Reach hospital" scriptFormat="groovy">
+      <bpmn:incoming>SequenceFlow_0ua07i4</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1257dnj</bpmn:outgoing>
+      <bpmn:script>S.info(execution, "Reach hospital");</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="Flow_05hmngx" sourceRef="Activity_0t0r3kj" targetRef="ExclusiveGateway_191zc17" />
+    <bpmn:sequenceFlow id="SequenceFlow_1583e4h" sourceRef="Task_0nhsbx3" targetRef="Activity_0t0r3kj" />
+    <bpmn:sequenceFlow id="Flow_17ixv3w" sourceRef="Activity_1f76yde" targetRef="EndEvent_0vdkm0y" />
+    <bpmn:endEvent id="EndEvent_0vdkm0y">
+      <bpmn:incoming>Flow_17ixv3w</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:scriptTask id="Activity_1f76yde" name="Patient arrives at the hospital" scriptFormat="groovy">
+      <bpmn:incoming>SequenceFlow_1257dnj</bpmn:incoming>
+      <bpmn:outgoing>Flow_17ixv3w</bpmn:outgoing>
+      <bpmn:script>S.info(execution, "Patient arrives at the hospital");
+S.sendMessage(execution, "Patient arrives at the hospital to Operator");</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Activity_0t0r3kj" name="Blood collected by paramedics" scriptFormat="groovy">
+      <bpmn:incoming>SequenceFlow_1583e4h</bpmn:incoming>
+      <bpmn:outgoing>Flow_05hmngx</bpmn:outgoing>
+      <bpmn:script>S.info(execution, "Blood collected by paramedics");
+S.sendMessage(execution, "Blood collected by paramedics");</bpmn:script>
+    </bpmn:scriptTask>
   </bpmn:process>
   <bpmn:process id="Operator-001" isExecutable="true" camunda:historyTimeToLive="180">
-    <bpmn:startEvent id="StartEvent_1sv9p5i" name="Incoming emergency call">
-      <bpmn:outgoing>SequenceFlow_0bcrri2</bpmn:outgoing>
-      <bpmn:messageEventDefinition messageRef="Message_1b1lps5" />
-    </bpmn:startEvent>
     <bpmn:parallelGateway id="ExclusiveGateway_1fgiiq4">
       <bpmn:incoming>SequenceFlow_0xepgs6</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0ue7vmw</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_093cwoj</bpmn:outgoing>
     </bpmn:parallelGateway>
-    <bpmn:sendTask id="Task_0scytpf" name="Request paramedics intervention" camunda:type="external" camunda:topic="Request paramedics intervention">
-      <bpmn:incoming>SequenceFlow_0ue7vmw</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1gozquk</bpmn:outgoing>
-    </bpmn:sendTask>
-    <bpmn:sendTask id="Task_00nltgu" name="Alert clinicians" camunda:type="external" camunda:topic="Alert clinicians">
-      <bpmn:incoming>SequenceFlow_093cwoj</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1bcco3f</bpmn:outgoing>
-    </bpmn:sendTask>
     <bpmn:parallelGateway id="ExclusiveGateway_1y9umno">
       <bpmn:incoming>SequenceFlow_1gozquk</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_1bcco3f</bpmn:incoming>
@@ -100,7 +97,7 @@
       <bpmn:outgoing>SequenceFlow_1uaoiti</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:eventBasedGateway id="ExclusiveGateway_0aseiv0">
-      <bpmn:incoming>SequenceFlow_1v408is</bpmn:incoming>
+      <bpmn:incoming>Flow_0o4pb6j</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1jaswa1</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_02g2b8h</bpmn:outgoing>
     </bpmn:eventBasedGateway>
@@ -109,10 +106,6 @@
       <bpmn:outgoing>SequenceFlow_1iwapvz</bpmn:outgoing>
       <bpmn:messageEventDefinition messageRef="Message_20mj44p" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:sendTask id="Task_0c4i6wu" name="Cancel scheduled blood collection" camunda:type="external" camunda:topic="Cancel scheduled blood collection">
-      <bpmn:incoming>SequenceFlow_1iwapvz</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1fcoc8q</bpmn:outgoing>
-    </bpmn:sendTask>
     <bpmn:exclusiveGateway id="ExclusiveGateway_0j5ls7v">
       <bpmn:incoming>SequenceFlow_057eto5</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_1fcoc8q</bpmn:incoming>
@@ -120,7 +113,7 @@
     </bpmn:exclusiveGateway>
     <bpmn:exclusiveGateway id="ExclusiveGateway_0aopkhi">
       <bpmn:incoming>SequenceFlow_1fmuxhx</bpmn:incoming>
-      <bpmn:incoming>SequenceFlow_005655f</bpmn:incoming>
+      <bpmn:incoming>Flow_0dgj9qp</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1tc538d</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:endEvent id="EndEvent_03v9pp9" name="Call concluded">
@@ -131,16 +124,6 @@
       <bpmn:outgoing>SequenceFlow_057eto5</bpmn:outgoing>
       <bpmn:messageEventDefinition messageRef="Message_2s4301c" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:intermediateThrowEvent id="IntermediateThrowEvent_1dui1lu" name="Request examinations">
-      <bpmn:incoming>SequenceFlow_15lwik3</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_005655f</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_17kkxx3" messageRef="Message_10ktekf" camunda:type="external" camunda:topic="Request examinations" />
-    </bpmn:intermediateThrowEvent>
-    <bpmn:intermediateThrowEvent id="IntermediateThrowEvent_0pnwg7c" name="Request blood collection">
-      <bpmn:incoming>SequenceFlow_1uaoiti</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1v408is</bpmn:outgoing>
-      <bpmn:messageEventDefinition camunda:type="external" camunda:topic="Request blood collection" />
-    </bpmn:intermediateThrowEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0bcrri2" sourceRef="StartEvent_1sv9p5i" targetRef="Task_16ev7fq" />
     <bpmn:sequenceFlow id="SequenceFlow_0xepgs6" sourceRef="Task_16ev7fq" targetRef="ExclusiveGateway_1fgiiq4" />
     <bpmn:sequenceFlow id="SequenceFlow_0ue7vmw" sourceRef="ExclusiveGateway_1fgiiq4" targetRef="Task_0scytpf" />
@@ -148,38 +131,69 @@
     <bpmn:sequenceFlow id="SequenceFlow_1gozquk" sourceRef="Task_0scytpf" targetRef="ExclusiveGateway_1y9umno" />
     <bpmn:sequenceFlow id="SequenceFlow_1bcco3f" sourceRef="Task_00nltgu" targetRef="ExclusiveGateway_1y9umno" />
     <bpmn:sequenceFlow id="SequenceFlow_11doox6" sourceRef="ExclusiveGateway_1y9umno" targetRef="ExclusiveGateway_08ow3r9" />
-    <bpmn:sequenceFlow id="SequenceFlow_15lwik3" name="YES" sourceRef="ExclusiveGateway_08ow3r9" targetRef="IntermediateThrowEvent_1dui1lu">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${bloodType != 'unknown'}</bpmn:conditionExpression>
+    <bpmn:sequenceFlow id="SequenceFlow_15lwik3" name="YES" sourceRef="ExclusiveGateway_08ow3r9" targetRef="Activity_1wh2ssq">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${bloodType != "unknown"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_1uaoiti" name="NO" sourceRef="ExclusiveGateway_08ow3r9" targetRef="IntermediateThrowEvent_0pnwg7c">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${bloodType == 'unknown'}</bpmn:conditionExpression>
+    <bpmn:sequenceFlow id="SequenceFlow_1uaoiti" name="NO" sourceRef="ExclusiveGateway_08ow3r9" targetRef="Activity_1a7nmvv">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${bloodType == "unknown"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_1v408is" sourceRef="IntermediateThrowEvent_0pnwg7c" targetRef="ExclusiveGateway_0aseiv0" />
     <bpmn:sequenceFlow id="SequenceFlow_1jaswa1" sourceRef="ExclusiveGateway_0aseiv0" targetRef="IntermediateCatchEvent_0icntie" />
     <bpmn:sequenceFlow id="SequenceFlow_02g2b8h" sourceRef="ExclusiveGateway_0aseiv0" targetRef="IntermediateCatchEvent_1xzn3s5" />
     <bpmn:sequenceFlow id="SequenceFlow_1iwapvz" sourceRef="IntermediateCatchEvent_0icntie" targetRef="Task_0c4i6wu" />
     <bpmn:sequenceFlow id="SequenceFlow_1fcoc8q" sourceRef="Task_0c4i6wu" targetRef="ExclusiveGateway_0j5ls7v" />
     <bpmn:sequenceFlow id="SequenceFlow_057eto5" sourceRef="IntermediateCatchEvent_1xzn3s5" targetRef="ExclusiveGateway_0j5ls7v" />
     <bpmn:sequenceFlow id="SequenceFlow_1fmuxhx" sourceRef="ExclusiveGateway_0j5ls7v" targetRef="ExclusiveGateway_0aopkhi" />
-    <bpmn:sequenceFlow id="SequenceFlow_005655f" sourceRef="IntermediateThrowEvent_1dui1lu" targetRef="ExclusiveGateway_0aopkhi" />
     <bpmn:sequenceFlow id="SequenceFlow_1tc538d" sourceRef="ExclusiveGateway_0aopkhi" targetRef="EndEvent_03v9pp9" />
-    <bpmn:userTask id="Task_16ev7fq" name="Get informed about patient status and location">
-      <bpmn:extensionElements>
-        <camunda:formData>
-          <camunda:formField id="patientId" label="patientId" type="string" />
-          <camunda:formField id="location" label="location" type="string" />
-          <camunda:formField id="bloodType" label="bloodType" type="string" />
-        </camunda:formData>
-      </bpmn:extensionElements>
+    <bpmn:startEvent id="StartEvent_1sv9p5i" name="Incoming emergency call">
+      <bpmn:outgoing>SequenceFlow_0bcrri2</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:scriptTask id="Task_16ev7fq" name="Get informed about patient status and location" scriptFormat="groovy">
       <bpmn:incoming>SequenceFlow_0bcrri2</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0xepgs6</bpmn:outgoing>
-    </bpmn:userTask>
+      <bpmn:script>if (execution.getVariable("bloodType") == null) {
+    execution.setVariable("bloodType", "unknown");
+}
+S.info(execution, "----------");
+S.info(execution, "Get informed about patient status and location");</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Task_0scytpf" name="Request paramedics intervention" scriptFormat="groovy">
+      <bpmn:incoming>SequenceFlow_0ue7vmw</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1gozquk</bpmn:outgoing>
+      <bpmn:script>S.info(execution, "Request paramedics intervention");
+S.sendMessageToStart(execution, "Request paramedics intervention");</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Task_00nltgu" name="Alert clinicians" scriptFormat="groovy">
+      <bpmn:incoming>SequenceFlow_093cwoj</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1bcco3f</bpmn:outgoing>
+      <bpmn:script>S.info(execution, "Alert clinicians");
+S.sendMessageToStart(execution, "Alert clinicians");</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Task_0c4i6wu" name="Cancel scheduled blood collection" scriptFormat="groovy">
+      <bpmn:incoming>SequenceFlow_1iwapvz</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1fcoc8q</bpmn:outgoing>
+      <bpmn:script>S.info(execution, "Cancel scheduled blood collection");
+S.sendMessage(execution, "Cancel scheduled blood collection");</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="Flow_0dgj9qp" sourceRef="Activity_1wh2ssq" targetRef="ExclusiveGateway_0aopkhi" />
+    <bpmn:sequenceFlow id="Flow_0o4pb6j" sourceRef="Activity_1a7nmvv" targetRef="ExclusiveGateway_0aseiv0" />
+    <bpmn:scriptTask id="Activity_1wh2ssq" name="Request examinations" scriptFormat="groovy">
+      <bpmn:incoming>SequenceFlow_15lwik3</bpmn:incoming>
+      <bpmn:outgoing>Flow_0dgj9qp</bpmn:outgoing>
+      <bpmn:script>S.info(execution, "Request examinations");
+S.sendMessage(execution, "Request examinations");</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Activity_1a7nmvv" name="Request blood collection" scriptFormat="groovy">
+      <bpmn:incoming>SequenceFlow_1uaoiti</bpmn:incoming>
+      <bpmn:outgoing>Flow_0o4pb6j</bpmn:outgoing>
+      <bpmn:script>S.info(execution, "Request blood collection");
+S.sendMessage(execution, "Request blood collection");</bpmn:script>
+    </bpmn:scriptTask>
     <bpmn:textAnnotation id="TextAnnotation_1k1re95">
       <bpmn:text>Patient ID,location,blood type</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:association id="Association_145nrj2" sourceRef="Task_16ev7fq" targetRef="TextAnnotation_1k1re95" />
   </bpmn:process>
-  <bpmn:process id="Emergency-Room-001" isExecutable="true" camunda:historyTimeToLive="180">
+  <bpmn:process id="Emergency-Room-001" isExecutable="true" camunda:historyTimeToLive="180" camunda:isStartableInTasklist="false">
     <bpmn:laneSet id="LaneSet_11404ob">
       <bpmn:lane id="Lane_0k30lkz" name="Physician">
         <bpmn:flowNodeRef>Task_1hpb4gg</bpmn:flowNodeRef>
@@ -190,21 +204,21 @@
         <bpmn:flowNodeRef>ExclusiveGateway_1h41rt2</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>ExclusiveGateway_1a4qcj0</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>IntermediateCatchEvent_0pyy0mp</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>IntermediateThrowEvent_00mk57x</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>ExclusiveGateway_0zhsg48</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>ExclusiveGateway_008ztdz</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>ExclusiveGateway_0vivi81</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>ExclusiveGateway_007d1r9</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>EndEvent_02dhf5d</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>IntermediateCatchEvent_1m24d3n</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>IntermediateThrowEvent_1c581x7</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>IntermediateCatchEvent_13junj7</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>IntermediateCatchEvent_0bll4al</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Task_14d6gus</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Task_13fazqx</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Task_1qekvmm</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Task_1q3raoh</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Task_0gn0y6x</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_14d6gus</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_1qekvmm</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>IntermediateThrowEvent_1c581x7</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>IntermediateThrowEvent_00mk57x</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>IntermediateCatchEvent_1m24d3n</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:startEvent id="StartEvent_1k46ael" name="Alert clinicians">
@@ -225,11 +239,6 @@
       <bpmn:incoming>SequenceFlow_1xp0bd9</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1fcciw1</bpmn:outgoing>
       <bpmn:messageEventDefinition messageRef="Message_2t86qbb" />
-    </bpmn:intermediateCatchEvent>
-    <bpmn:intermediateCatchEvent id="IntermediateThrowEvent_00mk57x" name="Patient arrives at the hospital ">
-      <bpmn:incoming>SequenceFlow_1fcciw1</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1dqgx1n</bpmn:outgoing>
-      <bpmn:messageEventDefinition messageRef="Message_05ce1o4" />
     </bpmn:intermediateCatchEvent>
     <bpmn:exclusiveGateway id="ExclusiveGateway_0zhsg48">
       <bpmn:incoming>SequenceFlow_1r537lm</bpmn:incoming>
@@ -254,16 +263,6 @@
     <bpmn:endEvent id="EndEvent_02dhf5d">
       <bpmn:incoming>SequenceFlow_1qnlf7p</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:intermediateCatchEvent id="IntermediateCatchEvent_1m24d3n" name="Patient arrives at the hospital">
-      <bpmn:incoming>SequenceFlow_034hget</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1tagztx</bpmn:outgoing>
-      <bpmn:messageEventDefinition messageRef="Message_05ce1o4" />
-    </bpmn:intermediateCatchEvent>
-    <bpmn:intermediateCatchEvent id="IntermediateThrowEvent_1c581x7" name="Patient arrives at the hospital ">
-      <bpmn:incoming>SequenceFlow_1xrjcsw</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1igbr32</bpmn:outgoing>
-      <bpmn:messageEventDefinition messageRef="Message_05ce1o4" />
-    </bpmn:intermediateCatchEvent>
     <bpmn:intermediateCatchEvent id="IntermediateCatchEvent_13junj7" name="Request esamination">
       <bpmn:incoming>SequenceFlow_1wp3cno</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1xrjcsw</bpmn:outgoing>
@@ -274,39 +273,6 @@
       <bpmn:outgoing>SequenceFlow_0sy93wb</bpmn:outgoing>
       <bpmn:messageEventDefinition messageRef="Message_3ncbr6h" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:serviceTask id="Task_14d6gus" name="Prepare room for blood collection" camunda:type="external" camunda:topic="Prepare room for blood collection">
-      <bpmn:incoming>SequenceFlow_0sy93wb</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_0p3xpsj</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="Task_13fazqx" name="Blood collection" camunda:type="external" camunda:topic="Blood collection By Nurse">
-      <bpmn:incoming>SequenceFlow_1tagztx</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1hf3zf8</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:userTask id="Task_1qekvmm" name="Obtain blood analyses results">
-      <bpmn:extensionElements>
-        <camunda:formData>
-          <camunda:formField id="bloodType" label="bloodType" type="string" />
-        </camunda:formData>
-      </bpmn:extensionElements>
-      <bpmn:incoming>SequenceFlow_1hf3zf8</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1r537lm</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:serviceTask id="Task_1q3raoh" name="Take care of patient " camunda:type="external" camunda:topic="Take care of patient ">
-      <bpmn:incoming>SequenceFlow_1thnbz6</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1uw1515</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="Task_1hpb4gg" name="Examination" camunda:type="external" camunda:topic="Examination">
-      <bpmn:incoming>SequenceFlow_1xswkh7</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_0rkq1kt</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="Task_169yf92" name="Schedule blood transfusion" camunda:type="external" camunda:topic="Schedule blood transfusion">
-      <bpmn:incoming>SequenceFlow_0rkq1kt</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1rdtelk</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="Task_0gn0y6x" name="Blood transfusion" camunda:type="external" camunda:topic="Blood transfusion">
-      <bpmn:incoming>SequenceFlow_1rdtelk</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1qnlf7p</bpmn:outgoing>
-    </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_0hfa75l" sourceRef="StartEvent_1k46ael" targetRef="ExclusiveGateway_1h41rt2" />
     <bpmn:sequenceFlow id="SequenceFlow_1wp3cno" sourceRef="ExclusiveGateway_1h41rt2" targetRef="IntermediateCatchEvent_13junj7" />
     <bpmn:sequenceFlow id="SequenceFlow_06xpbnx" sourceRef="ExclusiveGateway_1h41rt2" targetRef="IntermediateCatchEvent_0bll4al" />
@@ -334,6 +300,62 @@
     <bpmn:sequenceFlow id="SequenceFlow_1hf3zf8" sourceRef="Task_13fazqx" targetRef="Task_1qekvmm" />
     <bpmn:sequenceFlow id="SequenceFlow_0rkq1kt" sourceRef="Task_1hpb4gg" targetRef="Task_169yf92" />
     <bpmn:sequenceFlow id="SequenceFlow_1rdtelk" sourceRef="Task_169yf92" targetRef="Task_0gn0y6x" />
+    <bpmn:scriptTask id="Task_13fazqx" name="Blood collection" scriptFormat="groovy">
+      <bpmn:incoming>SequenceFlow_1tagztx</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1hf3zf8</bpmn:outgoing>
+      <bpmn:script>S.info(execution, "Blood collection");</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Task_1q3raoh" name="Take care of patient" scriptFormat="groovy">
+      <bpmn:incoming>SequenceFlow_1thnbz6</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1uw1515</bpmn:outgoing>
+      <bpmn:script>S.info(execution, "Take care of patient");</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Task_1hpb4gg" name="Examination" scriptFormat="groovy">
+      <bpmn:incoming>SequenceFlow_1xswkh7</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0rkq1kt</bpmn:outgoing>
+      <bpmn:script>S.info(execution, "Examination");</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Task_169yf92" name="Schedule blood transfusion" scriptFormat="groovy">
+      <bpmn:incoming>SequenceFlow_0rkq1kt</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1rdtelk</bpmn:outgoing>
+      <bpmn:script>S.info(execution, "Schedule blood transfusion");</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Task_0gn0y6x" name="Blood transfusion" scriptFormat="groovy">
+      <bpmn:incoming>SequenceFlow_1rdtelk</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1qnlf7p</bpmn:outgoing>
+      <bpmn:script>S.info(execution, "Blood transfusion");</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Task_14d6gus" name="Prepare room for blood collection" scriptFormat="groovy">
+      <bpmn:incoming>SequenceFlow_0sy93wb</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0p3xpsj</bpmn:outgoing>
+      <bpmn:script>S.info(execution, "Prepare room for blood collection");</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Task_1qekvmm" name="Obtain blood analyses results" scriptFormat="groovy">
+      <bpmn:incoming>SequenceFlow_1hf3zf8</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1r537lm</bpmn:outgoing>
+      <bpmn:script>S.info(execution, "Obtain blood analyses results");</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:intermediateCatchEvent id="IntermediateThrowEvent_1c581x7" name="Patient arrives at the hospital ">
+      <bpmn:incoming>SequenceFlow_1xrjcsw</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1igbr32</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_0zfm3md">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1S</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:intermediateCatchEvent id="IntermediateThrowEvent_00mk57x" name="Patient arrives at the hospital ">
+      <bpmn:incoming>SequenceFlow_1fcciw1</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1dqgx1n</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_1qgfjpq">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1S</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:intermediateCatchEvent id="IntermediateCatchEvent_1m24d3n" name="Patient arrives at the hospital">
+      <bpmn:incoming>SequenceFlow_034hget</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1tagztx</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_02555bt">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT60S</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
     <bpmn:textAnnotation id="TextAnnotation_14g7wcg">
       <bpmn:text>Obtain patient's blood type</bpmn:text>
     </bpmn:textAnnotation>
@@ -352,7 +374,7 @@
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1vagyjj">
       <bpmndi:BPMNShape id="Participant_0a9m08n_di" bpmnElement="Participant_0a9m08n" isHorizontal="true">
-        <dc:Bounds x="153" y="101" width="1241" height="316" />
+        <dc:Bounds x="153" y="101" width="1287" height="316" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="StartEvent_1lhunw1_di" bpmnElement="StartEvent_0ye84n5">
         <dc:Bounds x="205" y="269" width="36" height="36" />
@@ -369,29 +391,29 @@
       <bpmndi:BPMNShape id="ExclusiveGateway_191zc17_di" bpmnElement="ExclusiveGateway_191zc17" isMarkerVisible="true">
         <dc:Bounds x="978" y="262" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="EndEvent_0igzb86_di" bpmnElement="EndEvent_0vdkm0y">
-        <dc:Bounds x="1262" y="269" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1238" y="238" width="84" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="IntermediateThrowEvent_0lf868b_di" bpmnElement="IntermediateThrowEvent_0ypcaax">
-        <dc:Bounds x="875" y="269" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="855" y="232" width="75" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1xmatbq_di" bpmnElement="Task_0rm9uco">
+      <bpmndi:BPMNShape id="Activity_1n27zw1_di" bpmnElement="Task_0rm9uco">
         <dc:Bounds x="291" y="247" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1mwihji_di" bpmnElement="Task_0nhsbx3">
+      <bpmndi:BPMNShape id="Activity_1v038q7_di" bpmnElement="Task_1thnijf">
+        <dc:Bounds x="441" y="247" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0zrjx6d_di" bpmnElement="Task_0nhsbx3">
         <dc:Bounds x="708" y="247" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1oevcxw_di" bpmnElement="Task_1syxqrx">
+      <bpmndi:BPMNShape id="Activity_0bxmamb_di" bpmnElement="Task_1syxqrx">
         <dc:Bounds x="1095" y="247" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0p5j25u_di" bpmnElement="Task_1thnijf">
-        <dc:Bounds x="441" y="247" width="100" height="80" />
+      <bpmndi:BPMNShape id="Event_1urpmy2_di" bpmnElement="EndEvent_0vdkm0y">
+        <dc:Bounds x="1372" y="269" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1318" y="238" width="84" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_06igues_di" bpmnElement="Activity_1f76yde">
+        <dc:Bounds x="1230" y="247" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1v46bn4_di" bpmnElement="Activity_0t0r3kj">
+        <dc:Bounds x="840" y="247" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_05j33ri_di" bpmnElement="SequenceFlow_05j33ri">
         <di:waypoint x="241" y="287" />
@@ -421,39 +443,31 @@
           <dc:Bounds x="801" y="184" width="17" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_1583e4h_di" bpmnElement="SequenceFlow_1583e4h">
-        <di:waypoint x="808" y="287" />
-        <di:waypoint x="875" y="287" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_0mbbzo7_di" bpmnElement="SequenceFlow_0mbbzo7">
-        <di:waypoint x="911" y="287" />
-        <di:waypoint x="978" y="287" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0ua07i4_di" bpmnElement="SequenceFlow_0ua07i4">
         <di:waypoint x="1028" y="287" />
         <di:waypoint x="1095" y="287" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1257dnj_di" bpmnElement="SequenceFlow_1257dnj">
         <di:waypoint x="1195" y="287" />
-        <di:waypoint x="1262" y="287" />
+        <di:waypoint x="1230" y="287" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05hmngx_di" bpmnElement="Flow_05hmngx">
+        <di:waypoint x="940" y="287" />
+        <di:waypoint x="978" y="287" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1583e4h_di" bpmnElement="SequenceFlow_1583e4h">
+        <di:waypoint x="808" y="287" />
+        <di:waypoint x="840" y="287" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_17ixv3w_di" bpmnElement="Flow_17ixv3w">
+        <di:waypoint x="1330" y="287" />
+        <di:waypoint x="1372" y="287" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Participant_0fhpmj1_di" bpmnElement="Participant_0fhpmj1" isHorizontal="true">
         <dc:Bounds x="153" y="498" width="1657" height="365" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="StartEvent_1sjhwf8_di" bpmnElement="StartEvent_1sv9p5i">
-        <dc:Bounds x="209" y="620" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="191" y="663" width="74" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ParallelGateway_1jz8h1c_di" bpmnElement="ExclusiveGateway_1fgiiq4">
         <dc:Bounds x="445" y="613" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="SendTask_0egzkw6_di" bpmnElement="Task_0scytpf">
-        <dc:Bounds x="540" y="515" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="SendTask_03zhife_di" bpmnElement="Task_00nltgu">
-        <dc:Bounds x="540" y="670" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ParallelGateway_13wcecv_di" bpmnElement="ExclusiveGateway_1y9umno">
         <dc:Bounds x="693" y="613" width="50" height="50" />
@@ -469,10 +483,6 @@
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1105" y="810" width="75" height="27" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="SendTask_0gedf0f_di" bpmnElement="Task_0c4i6wu">
-        <dc:Bounds x="1216" y="745" width="100" height="80" />
-        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ExclusiveGateway_0j5ls7v_di" bpmnElement="ExclusiveGateway_0j5ls7v" isMarkerVisible="true">
         <dc:Bounds x="1385" y="760" width="50" height="50" />
@@ -492,20 +502,29 @@
           <dc:Bounds x="1157" y="692" width="84" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="IntermediateThrowEvent_0t7am2w_di" bpmnElement="IntermediateThrowEvent_1dui1lu">
-        <dc:Bounds x="880" y="537" width="36" height="36" />
+      <bpmndi:BPMNShape id="Event_1nlpiyz_di" bpmnElement="StartEvent_1sv9p5i">
+        <dc:Bounds x="209" y="620" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="865" y="507" width="65" height="27" />
+          <dc:Bounds x="191" y="663" width="74" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="IntermediateThrowEvent_07jg15p_di" bpmnElement="IntermediateThrowEvent_0pnwg7c">
-        <dc:Bounds x="929" y="692" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="912" y="655" width="71" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1vqtci2_di" bpmnElement="Task_16ev7fq">
+      <bpmndi:BPMNShape id="Activity_1k1yoiv_di" bpmnElement="Task_16ev7fq">
         <dc:Bounds x="295" y="598" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_10gnodv_di" bpmnElement="Task_0scytpf">
+        <dc:Bounds x="540" y="515" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_04lwlmf_di" bpmnElement="Task_00nltgu">
+        <dc:Bounds x="540" y="670" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0q8ixwc_di" bpmnElement="Task_0c4i6wu">
+        <dc:Bounds x="1216" y="745" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0pntgwl_di" bpmnElement="Activity_1wh2ssq">
+        <dc:Bounds x="840" y="515" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_01g62c0_di" bpmnElement="Activity_1a7nmvv">
+        <dc:Bounds x="900" y="670" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_1k1re95_di" bpmnElement="TextAnnotation_1k1re95">
         <dc:Bounds x="295" y="715" width="100" height="54" />
@@ -545,22 +564,18 @@
       <bpmndi:BPMNEdge id="SequenceFlow_15lwik3_di" bpmnElement="SequenceFlow_15lwik3">
         <di:waypoint x="821" y="613" />
         <di:waypoint x="821" y="555" />
-        <di:waypoint x="880" y="555" />
+        <di:waypoint x="840" y="555" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="825" y="581" width="22" height="14" />
+          <dc:Bounds x="813" y="510" width="22" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1uaoiti_di" bpmnElement="SequenceFlow_1uaoiti">
         <di:waypoint x="821" y="663" />
         <di:waypoint x="821" y="710" />
-        <di:waypoint x="929" y="710" />
+        <di:waypoint x="900" y="710" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="828" y="684" width="17" height="14" />
+          <dc:Bounds x="858" y="687" width="17" height="14" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_1v408is_di" bpmnElement="SequenceFlow_1v408is">
-        <di:waypoint x="965" y="710" />
-        <di:waypoint x="1018" y="710" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1jaswa1_di" bpmnElement="SequenceFlow_1jaswa1">
         <di:waypoint x="1043" y="735" />
@@ -589,14 +604,18 @@
         <di:waypoint x="1435" y="785" />
         <di:waypoint x="1497" y="785" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_005655f_di" bpmnElement="SequenceFlow_005655f">
-        <di:waypoint x="916" y="555" />
-        <di:waypoint x="1522" y="555" />
-        <di:waypoint x="1522" y="760" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1tc538d_di" bpmnElement="SequenceFlow_1tc538d">
         <di:waypoint x="1547" y="785" />
         <di:waypoint x="1609" y="785" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0dgj9qp_di" bpmnElement="Flow_0dgj9qp">
+        <di:waypoint x="940" y="555" />
+        <di:waypoint x="1522" y="555" />
+        <di:waypoint x="1522" y="760" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0o4pb6j_di" bpmnElement="Flow_0o4pb6j">
+        <di:waypoint x="1000" y="710" />
+        <di:waypoint x="1018" y="710" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Association_145nrj2_di" bpmnElement="Association_145nrj2">
         <di:waypoint x="345" y="678" />
@@ -629,12 +648,6 @@
           <dc:Bounds x="698" y="1471" width="82" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="IntermediateCatchEvent_053av6v_di" bpmnElement="IntermediateThrowEvent_00mk57x">
-        <dc:Bounds x="815" y="1428" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="791" y="1471" width="84" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ExclusiveGateway_0zhsg48_di" bpmnElement="ExclusiveGateway_0zhsg48" isMarkerVisible="true">
         <dc:Bounds x="1085" y="1343" width="50" height="50" />
       </bpmndi:BPMNShape>
@@ -653,18 +666,6 @@
       <bpmndi:BPMNShape id="EndEvent_02dhf5d_di" bpmnElement="EndEvent_02dhf5d">
         <dc:Bounds x="1773" y="1282" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="IntermediateCatchEvent_1m24d3n_di" bpmnElement="IntermediateCatchEvent_1m24d3n">
-        <dc:Bounds x="759" y="1282" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="735" y="1325" width="84" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="IntermediateCatchEvent_0tplkci_di" bpmnElement="IntermediateThrowEvent_1c581x7">
-        <dc:Bounds x="552" y="1210" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="528" y="1253" width="84" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="IntermediateCatchEvent_13junj7_di" bpmnElement="IntermediateCatchEvent_13junj7">
         <dc:Bounds x="377" y="1210" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -677,26 +678,45 @@
           <dc:Bounds x="392" y="1393" width="71" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_19tzc1r_di" bpmnElement="Task_14d6gus">
-        <dc:Bounds x="473" y="1328" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1vkr2ho_di" bpmnElement="Task_13fazqx">
+      <bpmndi:BPMNShape id="Activity_07oojw8_di" bpmnElement="Task_13fazqx">
         <dc:Bounds x="839" y="1260" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1gkw4nw_di" bpmnElement="Task_1qekvmm">
-        <dc:Bounds x="973" y="1260" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1xntbjw_di" bpmnElement="Task_1q3raoh">
+      <bpmndi:BPMNShape id="Activity_0awt464_di" bpmnElement="Task_1q3raoh">
         <dc:Bounds x="1373" y="1367" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1u5benq_di" bpmnElement="Task_1hpb4gg">
+      <bpmndi:BPMNShape id="Activity_01rmqxb_di" bpmnElement="Task_1hpb4gg">
         <dc:Bounds x="1473" y="1015" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_18gdjky_di" bpmnElement="Task_169yf92">
+      <bpmndi:BPMNShape id="Activity_1uwlcyg_di" bpmnElement="Task_169yf92">
         <dc:Bounds x="1623" y="1015" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0r4dv67_di" bpmnElement="Task_0gn0y6x">
+      <bpmndi:BPMNShape id="Activity_19nldlj_di" bpmnElement="Task_0gn0y6x">
         <dc:Bounds x="1623" y="1260" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_12vqaeh_di" bpmnElement="Task_14d6gus">
+        <dc:Bounds x="473" y="1328" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0yxb547_di" bpmnElement="Task_1qekvmm">
+        <dc:Bounds x="973" y="1260" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0pdh3p5_di" bpmnElement="IntermediateThrowEvent_1c581x7">
+        <dc:Bounds x="552" y="1210" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="528" y="1253" width="84" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1fhg9eo_di" bpmnElement="IntermediateThrowEvent_00mk57x">
+        <dc:Bounds x="815" y="1428" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="791" y="1471" width="84" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_10r6mov_di" bpmnElement="IntermediateCatchEvent_1m24d3n">
+        <dc:Bounds x="759" y="1282" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="735" y="1325" width="84" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_14g7wcg_di" bpmnElement="TextAnnotation_14g7wcg">
         <dc:Bounds x="932" y="1373" width="100" height="40" />
@@ -831,29 +851,29 @@
         <di:waypoint x="739" y="1100" />
         <di:waypoint x="739" y="1428" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="MessageFlow_140o4mt_di" bpmnElement="MessageFlow_140o4mt">
-        <di:waypoint x="893" y="305" />
-        <di:waypoint x="893" y="463" />
-        <di:waypoint x="1142" y="463" />
-        <di:waypoint x="1142" y="767" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="MessageFlow_0m9yipt_di" bpmnElement="MessageFlow_0m9yipt">
-        <di:waypoint x="1280" y="305" />
+        <di:waypoint x="1280" y="327" />
         <di:waypoint x="1280" y="462" />
         <di:waypoint x="1199" y="462" />
         <di:waypoint x="1199" y="649" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="MessageFlow_0bi28yb_di" bpmnElement="MessageFlow_0bi28yb">
-        <di:waypoint x="898" y="573" />
-        <di:waypoint x="898" y="913" />
+        <di:waypoint x="890" y="595" />
+        <di:waypoint x="890" y="913" />
         <di:waypoint x="395" y="913" />
         <di:waypoint x="395" y="1210" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="MessageFlow_1npxp2v_di" bpmnElement="MessageFlow_1npxp2v">
-        <di:waypoint x="947" y="728" />
-        <di:waypoint x="947" y="939" />
+        <di:waypoint x="950" y="750" />
+        <di:waypoint x="950" y="939" />
         <di:waypoint x="426" y="939" />
         <di:waypoint x="426" y="1350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MessageFlow_140o4mt_di" bpmnElement="MessageFlow_140o4mt">
+        <di:waypoint x="890" y="327" />
+        <di:waypoint x="890" y="463" />
+        <di:waypoint x="1142" y="463" />
+        <di:waypoint x="1142" y="767" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

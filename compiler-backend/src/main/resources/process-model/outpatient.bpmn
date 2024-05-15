@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1pbejuq" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.17.0">
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1pbejuq" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.20.0">
   <bpmn:collaboration id="Collaboration_08keb21">
     <bpmn:participant id="Participant_1ekaw7f" name="PNUH" processRef="outpatient-001" />
   </bpmn:collaboration>
@@ -71,10 +71,10 @@
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_0wj8j9l" sourceRef="StartEvent_15c2yw1" targetRef="Gateway_0a0kr8h" />
     <bpmn:sequenceFlow id="Flow_0lcu7bj" name="No" sourceRef="Gateway_0a0kr8h" targetRef="Activity_11snmj2">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!hasReserved}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_08fk2wb" sourceRef="Gateway_0a0kr8h" targetRef="Activity_0klgrio">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${hasReserved}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0bv3l4s" sourceRef="Activity_0klgrio" targetRef="Event_1txncv7" />
     <bpmn:sequenceFlow id="Flow_1e09oo8" sourceRef="Event_1txncv7" targetRef="Activity_0uazsg9" />
@@ -115,56 +115,72 @@
       <bpmn:incoming>Flow_0bv3l4s</bpmn:incoming>
       <bpmn:outgoing>Flow_1e09oo8</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_12lwuyj">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT5S</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1S</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
-    <bpmn:serviceTask id="Activity_11snmj2" name="Create &#38; reserve a clinic appointment" camunda:type="external" camunda:topic="Create &#38; reserve a clinic appointment">
+    <bpmn:scriptTask id="Activity_11snmj2" name="Create &#38; reserve a clinic appointment" scriptFormat="groovy">
       <bpmn:incoming>Flow_0lcu7bj</bpmn:incoming>
       <bpmn:outgoing>Flow_0o2059k</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0klgrio" name="Assign a waiting number to patient" camunda:type="external" camunda:topic="Assign a waiting number to patient">
+      <bpmn:script>if (execution.getVariable("hasReserved") == null) {
+    execution.setVariable("hasReserved", false);
+}
+if (execution.getVariable("needMedicalExamination") == null) {
+    execution.setVariable("needMedicalExamination", false);
+}
+if (execution.getVariable("needRediagnosis") == null) {
+    execution.setVariable("needRediagnosis", true);
+}
+if (execution.getVariable("needPrescription") == null) {
+    execution.setVariable("needPrescription", true);
+}
+if (execution.getVariable("needCertificate") == null) {
+    execution.setVariable("needCertificate", true);
+}
+S.info(execution, "----------");
+S.info(execution, "Create &amp; reserve a clinic appointment");</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Activity_0klgrio" name="Assign a waiting number to patient" scriptFormat="groovy">
       <bpmn:incoming>Flow_08fk2wb</bpmn:incoming>
       <bpmn:incoming>Flow_0o2059k</bpmn:incoming>
       <bpmn:outgoing>Flow_0bv3l4s</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:userTask id="Activity_0uazsg9" name="Consult &#38; make a diagnose">
-      <bpmn:extensionElements>
-        <camunda:formData>
-          <camunda:formField id="needMedicalExamination" label="needMedicalExamination" type="boolean" />
-          <camunda:formField id="needRediagnosis" label="needRediagnosis" type="boolean" />
-          <camunda:formField id="needPrescription" label="needPrescription" type="boolean" />
-        </camunda:formData>
-      </bpmn:extensionElements>
+      <bpmn:script>S.info(execution, "Assign a waiting number to patient");</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Activity_0uazsg9" name="Consult &#38; make a diagnose" scriptFormat="groovy">
       <bpmn:incoming>Flow_1e09oo8</bpmn:incoming>
       <bpmn:incoming>Flow_1l7xifd</bpmn:incoming>
       <bpmn:outgoing>Flow_19ofnsw</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:serviceTask id="Activity_0v7zpsu" name="Implement medical examination" camunda:type="external" camunda:topic="Implement medical examination">
+      <bpmn:script>S.info(execution, "Consult &amp; make a diagnose");</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Activity_0v7zpsu" name="Implement medical examination" scriptFormat="groovy">
       <bpmn:incoming>Flow_0zqviuz</bpmn:incoming>
       <bpmn:outgoing>Flow_1l7xifd</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_09btkt3" name="Schedule &#38; reserve revisit" camunda:type="external" camunda:topic="Schedule &#38; reserve revisit">
+      <bpmn:script>S.info(execution, "Implement medical examination");</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Activity_09btkt3" name="Schedule &#38; reserve revisit" scriptFormat="groovy">
       <bpmn:incoming>Flow_1ty6ys0</bpmn:incoming>
       <bpmn:outgoing>Flow_1tq2s4f</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0rrhirv" name="Pay the cost of diagnosis" camunda:type="external" camunda:topic="Pay the cost of diagnosis">
+      <bpmn:script>S.info(execution, "Schedule &amp; reserve revisit");</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Activity_0rrhirv" name="Pay the cost of diagnosis" scriptFormat="groovy">
       <bpmn:incoming>Flow_0ojz1rv</bpmn:incoming>
       <bpmn:outgoing>Flow_127dnd2</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_1wu5t3p" name="Issue the prescription" camunda:type="external" camunda:topic="Issue the prescription">
+      <bpmn:script>S.info(execution, "Pay the cost of diagnosis");</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Activity_1wu5t3p" name="Issue the prescription" scriptFormat="groovy">
       <bpmn:incoming>Flow_1gv24wc</bpmn:incoming>
       <bpmn:outgoing>Flow_11io2sl</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_1flfg9q" name="Print a certificate for submittion" camunda:type="external" camunda:topic="Print a certificate for submittion">
+      <bpmn:script>S.info(execution, "Issue the prescription");</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Activity_1flfg9q" name="Print a certificate for submittion" scriptFormat="groovy">
       <bpmn:incoming>Flow_0sd95w9</bpmn:incoming>
       <bpmn:outgoing>Flow_1niqy2z</bpmn:outgoing>
-    </bpmn:serviceTask>
+      <bpmn:script>S.info(execution, "Print a certificate for submittion");</bpmn:script>
+    </bpmn:scriptTask>
     <bpmn:startEvent id="StartEvent_15c2yw1" name="Patient visits the hospital">
       <bpmn:extensionElements>
         <camunda:formData />
       </bpmn:extensionElements>
       <bpmn:outgoing>Flow_0wj8j9l</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_1cjczl2" messageRef="Message_371bkce" />
     </bpmn:startEvent>
   </bpmn:process>
   <bpmn:message id="Message_371bkce" name="Patient visits the hospital" />
@@ -231,31 +247,31 @@
           <dc:Bounds x="296" y="525" width="69" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1ssfstq_di" bpmnElement="Activity_11snmj2">
+      <bpmndi:BPMNShape id="Activity_0aacqtj_di" bpmnElement="Activity_11snmj2">
         <dc:Bounds x="400" y="160" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0a46d9k_di" bpmnElement="Activity_0klgrio">
+      <bpmndi:BPMNShape id="Activity_0oc0u2l_di" bpmnElement="Activity_0klgrio">
         <dc:Bounds x="280" y="350" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_019q1e1_di" bpmnElement="Activity_0uazsg9">
+      <bpmndi:BPMNShape id="Activity_0980lin_di" bpmnElement="Activity_0uazsg9">
         <dc:Bounds x="440" y="460" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1mjhucl_di" bpmnElement="Activity_0v7zpsu">
+      <bpmndi:BPMNShape id="Activity_1c0u6n9_di" bpmnElement="Activity_0v7zpsu">
         <dc:Bounds x="570" y="350" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1oip09z_di" bpmnElement="Activity_09btkt3">
+      <bpmndi:BPMNShape id="Activity_17mz06x_di" bpmnElement="Activity_09btkt3">
         <dc:Bounds x="790" y="350" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0orn1az_di" bpmnElement="Activity_0rrhirv">
+      <bpmndi:BPMNShape id="Activity_0s0gt0l_di" bpmnElement="Activity_0rrhirv">
         <dc:Bounds x="970" y="130" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1bbmp84_di" bpmnElement="Activity_1wu5t3p">
+      <bpmndi:BPMNShape id="Activity_1rxwwh9_di" bpmnElement="Activity_1wu5t3p">
         <dc:Bounds x="1090" y="660" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1lt6asa_di" bpmnElement="Activity_1flfg9q">
+      <bpmndi:BPMNShape id="Activity_0riz1rq_di" bpmnElement="Activity_1flfg9q">
         <dc:Bounds x="1410" y="210" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1oxw234_di" bpmnElement="StartEvent_15c2yw1">
+      <bpmndi:BPMNShape id="Event_1cz9ica_di" bpmnElement="StartEvent_15c2yw1">
         <dc:Bounds x="312" y="102" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="290" y="76" width="81" height="27" />
